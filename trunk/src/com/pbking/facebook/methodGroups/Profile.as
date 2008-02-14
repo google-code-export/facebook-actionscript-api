@@ -34,11 +34,13 @@ package com.pbking.facebook.methodGroups
 	{
 		// VARIABLES //////////
 		
+		private var facebook:Facebook;
+		
 		// CONSTRUCTION //////////
 		
-		function Profile():void
+		function Profile(facebook:Facebook):void
 		{
-			//nothing here
+			this.facebook = facebook;
 		}
 		
 		// FACEBOOK FUNCTION CALLS //////////
@@ -55,7 +57,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function setFBML(markup:String, user:FacebookUser=null, callback:Function=null):SetFBML_delegate
 		{
-			var delegate:SetFBML_delegate = new SetFBML_delegate(markup, user);
+			var delegate:SetFBML_delegate = new SetFBML_delegate(facebook, markup, user);
 			return MethodGroupUtil.addCallback(delegate, callback) as SetFBML_delegate;		
 		}
 
@@ -67,7 +69,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function getFBML(user:FacebookUser=null, callback:Function=null):GetFBML_delegate
 		{
-			var delegate:GetFBML_delegate = new GetFBML_delegate(user);
+			var delegate:GetFBML_delegate = new GetFBML_delegate(facebook, user);
 			return MethodGroupUtil.addCallback(delegate, callback) as GetFBML_delegate;		
 		}
 

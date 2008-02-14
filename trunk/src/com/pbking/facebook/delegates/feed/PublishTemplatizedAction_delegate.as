@@ -6,7 +6,7 @@ package com.pbking.facebook.delegates.feed
 
 	public class PublishTemplatizedAction_delegate extends FacebookDelegate
 	{
-		public function PublishTemplatizedAction_delegate(  actor:FacebookUser, 
+		public function PublishTemplatizedAction_delegate(  facebook:Facebook, actor:FacebookUser, 
 															title_template:String="", title_data:String="", 
 															body_template:String="", body_data:String="", 
 															body_general:String="", targetUsers:Array=null,
@@ -15,6 +15,7 @@ package com.pbking.facebook.delegates.feed
 															image_3:String="", image_3_link:String="",
 															image_4:String="", image_4_link:String="")
 		{
+			super(facebook);
 			fbCall.setRequestArgument("actor_id", actor.uid.toString());
 			
 			if(title_template != "") fbCall.setRequestArgument("title_template", title_template);

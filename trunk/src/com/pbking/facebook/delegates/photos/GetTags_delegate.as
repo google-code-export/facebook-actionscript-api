@@ -31,6 +31,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.pbking.facebook.delegates.photos
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.photos.FacebookPhoto;
 	import com.pbking.facebook.data.photos.FacebookTag;
 	import com.pbking.facebook.delegates.FacebookDelegate;
@@ -44,8 +45,10 @@ package com.pbking.facebook.delegates.photos
 
 		private var photoCollection:HashableArray = new HashableArray('pid', false);
 		
-		function GetTags_delegate(photos:Array, populatePhotosWithTags:Boolean = true)
+		function GetTags_delegate(facebook:Facebook, photos:Array, populatePhotosWithTags:Boolean = true)
 		{
+			super(facebook);
+			
 			this.photos = photos;
 			this.populatePhotosWithTags = populatePhotosWithTags;
 			

@@ -31,6 +31,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.pbking.facebook.delegates.photos
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.*;
 	import com.pbking.facebook.data.photos.FacebookPhoto;
 	import com.pbking.facebook.delegates.FacebookDelegate;
@@ -40,14 +41,14 @@ package com.pbking.facebook.delegates.photos
 	{
 		// VARIABLES //////////
 		
-		//results
-		
 		public var photos:Array;
 		
 		// CONSTRUCTION //////////
 		
-		public function GetPhotos_delegate(subj_id:Object=null, aid:Object=null, pids:Array=null)
+		public function GetPhotos_delegate(facebook:Facebook, subj_id:Object=null, aid:Object=null, pids:Array=null)
 		{
+			super(facebook);
+			
 			if(subj_id==null && aid==null && pids==null)
 				throw new Error('GetPhotos must have at least one of the values subj_id, aid, or pids set');
 			

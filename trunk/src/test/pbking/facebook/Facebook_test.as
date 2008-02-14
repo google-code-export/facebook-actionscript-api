@@ -67,7 +67,7 @@ package test.pbking.facebook
 		public function testCreateToken():void
 		{
 			testFacebook.startNoSession(testApi_key, testSecret);
-			var d:CreateToken_delegate = new CreateToken_delegate();
+			var d:CreateToken_delegate = new CreateToken_delegate(testFacebook);
 			d.addEventListener(Event.COMPLETE, addAsync(onTestCreateTokenReply, timeoutTime));
 		}
 		private function onTestCreateTokenReply(e:Event):void

@@ -1,5 +1,6 @@
 package com.pbking.facebook.delegates.users
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.delegates.FacebookDelegate;
 	import com.pbking.util.logging.PBLogger;
@@ -8,9 +9,9 @@ package com.pbking.facebook.delegates.users
 	{
 		public var user:FacebookUser;
 		
-		public function GetLoggedInUser_delegate()
+		public function GetLoggedInUser_delegate(facebook:Facebook)
 		{
-			PBLogger.getLogger("pbking.facebook").debug("getting logged in user");
+			super(facebook);
 			
 			fbCall.post("facebook.users.getLoggedInUser");
 		}
@@ -18,7 +19,7 @@ package com.pbking.facebook.delegates.users
 		override protected function handleResult(result:Object):void
 		{
 			var newUserId:int = parseInt(result.toString());			
-			user = fBook.getUser(newUserId);
+			user = FacebookUser.getUser(newUserId);
 			user.isLoggedInUser = true;
 		}
 		

@@ -35,18 +35,20 @@ package com.pbking.facebook.methodGroups
 	{
 		// VARIABLES //////////
 		
+		private var facebook:Facebook;
+		
 		// CONSTRUCTION //////////
 		
-		function Friends():void
+		function Friends(facebook:Facebook):void
 		{
-			//nothing here
+			this.facebook = facebook;
 		}
 		
 		// FACEBOOK FUNCTION CALLS //////////
 		
 		public function areFriends(list1:Array, list2:Array, callback:Function=null):AreFriends_delegate
 		{
-			var delegate:AreFriends_delegate = new AreFriends_delegate(list1, list2);
+			var delegate:AreFriends_delegate = new AreFriends_delegate(facebook, list1, list2);
 			return MethodGroupUtil.addCallback(delegate, callback) as AreFriends_delegate;		
 		}
 		
@@ -61,13 +63,13 @@ package com.pbking.facebook.methodGroups
 		
 		public function getFriends(callback:Function=null):GetFriends_delegate
 		{
-			var delegate:GetFriends_delegate = new GetFriends_delegate();
+			var delegate:GetFriends_delegate = new GetFriends_delegate(facebook);
 			return MethodGroupUtil.addCallback(delegate, callback) as GetFriends_delegate;		
 		}
 		
 		public function getAppUsers(callback:Function=null):GetAppUsers_delegate
 		{
-			var delegate:GetAppUsers_delegate = new GetAppUsers_delegate();
+			var delegate:GetAppUsers_delegate = new GetAppUsers_delegate(facebook);
 			return MethodGroupUtil.addCallback(delegate, callback) as GetAppUsers_delegate;		
 		}
 	}

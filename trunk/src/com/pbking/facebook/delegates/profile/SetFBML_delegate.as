@@ -1,17 +1,17 @@
 package com.pbking.facebook.delegates.profile
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.delegates.FacebookDelegate;
-	import com.pbking.util.logging.PBLogger;
 	
 	public class SetFBML_delegate extends FacebookDelegate
 	{
 		public var markup:String;
 		public var user:FacebookUser;
 		
-		public function SetFBML_delegate(markup:String, user:FacebookUser=null)
+		public function SetFBML_delegate(facebook:Facebook, markup:String, user:FacebookUser=null)
 		{
-			PBLogger.getLogger("pbking.facebook").debug("setting fbml");
+			super(facebook);
 			
 			this.markup = markup;
 			this.user = user;

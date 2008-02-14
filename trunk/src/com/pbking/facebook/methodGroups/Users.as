@@ -34,11 +34,13 @@ package com.pbking.facebook.methodGroups
 	{
 		// VARIABLES //////////
 		
+		private var facebook:Facebook;
+		
 		// CONSTRUCTION //////////
 		
-		function Users():void
+		function Users(facebook:Facebook):void
 		{
-			//nothing here
+			this.facebook = facebook;
 		}
 		
 		// FACEBOOK FUNCTION CALLS //////////
@@ -48,7 +50,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function getInfo(users:Array, fields:Array, callback:Function=null):GetUserInfo_delegate
 		{
-			var delegate:GetUserInfo_delegate = new GetUserInfo_delegate(users, fields);
+			var delegate:GetUserInfo_delegate = new GetUserInfo_delegate(facebook, users, fields);
 			return MethodGroupUtil.addCallback(delegate, callback) as GetUserInfo_delegate;
 		}
 		
@@ -57,7 +59,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function getLoggedInUser(callback:Function=null):GetLoggedInUser_delegate
 		{
-			var delegate:GetLoggedInUser_delegate = new GetLoggedInUser_delegate();
+			var delegate:GetLoggedInUser_delegate = new GetLoggedInUser_delegate(facebook);
 			return MethodGroupUtil.addCallback(delegate, callback) as GetLoggedInUser_delegate;
 		}
 		
@@ -70,7 +72,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function hasAppPermission(extendedPermission:String, callback:Function=null):HasAppPermission_delegate
 		{
-			var delegate:HasAppPermission_delegate = new HasAppPermission_delegate(extendedPermission);
+			var delegate:HasAppPermission_delegate = new HasAppPermission_delegate(facebook, extendedPermission);
 			return MethodGroupUtil.addCallback(delegate, callback) as HasAppPermission_delegate;
 		}
 		
@@ -79,16 +81,17 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function isAppAdded(callback:Function=null):IsAppAdded_delegate
 		{
-			var delegate:IsAppAdded_delegate = new IsAppAdded_delegate();
+			var delegate:IsAppAdded_delegate = new IsAppAdded_delegate(facebook);
 			return MethodGroupUtil.addCallback(delegate, callback) as IsAppAdded_delegate;
 		}
 		
 		/**
-		 * Updates a user's Facebook status. This method requires the extended permission status_update, which the user must opt into via the Extended Permissions system. 
+		 * Updates a user's Facebook status. This method requires the extended permission status_update, 
+		 * which the user must opt into via the Extended Permissions system. 
 		 */
 		public function setStatus(status:String, clear:Boolean=false, callback:Function=null):SetStatus_delegate
 		{
-			var delegate:SetStatus_delegate = new SetStatus_delegate(status, clear);
+			var delegate:SetStatus_delegate = new SetStatus_delegate(facebook, status, clear);
 			return MethodGroupUtil.addCallback(delegate, callback) as SetStatus_delegate;
 		}
 		

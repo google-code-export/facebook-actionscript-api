@@ -14,8 +14,10 @@ package com.pbking.facebook.delegates.groups
 		
 		public var groups:Array;
 		
-		public function GetGroups_delegate(user:FacebookUser=null, groupsFilter:Array=null)
+		public function GetGroups_delegate(facebook:Facebook, user:FacebookUser=null, groupsFilter:Array=null)
 		{
+			super(facebook);
+			
 			this.user = user;
 			this.groups = groups;
 			
@@ -39,7 +41,7 @@ package com.pbking.facebook.delegates.groups
 			
 			for each(var groupX:Object in result)
 			{
-				var newGroup:FacebookGroup = fBook.getGroup(groupX.gid);
+				var newGroup:FacebookGroup = FacebookGroup.getGroup(groupX.gid);
 				groups.push(newGroup);
 				
 				if(groupX.name)
@@ -76,7 +78,7 @@ package com.pbking.facebook.delegates.groups
 					newGroup.pic_small = groupX.pic_small;
 
 				if(groupX.creator)
-					newGroup.creator = fBook.getUser(parseInt(groupX.creator));;
+					newGroup.creator = FacebookUser.getUser(parseInt(groupX.creator));;
 				
 				if(groupX.update_time)
 					newGroup.update_time = FacebookDataParser.formatDate(groupX.update_time);

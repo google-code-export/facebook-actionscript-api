@@ -7,8 +7,9 @@ package com.pbking.facebook.delegates.marketplace
 	{
 		public var categories:Array;
 		
-		function GetCategories_delegate()
+		function GetCategories_delegate(facebook:Facebook)
 		{
+			super(facebook);
 			fbCall.post("marketplace.getCategories");
 		}
 		

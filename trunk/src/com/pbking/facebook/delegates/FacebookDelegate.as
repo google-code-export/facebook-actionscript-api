@@ -45,6 +45,8 @@ package com.pbking.facebook.delegates
 	
 	public class FacebookDelegate extends EventDispatcher
 	{
+		// VARIABLES //////////
+		
 		protected var fBook:Facebook;
 		protected var fbCall:FacebookCall;
 		
@@ -52,13 +54,26 @@ package com.pbking.facebook.delegates
 		public var errorCode:int = 0;
 		public var errorMessage:String = "";
 		
-		function FacebookDelegate()
+		// CONSTRUCTION //////////
+		
+		function FacebookDelegate(facebook:Facebook)
 		{
-			this.fBook = Facebook.instance;
+			this.fBook = facebook;
 			fbCall = new FacebookCall(fBook);
 			fbCall.addEventListener(Event.COMPLETE, onCallComplete);
 			fbCall.addEventListener(IOErrorEvent.IO_ERROR, onCallError);
 			fbCall.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onCallError);
+		}
+		
+		//////////
+		
+		private function removeFBCallListeners():void
+		{
+			if(!fbCall) return;
+				
+			fbCall.removeEventListener(Event.COMPLETE, onCallComplete);
+			fbCall.removeEventListener(IOErrorEvent.IO_ERROR, onCallError);
+			fbCall.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onCallError);
 		}
 		
 		public function get result():Object
@@ -68,6 +83,7 @@ package com.pbking.facebook.delegates
 		
 		protected function onCallError(event:ErrorEvent):void
 		{
+			removeFBCallListeners();
 			//something super sucky happened
 			errorCode = -1;
 			errorMessage = event.toString();
@@ -76,7 +92,7 @@ package com.pbking.facebook.delegates
 		
 		protected function onCallComplete(event:Event):void
 		{
-			fbCall.removeEventListener(Event.COMPLETE, onCallComplete);
+			removeFBCallListeners();
 			
 			var result:Object = fbCall.result;
 

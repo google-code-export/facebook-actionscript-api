@@ -1,7 +1,6 @@
 package com.pbking.facebook.delegates.notifications
 {
-	import com.pbking.facebook.data.notifications.Notification;
-	import com.pbking.facebook.data.notifications.NotificationList;
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.delegates.FacebookDelegate;
 	import com.pbking.util.logging.PBLogger;
 	
@@ -11,9 +10,9 @@ package com.pbking.facebook.delegates.notifications
 		public var notifications:Object = new Object();
 		public var notificationLists:Object = new Object();
 		
-		public function GetNotifications_delegate()
+		public function GetNotifications_delegate(facebook:Facebook)
 		{
-			PBLogger.getLogger("pbking.facebook").debug("getting notifications");
+			super(facebook);
 			
 			fbCall.post("facebook.notifications.get");
 		}

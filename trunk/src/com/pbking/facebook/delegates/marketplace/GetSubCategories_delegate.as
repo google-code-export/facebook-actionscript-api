@@ -7,8 +7,10 @@ package com.pbking.facebook.delegates.marketplace
 	{
 		public var subcategories:Array;
 		
-		function GetSubCategories_delegate(category:String)
+		function GetSubCategories_delegate(facebook:Facebook, category:String)
 		{
+			super(facebook);
+			
 			fbCall.setRequestArgument("category", category);
 			fbCall.post("marketplace.getSubCategories");
 		}

@@ -1,18 +1,17 @@
 package com.pbking.facebook.delegates.photos
 {
 	import com.pbking.facebook.Facebook;
-	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.data.photos.FacebookAlbum;
 	import com.pbking.facebook.delegates.FacebookDelegate;
-	
-	import flash.events.Event;
 
 	public class CreateAlbum_delegate extends FacebookDelegate
 	{
 		public var newAlbum:FacebookAlbum;
 		
-		public function CreateAlbum_delegate(name:String, location:String="", description:String="")
+		public function CreateAlbum_delegate(facebook:Facebook, name:String, location:String="", description:String="")
 		{
+			super(facebook);
+			
 			fbCall.setRequestArgument("name", name);
 
 			if(location != "")

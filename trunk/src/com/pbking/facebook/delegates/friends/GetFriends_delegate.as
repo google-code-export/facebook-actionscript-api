@@ -1,5 +1,7 @@
 package com.pbking.facebook.delegates.friends
 {
+	import com.pbking.facebook.Facebook;
+	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.delegates.FacebookDelegate;
 	import com.pbking.util.logging.PBLogger;
 	
@@ -7,10 +9,9 @@ package com.pbking.facebook.delegates.friends
 	{
 		public var friends:Array;
 		
-		public function GetFriends_delegate()
+		public function GetFriends_delegate(facebook:Facebook)
 		{
-			PBLogger.getLogger("pbking.facebook").debug("getting friends");
-			
+			super(facebook);
 			fbCall.post("facebook.friends.get");
 		}
 		
@@ -20,7 +21,7 @@ package com.pbking.facebook.delegates.friends
 			
 			for each(var uid:int in result)
 			{
-				friends.push(fBook.getUser(uid));
+				friends.push(FacebookUser.getUser(uid));
 			} 
 		}
 		

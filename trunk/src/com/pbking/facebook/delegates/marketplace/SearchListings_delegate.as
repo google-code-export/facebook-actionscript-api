@@ -12,8 +12,10 @@ package com.pbking.facebook.delegates.marketplace
 		
 		// CONSTRUCTION /////////
 		
-		function SearchListings_delegate(category:String="", subcategory:String="", query:String="")
+		function SearchListings_delegate(facebook:Facebook, category:String="", subcategory:String="", query:String="")
 		{
+			super(facebook);
+			
 			if(category != "")
 			{
 				fbCall.setRequestArgument("category", category);

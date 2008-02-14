@@ -17,8 +17,10 @@ package com.pbking.facebook.delegates.events
 		
 		public var events:Array = [];
 		
-		public function GetEvents_delegate(user:FacebookUser=null, eventsFilter:Array=null, start_time:Date=null, end_time:Date=null, rsvp_status_filter:String="")
+		public function GetEvents_delegate(facebook:Facebook, user:FacebookUser=null, eventsFilter:Array=null, start_time:Date=null, end_time:Date=null, rsvp_status_filter:String="")
 		{
+			super(facebook);
+			
 			this.user = user;
 			this.eventsFilter = eventsFilter;
 			this.start_time = start_time;
@@ -54,7 +56,7 @@ package com.pbking.facebook.delegates.events
 		{
 			for each(var event:Object in result)
 			{
-				var newEvent:FacebookEvent = fBook.getEvent(event.eid);
+				var newEvent:FacebookEvent = FacebookEvent.getEvent(event.eid);
 				events.push(newEvent);
 				
 				if(event.name)
@@ -82,7 +84,7 @@ package com.pbking.facebook.delegates.events
 					newEvent.pic_small = event.pic_small;
 
 				if(event.creator)
-					newEvent.creator = fBook.getUser(parseInt(event.creator));;
+					newEvent.creator = FacebookUser.getUser(parseInt(event.creator));;
 				
 				if(event.update_time)
 					newEvent.update_time = FacebookDataParser.formatDate(event.update_time);

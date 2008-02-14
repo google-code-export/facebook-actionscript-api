@@ -5,8 +5,10 @@ package com.pbking.facebook.delegates.fql
 
 	public class FqlQuery_delegate extends FacebookDelegate
 	{
-		public function FqlQuery_delegate(query:String)
+		public function FqlQuery_delegate(facebook:Facebook, query:String)
 		{
+			super(facebook);
+			
 			fbCall.setRequestArgument("query", query);
 			fbCall.post("facebook.fql.query");
 		}

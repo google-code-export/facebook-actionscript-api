@@ -31,6 +31,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.pbking.facebook.delegates.auth
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.delegates.FacebookDelegate;
 	import com.pbking.util.logging.PBLogger;
 	
@@ -49,8 +50,10 @@ package com.pbking.facebook.delegates.auth
 		
 		// CONSTRUCTION //////////
 		
-		function GetSession_delegate(auth_token:String)
+		function GetSession_delegate(facebook:Facebook, auth_token:String)
 		{
+			super(facebook);
+			
 			this.auth_token = auth_token;
 
 			PBLogger.getLogger("pbking.facebook").debug("starting facebook session with auth_token: " + auth_token);

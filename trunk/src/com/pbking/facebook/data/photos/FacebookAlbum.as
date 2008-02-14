@@ -71,7 +71,7 @@ package com.pbking.facebook.data.photos
 			if(initObj.cover_pid)
 				this._cover_pid = initObj.cover_pid;
 				
-			this._owner = Facebook.instance.getUser(parseInt(initObj.owner));
+			this._owner = FacebookUser.getUser(parseInt(initObj.owner));
 			
 			this._name = initObj.name;
 			this._description = initObj.description;

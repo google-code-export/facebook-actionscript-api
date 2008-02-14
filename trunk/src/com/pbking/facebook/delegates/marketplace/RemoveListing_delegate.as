@@ -5,8 +5,9 @@ package com.pbking.facebook.delegates.marketplace
 
 	public class RemoveListing_delegate extends FacebookDelegate
 	{
-		function RemoveListing_delegate(listing_id:int)
+		function RemoveListing_delegate(facebook:Facebook, listing_id:int)
 		{
+			super(facebook);
 			fbCall.setRequestArgument("listing_id", listing_id.toString());
 			fbCall.post("marketplace.removeListing");
 		}
