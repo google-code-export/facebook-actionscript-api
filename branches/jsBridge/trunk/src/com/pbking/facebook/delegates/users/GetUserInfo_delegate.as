@@ -1,7 +1,6 @@
 package com.pbking.facebook.delegates.users
 {
 	import com.pbking.facebook.Facebook;
-	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.data.misc.FacebookEducationInfo;
 	import com.pbking.facebook.data.misc.FacebookLocation;
 	import com.pbking.facebook.data.misc.FacebookNetwork;
@@ -9,15 +8,15 @@ package com.pbking.facebook.delegates.users
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.data.util.FacebookDataParser;
 	import com.pbking.facebook.delegates.FacebookDelegate;
-	
-	import flash.events.Event;
 
 	public class GetUserInfo_delegate extends FacebookDelegate
 	{
 		public var users:Array;
 		
-		function GetUserInfo_delegate(users:Array, fields:Array)
+		function GetUserInfo_delegate(facebook:Facebook, users:Array, fields:Array)
 		{
+			super(facebook);
+			
 			this.users = users;
 			var uids:Array = [];
 
@@ -35,7 +34,7 @@ package com.pbking.facebook.delegates.users
 		{
 			for each(var xUser:Object in result)
 			{
-				var modUser:FacebookUser = fBook.getUser(parseInt(xUser.uid));
+				var modUser:FacebookUser = FacebookUser.getUser(parseInt(xUser.uid));
 				//populate the fields in the xUser data
 
 				// NAME

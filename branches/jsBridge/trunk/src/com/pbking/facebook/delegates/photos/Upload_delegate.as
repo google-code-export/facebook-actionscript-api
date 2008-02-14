@@ -30,10 +30,10 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.pbking.facebook.delegates.photos
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.photos.FacebookAlbum;
 	import com.pbking.facebook.data.photos.FacebookPhoto;
 	import com.pbking.facebook.delegates.FacebookDelegate;
-	import com.pbking.util.logging.PBLogger;
 	
 	import flash.utils.ByteArray;
 	
@@ -45,9 +45,9 @@ package com.pbking.facebook.delegates.photos
 		
 		// CONSTRUCTION //////////
 		
-		public function Upload_delegate(data:ByteArray, album:FacebookAlbum=null, caption:String="")
+		public function Upload_delegate(facebook:Facebook, data:ByteArray, album:FacebookAlbum=null, caption:String="")
 		{
-			PBLogger.getLogger("pbking.facebook").debug("uploading an image");
+			super(facebook);
 			
 			fbCall.setRequestArgument("data", data);
 			if(album != null)

@@ -31,11 +31,11 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.pbking.facebook.delegates.photos
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.photos.FacebookAlbum;
 	import com.pbking.facebook.data.photos.FacebookPhoto;
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.delegates.FacebookDelegate;
-	import com.pbking.util.logging.PBLogger;
 	
 	import flash.events.Event;
 	
@@ -52,9 +52,9 @@ package com.pbking.facebook.delegates.photos
 		
 		// CONSTRUCTION //////////
 		
-		public function GetAlbums_delegate(user:FacebookUser, doGetCovers:Boolean = false, doGetImages:Boolean = false)
+		public function GetAlbums_delegate(facebook:Facebook, user:FacebookUser, doGetCovers:Boolean = false, doGetImages:Boolean = false)
 		{
-			PBLogger.getLogger("pbking.facebook").debug("getting all albums for user: " + user.uid);
+			super(facebook);
 			
 			this.doGetCovers = doGetCovers;
 			this.doGetImages = doGetImages;

@@ -1,9 +1,9 @@
 package com.pbking.facebook.delegates.friends
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.delegates.FacebookDelegate;
 	import com.pbking.util.collection.HashableArray;
-	import com.pbking.util.logging.PBLogger;
 	
 	public class AreFriends_delegate extends FacebookDelegate
 	{
@@ -13,9 +13,9 @@ package com.pbking.facebook.delegates.friends
 		
 		private var totalUserCollection:HashableArray = new HashableArray("uid", false);
 		
-		public function AreFriends_delegate(list1:Array, list2:Array)
+		public function AreFriends_delegate(facebook:Facebook, list1:Array, list2:Array)
 		{
-			PBLogger.getLogger("pbking.facebook").debug("getting areFriends");
+			super(facebook);
 			
 			var user:FacebookUser;
 			var uids1:Array = [];

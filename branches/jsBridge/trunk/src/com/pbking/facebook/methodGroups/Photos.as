@@ -25,18 +25,24 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 package com.pbking.facebook.methodGroups
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.photos.FacebookAlbum;
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.delegates.photos.*;
 	
-	import flash.display.BitmapData;
 	import flash.utils.ByteArray;
 	
 	public class Photos
 	{
-		function Photos():void
+		// VARIABLES //////////
+		
+		private var facebook:Facebook;
+		
+		// CONSTRUCTION //////////
+		
+		function Photos(facebook:Facebook):void
 		{
-			//nothing here
+			this.facebook = facebook;
 		}
 		
 		// FACEBOOK FUNCTIONS //////////
@@ -49,7 +55,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function createAlbum(name:String, location:String="", description:String="", callback:Function = null):CreateAlbum_delegate
 		{
-			var delegate:CreateAlbum_delegate = new CreateAlbum_delegate(name, location, description);
+			var delegate:CreateAlbum_delegate = new CreateAlbum_delegate(facebook, name, location, description);
 			return MethodGroupUtil.addCallback(delegate, callback) as CreateAlbum_delegate;
 		}
 		
@@ -58,7 +64,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function getTags(photos:Array, populatePhotosWithTags:Boolean = true, callback:Function = null):GetTags_delegate
 		{
-			var delegate:GetTags_delegate = new GetTags_delegate(photos, populatePhotosWithTags);
+			var delegate:GetTags_delegate = new GetTags_delegate(facebook, photos, populatePhotosWithTags);
 			return MethodGroupUtil.addCallback(delegate, callback) as GetTags_delegate;
 		}
 		
@@ -71,7 +77,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function upload(data:ByteArray, album:FacebookAlbum=null, caption:String="", callback:Function=null):Upload_delegate
 		{
-			var delegate:Upload_delegate = new Upload_delegate(data, album, caption) 
+			var delegate:Upload_delegate = new Upload_delegate(facebook, data, album, caption) 
 			return MethodGroupUtil.addCallback(delegate, callback) as Upload_delegate;		
 		}
 		
@@ -110,7 +116,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function addTags(tags:Array, callback:Function = null):AddTags_delegate
 		{
-			var delegate:AddTags_delegate = new AddTags_delegate(tags);
+			var delegate:AddTags_delegate = new AddTags_delegate(facebook, tags);
 			return MethodGroupUtil.addCallback(delegate, callback) as AddTags_delegate;
 		}
 		
@@ -120,7 +126,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function getAlbums(user:FacebookUser, getCoverPhotos:Boolean = false, callback:Function = null):GetAlbums_delegate
 		{
-			var delegate:GetAlbums_delegate = new GetAlbums_delegate(user, getCoverPhotos);
+			var delegate:GetAlbums_delegate = new GetAlbums_delegate(facebook, user, getCoverPhotos);
 			return MethodGroupUtil.addCallback(delegate, callback) as GetAlbums_delegate;
 		}
 		
@@ -129,7 +135,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function getPhotos(subj_id:Object=null, aid:Object=null, pids:Array=null, callback:Function = null):GetPhotos_delegate
 		{
-			var delegate:GetPhotos_delegate = new GetPhotos_delegate(subj_id, aid, pids);
+			var delegate:GetPhotos_delegate = new GetPhotos_delegate(facebook, subj_id, aid, pids);
 			return MethodGroupUtil.addCallback(delegate, callback) as GetPhotos_delegate;
 		}
 		

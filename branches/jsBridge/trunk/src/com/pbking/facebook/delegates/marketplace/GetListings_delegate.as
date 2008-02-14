@@ -13,8 +13,10 @@ package com.pbking.facebook.delegates.marketplace
 		
 		// CONSTRUCTION //////////
 		
-		function GetListings_delegate(listingIds:Array=null, users:Array=null)
+		function GetListings_delegate(facebook:Facebook, listingIds:Array=null, users:Array=null)
 		{
+			super(facebook);
+			
 			if(listingIds)
 				fbCall.setRequestArgument("listing_ids", listingIds.join(","));
 			

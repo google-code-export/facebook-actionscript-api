@@ -31,7 +31,6 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.pbking.facebook.data.photos
 {
-	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.data.util.FacebookDataParser;
 	
@@ -58,7 +57,7 @@ package com.pbking.facebook.data.photos
 		{
 		  	this._pid = initObj.pid;
 		  	this._aid = initObj.aid;
-		  	this._owner = Facebook.instance.getUser(initObj.owner);
+		  	this._owner = FacebookUser.getUser(initObj.owner);
 		  	this._src = initObj.src;
 		  	this._src_big = initObj.src_big;
 		  	this._src_small = initObj.src_small;

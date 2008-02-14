@@ -8,8 +8,10 @@ package com.pbking.facebook.delegates.marketplace
 	{
 		public var listing:MarketplaceListing;
 		
-		function CreateListing_delegate(listing:MarketplaceListing, show_on_profile:Boolean=true)
+		function CreateListing_delegate(facebook:Facebook, listing:MarketplaceListing, show_on_profile:Boolean=true)
 		{
+			super(facebook);
+			
 			this.listing = listing;
 			
 			fbCall.setRequestArgument("listing_id", listing.listing_id.toString());

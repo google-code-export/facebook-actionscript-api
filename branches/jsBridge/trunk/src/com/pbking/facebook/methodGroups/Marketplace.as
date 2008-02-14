@@ -38,39 +38,41 @@ package com.pbking.facebook.methodGroups
 	{
 		// VARIABLES //////////
 		
+		private var facebook:Facebook;
+		
 		// CONSTRUCTION //////////
 		
-		function Marketplace():void
+		function Marketplace(facebook:Facebook):void
 		{
-			//nothing here
+			this.facebook = facebook;
 		}
 		
 		// FACEBOOK FUNCTION CALLS //////////
 		
 		public function createListing(listing:MarketplaceListing, show_on_profile:Boolean=true, callback:Function=null):CreateListing_delegate
 		{
-			var d:CreateListing_delegate = new CreateListing_delegate(listing, show_on_profile);
+			var d:CreateListing_delegate = new CreateListing_delegate(facebook, listing, show_on_profile);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
 		
 		public function removeListing(listing_id:int, callback:Function):RemoveListing_delegate
 		{
-			var d:RemoveListing_delegate = new RemoveListing_delegate(listing_id);
+			var d:RemoveListing_delegate = new RemoveListing_delegate(facebook, listing_id);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
 
 		public function getCategories(callback:Function=null):GetCategories_delegate
 		{
-			var d:GetCategories_delegate = new GetCategories_delegate();
+			var d:GetCategories_delegate = new GetCategories_delegate(facebook);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
 
 		public function getSubCategories(category:String, callback:Function=null):GetSubCategories_delegate
 		{
-			var d:GetSubCategories_delegate = new GetSubCategories_delegate(category);
+			var d:GetSubCategories_delegate = new GetSubCategories_delegate(facebook, category);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
@@ -80,7 +82,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function getListings(listingIds:Array=null, users:Array=null, callback:Function=null):GetListings_delegate
 		{
-			var d:GetListings_delegate = new GetListings_delegate(listingIds, users);
+			var d:GetListings_delegate = new GetListings_delegate(facebook, listingIds, users);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
@@ -95,7 +97,7 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function search(category:String="", subcategory:String="", query:String="", callback:Function=null):SearchListings_delegate
 		{
-			var d:SearchListings_delegate = new SearchListings_delegate(category, subcategory, query);
+			var d:SearchListings_delegate = new SearchListings_delegate(facebook, category, subcategory, query);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}

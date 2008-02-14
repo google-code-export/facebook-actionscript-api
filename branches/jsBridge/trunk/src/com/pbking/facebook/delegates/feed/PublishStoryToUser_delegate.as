@@ -1,17 +1,19 @@
 package com.pbking.facebook.delegates.feed
 {
-	import com.pbking.facebook.delegates.FacebookDelegate;
 	import com.pbking.facebook.Facebook;
+	import com.pbking.facebook.delegates.FacebookDelegate;
 
 	public class PublishStoryToUser_delegate extends FacebookDelegate
 	{
-		public function PublishStoryToUser_delegate(titleMarkup:String, bodyMarkup:String="", 
+		public function PublishStoryToUser_delegate(facebook:Facebook, titleMarkup:String, bodyMarkup:String="", 
 													image_1:String="", image_1_link:String="",
 													image_2:String="", image_2_link:String="",
 													image_3:String="", image_3_link:String="",
 													image_4:String="", image_4_link:String="",
 													priority:String="")
 		{
+			super(facebook);
+			
 			fbCall.setRequestArgument("title", titleMarkup);
 			
 			if(bodyMarkup != "") fbCall.setRequestArgument("body", bodyMarkup);

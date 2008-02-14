@@ -1,7 +1,7 @@
 package com.pbking.facebook.delegates.users
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.delegates.FacebookDelegate;
-	import com.pbking.util.logging.PBLogger;
 	
 	public class HasAppPermission_delegate extends FacebookDelegate
 	{
@@ -12,9 +12,9 @@ package com.pbking.facebook.delegates.users
 		public var extendedPermission:String;
 		public var hasPermission:Boolean;
 		
-		public function HasAppPermission_delegate(extendedPermission:String)
+		public function HasAppPermission_delegate(facebook:Facebook, extendedPermission:String)
 		{
-			PBLogger.getLogger("pbking.facebook").debug("getting extended permission for: " + extendedPermission);
+			super(facebook);
 			
 			this.extendedPermission = extendedPermission;
 			

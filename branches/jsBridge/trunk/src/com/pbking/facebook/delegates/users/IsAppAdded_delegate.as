@@ -1,5 +1,6 @@
 package com.pbking.facebook.delegates.users
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.delegates.FacebookDelegate;
 	import com.pbking.util.logging.PBLogger;
 	
@@ -8,9 +9,9 @@ package com.pbking.facebook.delegates.users
 		public var pageId:int;
 		public var isAdded:Boolean;
 		
-		public function IsAppAdded_delegate()
+		public function IsAppAdded_delegate(facebook:Facebook)
 		{
-			PBLogger.getLogger("pbking.facebook").debug("checking if user has added app");
+			super(facebook);
 			
 			fbCall.setRequestArgument("page_id", pageId.toString());
 			fbCall.post("facebook.users.isAppAdded");

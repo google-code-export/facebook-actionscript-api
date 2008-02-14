@@ -1,13 +1,13 @@
 package com.pbking.facebook.delegates.users
 {
+	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.delegates.FacebookDelegate;
-	import com.pbking.util.logging.PBLogger;
 	
 	public class SetStatus_delegate extends FacebookDelegate
 	{
-		public function SetStatus_delegate(status:String, clear:Boolean=false)
+		public function SetStatus_delegate(facebook:Facebook, status:String, clear:Boolean=false)
 		{
-			PBLogger.getLogger("pbking.facebook").debug("setting status");
+			super(facebook);
 			
 			if(clear)
 				fbCall.setRequestArgument("clear", "true");
