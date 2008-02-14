@@ -18,7 +18,7 @@ package com.pbking.facebook.delegates.users
 		
 		override protected function handleResult(result:Object):void
 		{
-			isAdded	= parseInt(result.toString()) == 1;
+			isAdded	= Boolean(result);
 		}
 		
 	}

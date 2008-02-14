@@ -126,7 +126,7 @@ package com.pbking.facebook
 		{
 			this._sessionType = newVal;
 			//ping setter to execute bindings
-			this.sessionType = this._sessionType; 
+			this.sessionType = null; 
 		}
 		
 		
@@ -191,6 +191,11 @@ package com.pbking.facebook
 		private var _isConnected:Boolean = false;
 		public function get isConnected():Boolean { return this._isConnected; }
 		public function set isConnected(newVal:Boolean):void {/*for binding*/}
+		private function setIsConnected(newVal:Boolean):void
+		{
+			_isConnected = newVal;
+			isConnected = !newVal; //ping to promote binding
+		}
 		
 		/**
 		 * Version of the facebook API.  This will be updated as the API is updated, but you can
@@ -448,8 +453,7 @@ package com.pbking.facebook
 		 */
 		private function onReady():void
 		{
-			_isConnected = true;
-			isConnected = true; //ping the value for bindings
+			setIsConnected(true);
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
@@ -458,8 +462,7 @@ package com.pbking.facebook
 		 */
 		private function onConnectionError(errorMessage:String):void
 		{
-			_isConnected = false;
-			isConnected = false; //ping the value for bindings
+			setIsConnected(false);
 			_connectionErrorMessage = errorMessage;
 			dispatchEvent(new Event(Event.COMPLETE));
 		}

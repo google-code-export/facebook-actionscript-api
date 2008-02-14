@@ -76,7 +76,7 @@ package com.pbking.facebook.delegates.users
 				if(xUser.pic)
 				{
 					modUser.affiliations = [];
-					for each ( var xNetwork:XML in xUser.affiliations ) 
+					for each ( var xNetwork:Object in xUser.affiliations ) 
 					{
 						var fbNetwork:FacebookNetwork = new FacebookNetwork();
 						fbNetwork.nid = parseInt( xNetwork.nid );
@@ -153,19 +153,19 @@ package com.pbking.facebook.delegates.users
 				if(xUser.hometown_location)
 				{
 					modUser.hometown_location = new FacebookLocation();
-					modUser.hometown_location.city = xUser.hometown_location.city.toString();
-					modUser.hometown_location.state = xUser.hometown_location.state.toString();
-					modUser.hometown_location.country = xUser.hometown_location.country.toString();
-					modUser.hometown_location.zip = xUser.hometown_location.zip.toString();
+					modUser.hometown_location.city = xUser.hometown_location.city;
+					modUser.hometown_location.state = xUser.hometown_location.state;
+					modUser.hometown_location.country = xUser.hometown_location.country;
+					modUser.hometown_location.zip = xUser.hometown_location.zip;
 				}
 	
 				if(xUser.current_location)
 				{
 					modUser.current_location = new FacebookLocation();
-					modUser.current_location.city = xUser.current_location.city.toString();
-					modUser.current_location.state = xUser.current_location.state.toString();
-					modUser.current_location.country = xUser.current_location.country.toString();
-					modUser.current_location.zip = xUser.current_location.zip.toString();
+					modUser.current_location.city = xUser.current_location.city;
+					modUser.current_location.state = xUser.current_location.state;
+					modUser.current_location.country = xUser.current_location.country;
+					modUser.current_location.zip = xUser.current_location.zip;
 				}
 	
 				// INTERESTS AND SUCH
@@ -214,15 +214,15 @@ package com.pbking.facebook.delegates.users
 				if(xUser.education_history)
 				{
 					modUser.education_history = [];
-					for each ( var e:XML in xUser.education_history ) 
+					for each ( var e:Object in xUser.education_history ) 
 					{
 						var educationInfo:FacebookEducationInfo = new FacebookEducationInfo();
-						educationInfo.name = e.name.toString();
-						educationInfo.year = e.year.toString();
+						educationInfo.name = e.name;
+						educationInfo.year = e.year;
 						educationInfo.concentrations = [];
 
 						for each ( var c:XML in e.concentration )
-							educationInfo.concentrations.push( c.toString() )
+							educationInfo.concentrations.push( c )
 		
 						modUser.education_history.push( educationInfo );
 					}
@@ -234,21 +234,21 @@ package com.pbking.facebook.delegates.users
 				{
 					modUser.work_history = [];
 					
-					for each ( var xWorkInfo:XML in xUser.work_history ) 
+					for each ( var xWorkInfo:Object in xUser.work_history ) 
 					{
 						var workInfo:FacebookWorkInfo = new FacebookWorkInfo();
 		
 						workInfo.location = new FacebookLocation();
-						workInfo.location.city = xWorkInfo.location.city.toString();
-						workInfo.location.state = xWorkInfo.location.state.toString();
-						workInfo.location.country = xWorkInfo.location.country.toString();
-						workInfo.location.zip = xWorkInfo.location.zip.toString();
+						workInfo.location.city = xWorkInfo.location.city;
+						workInfo.location.state = xWorkInfo.location.state;
+						workInfo.location.country = xWorkInfo.location.country;
+						workInfo.location.zip = xWorkInfo.location.zip;
 		
-						workInfo.company_name = xWorkInfo.company_name.toString();
-						workInfo.description = xWorkInfo.description.toString();
-						workInfo.position = xWorkInfo.position.toString();
-						workInfo.start_date = FacebookDataParser.formatDate(xWorkInfo.start_date.toString());
-						workInfo.end_date = FacebookDataParser.formatDate( xWorkInfo.end_date.toString() );
+						workInfo.company_name = xWorkInfo.company_name;
+						workInfo.description = xWorkInfo.description;
+						workInfo.position = xWorkInfo.position;
+						workInfo.start_date = FacebookDataParser.formatDate(xWorkInfo.start_date);
+						workInfo.end_date = FacebookDataParser.formatDate(xWorkInfo.end_date);
 		
 						modUser.work_history.push( workInfo );
 					}

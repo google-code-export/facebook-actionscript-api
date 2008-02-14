@@ -70,9 +70,14 @@
 		
 	    <mxmlc  file="${src}/FB_API_SIMPLE_EXAMPLE.mxml" 
 	            output="${build}/example/FB_API_EXAMPLE.swf"
+	    		debug="false"
 	    		actionscript-file-encoding="UTF-8">
 	    	
-	            <load-config filename="${FLEX_CONFIG}"/>
+	    		<el dir="${basedir}/lib/as3">
+	    	        <include name="corelib.swc"/>    
+	    	    </el> 
+	    	
+	    		<load-config filename="${FLEX_CONFIG}"/>
 	        	<source-path path-element="${FLEX_FRAMEWORKS}"/>
 	            <default-size width="500" height="400" />
 		</mxmlc>
@@ -99,7 +104,12 @@
 	    		debug="false"
 	    		actionscript-file-encoding="UTF-8">
 	    	
-	            <load-config filename="${FLEX_CONFIG}"/>
+	    		<el dir="${basedir}/lib/as3">
+	    	        <include name="corelib.swc"/>    
+	    	        <include name="flexunit.swc"/>    
+	    	    </el> 
+
+	    		<load-config filename="${FLEX_CONFIG}"/>
 	        	<source-path path-element="${FLEX_FRAMEWORKS}"/>
 	            <default-size width="800" height="600" />
 		</mxmlc>
