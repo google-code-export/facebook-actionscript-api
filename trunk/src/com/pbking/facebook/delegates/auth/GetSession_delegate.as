@@ -59,6 +59,7 @@ package com.pbking.facebook.delegates.auth
 			PBLogger.getLogger("pbking.facebook").debug("starting facebook session with auth_token: " + auth_token);
 
 			fbCall.setRequestArgument("auth_token", auth_token);
+			
 			fbCall.post("facebook.auth.getSession", fBook.default_rest_url);
 		}
 		
