@@ -19,7 +19,7 @@ package com.pbking.facebook.delegates.users
 		
 		override protected function handleResult(result:Object):void
 		{
-			success = parseInt(result.toString()) == 1;
+			this.success = Boolean(result);
 		}
 		
 	}

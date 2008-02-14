@@ -81,7 +81,7 @@ package com.pbking.facebook.delegates
 			var result:Object = fbCall.result;
 
 			//look for an error
-			if(result.hasOwnProperty('error_code'))
+			if(result && result.hasOwnProperty('error_code'))
 			{
 				//dang.  handle the error
 				this.errorCode = result.error_code;

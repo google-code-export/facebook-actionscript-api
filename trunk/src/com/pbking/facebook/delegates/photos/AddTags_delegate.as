@@ -57,7 +57,7 @@ package com.pbking.facebook.delegates.photos
 
 		override protected function handleResult(result:Object):void
 		{
-			this.success = parseInt(result.toString()) == 1;
+			this.success = Boolean(result);
 		}
 	}
 }

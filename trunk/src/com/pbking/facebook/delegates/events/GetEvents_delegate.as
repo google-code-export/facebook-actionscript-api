@@ -15,7 +15,7 @@ package com.pbking.facebook.delegates.events
 		public var end_time:Date;
 		public var rsvp_status_filter:String;
 		
-		public var events:Array;
+		public var events:Array = [];
 		
 		public function GetEvents_delegate(user:FacebookUser=null, eventsFilter:Array=null, start_time:Date=null, end_time:Date=null, rsvp_status_filter:String="")
 		{

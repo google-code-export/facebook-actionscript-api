@@ -24,7 +24,8 @@ package com.pbking.facebook.delegates.users
 		
 		override protected function handleResult(result:Object):void
 		{
-			hasPermission = parseInt(result.toString()) == 1;
+			hasPermission = Boolean(result);
+
 		}
 		
 	}
