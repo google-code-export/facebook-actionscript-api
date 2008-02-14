@@ -37,6 +37,7 @@ package com.pbking.facebook
 {
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.delegates.auth.*;
+	import com.pbking.facebook.delegates.users.GetLoggedInUser_delegate;
 	import com.pbking.facebook.methodGroups.*;
 	import com.pbking.util.logging.PBLogger;
 	
@@ -284,6 +285,7 @@ package com.pbking.facebook
 
 		public function startJSBridgeSession(api_key:String, secret:String, session_key:String, expires:Number, user_id:Number):void
 		{
+			logger.debug("starting jsBridge session");
 			setSessionType(FacebookSessionType.JAVASCRIPT_BRIDGE);
 			this._api_key = api_key;
 			this._secret = secret;
@@ -304,21 +306,17 @@ package com.pbking.facebook
 			this._secret = secret;
 		}
 
-		
+		private var non_inf_session_secret:String;
 		/**
 		 * Start a session for a desktop based application.
 		 * For this you need to know and pass the application api_key and secret.
 		 * The user will be prompted to login to their Facebook page after which you should call
 		 * validateDesktopSession().  Alternately you could pass in an infinite_session_key which
 		 * will authenticate immediately (without navigating to the user login page).
-		 * PLEASE note that this session is NOT secure as your secret will be compiled into your
-		 * application which CAN BE DECOMPILED!  This mode should ONLY be used for local testing purposes.
-		 * For production you should use the startSecureDesktopSession.
 		 */
-		public function startDesktopSession(api_key:String, secret:String, infinite_session_key:String=null):void
+		public function startDesktopSession(api_key:String, secret:String, infinite_session_key:String=null, infinite_session_secret:String=null):void
 		{
 			logger.debug("starting desktop session");
-			logger.warn("startDesktopSession is not secure and should be used for local testing only!");
 
 			setSessionType(FacebookSessionType.DESKTOP);
 			
@@ -326,25 +324,40 @@ package com.pbking.facebook
 			this.sessionType = _sessionType;
 			
 			this._api_key = api_key;
-			this._secret = secret;
 			
 			if(infinite_session_key)
 			{
+				this.non_inf_session_secret = secret;
+				this._secret = infinite_session_secret;
 				this._session_key = infinite_session_key;
 
-				// The user id is everything after the hyphen in the session key
-				var i:Number = infinite_session_key.indexOf("-");
-				var userid:int = parseInt(infinite_session_key.substring(i+1));
-				this._user = FacebookUser.getUser(userid);
+				//make a call to verify our session (and grab our user while we're at it)
+				this.users.getLoggedInUser(verifyInfinateSession);
+			}
+			else
+			{
+				this._secret = secret;
+				//construct a token and get ready for the user to enter user/pass
+				var delegate:CreateToken_delegate = new CreateToken_delegate(this);
+				delegate.addEventListener(Event.COMPLETE, onDesktopTokenCreated);
+			}
+		}
+		
+		private function verifyInfinateSession(e:Event):void
+		{
+			var d:GetLoggedInUser_delegate = e.target as GetLoggedInUser_delegate;
+			if(d.success)
+			{
+				this._user = d.user;
 				this._user.isLoggedInUser = true;
-
 				onReady();
 			}
 			else
 			{
-				//construct a token and get ready for the user to enter user/pass
-				var delegate:CreateToken_delegate = new CreateToken_delegate(this);
-				delegate.addEventListener(Event.COMPLETE, onDesktopTokenCreated);
+				//infinate session didn't work out.  just start over without it
+				this.session_key = null;
+				this._secret = this.non_inf_session_secret;
+				startDesktopSession(this._api_key, this._secret);
 			}
 		}
 		
@@ -387,6 +400,7 @@ package com.pbking.facebook
 
 				this._session_key = delegate.session_key;
 				this._expires = delegate.expires;
+				this._secret = delegate.secret;
 			
 				onReady();
 			}
