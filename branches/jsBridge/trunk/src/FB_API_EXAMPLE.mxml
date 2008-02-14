@@ -68,30 +68,46 @@ Actionscript Developers group or send them to me (Jason Crist:jcrist@pbking.com)
 			
 			private var logger:PBLogger;
 			
-			private var config_api_key:String = "xxx";
-			private var config_secret:String = "xxx";
-
 			/**
 			 * Called when the application is ready
 			 */
 			private function init():void
 			{
+				//instantiate our Flash Friendly logger and listen for facebook logs
 				logger = PBLogger.getLogger("pbking.facebook");
 				logger.addEventListener(PBLogEvent.LOG, onLog);
 				
+				//create our facebook instance
 				fBook = new Facebook();
 				fBook.addEventListener(Event.COMPLETE, onFacebookReady);
 				
-				var flashVars:Object = Application.application.parameters;
-
-				if(flashVars['fb_sig'] != null) 
+				//determine if we're running locally.  if we are we'll run this
+				//app as an unsecure desktop app.  Otherwise fire up a JSAuth session
+				if(Application.application.url.slice(0, 5) == "file:")
 				{
-					fBook.startWidgetSession(flashVars, config_api_key, config_secret);
+					var keyLoader:URLLoader = new URLLoader();
+					keyLoader.addEventListener(Event.COMPLETE, onKeySecretLoaded);
+					keyLoader.load(new URLRequest("api_key_secret.xml"));
 				}
 				else
 				{
-					fBook.startDesktopSession(config_api_key, config_secret);
+					var flashVars:Object = Application.application.parameters;
+					//startWidgetSession has been depreciated
+					//fBook.startWidgetSession(flashVars, config_api_key, config_secret);
+					
+					//these flashVars are NOT the flashvars passed in when using an <fb:swf/> tag
+					//they are pulled out of the JS api instance.  See /html/fb_as3_api_example.html for an
+					//example of how to pull those values out and send them here.
+					fBook.startJSBridgeSession(flashVars.api_key, flashVars.secret, flashVars.session_key, flashVars.expires, flashVars.user_id); 
 				}
+			}
+			
+			private function onKeySecretLoaded(e:Event):void
+			{
+				var keyLoader:URLLoader = e.target as URLLoader;
+				keyLoader.removeEventListener(Event.COMPLETE, onKeySecretLoaded);
+				var keySecret:XML = new XML(keyLoader.data);
+				fBook.startDesktopSession(keySecret.api_key, keySecret.secret);
 			}
 			
 			/**
@@ -154,9 +170,10 @@ Actionscript Developers group or send them to me (Jason Crist:jcrist@pbking.com)
 		
 	<mx:Button x="200" y="182" 
 		label="Validate (desktop app)" 
-		click="fBook.validateDesktopSession();"
-		visible="{fBook.sessionType == FacebookSessionType.DESKTOP_APP &amp;&amp; !fBook.isConnected}"/>
-		
+		click="fBook.validateDesktopSession();"/>
+	<!--
+		visible="{fBook.sessionType == FacebookSessionType.DESKTOP &amp;&amp; !fBook.isConnected}"/>
+	-->	
 	<!--
 		List of the logged in user's friends
 	-->
