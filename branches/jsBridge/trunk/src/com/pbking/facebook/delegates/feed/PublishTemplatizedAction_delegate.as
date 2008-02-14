@@ -48,13 +48,9 @@ package com.pbking.facebook.delegates.feed
 			fbCall.post("facebook.feed.publishTemplatizedAction");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			super.handleResult(resultXML);
-			
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
-			success = parseInt(resultXML) == 1;
+			success = result.toString() == "1";
 		}
 		
 	}

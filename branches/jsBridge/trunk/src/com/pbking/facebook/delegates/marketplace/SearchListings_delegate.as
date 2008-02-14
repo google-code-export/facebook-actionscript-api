@@ -29,14 +29,12 @@ package com.pbking.facebook.delegates.marketplace
 
 		// RESULT //////////
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-				
 			listings = [];
-			for each(var listingX:XML in resultXML..listing)
+			for each(var listing:Object in result)
 			{
-				listings.push(MarketplaceListing.createListingFromXML(listingX));
+				listings.push(new MarketplaceListing(listing));
 			}
 		}
 	}

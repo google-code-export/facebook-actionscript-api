@@ -60,16 +60,12 @@ package com.pbking.facebook.delegates.photos
 			fbCall.post("facebook.photos.getTags");
 		}
 
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
-			var xTags:XMLList = resultXML..photo_tag;
-			
 			//create all of the tag objects
 			this.tags = [];
-			for each(var xTag:XML in xTags)
-				this.tags.push(new FacebookTag(xTag));
+			for each(var tagInit:Object in result)
+				this.tags.push(new FacebookTag(tagInit));
 
 			if(populatePhotosWithTags)
 			{

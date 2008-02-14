@@ -56,14 +56,14 @@ package com.pbking.facebook.delegates
 		{
 			this.fBook = Facebook.instance;
 			fbCall = new FacebookCall(fBook);
-			fbCall.addEventListener(Event.COMPLETE, result);
+			fbCall.addEventListener(Event.COMPLETE, onCallComplete);
 			fbCall.addEventListener(IOErrorEvent.IO_ERROR, onCallError);
 			fbCall.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onCallError);
 		}
 		
-		public function getResponseXML():XML
+		public function get result():Object
 		{
-			return fbCall.getResponse();
+			return fbCall.result;
 		}
 		
 		protected function onCallError(event:ErrorEvent):void
@@ -74,29 +74,29 @@ package com.pbking.facebook.delegates
 			onError();
 		}
 		
-		protected function result(event:Event):void
+		protected function onCallComplete(event:Event):void
 		{
-			fbCall.removeEventListener(Event.COMPLETE, result);
-
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
+			fbCall.removeEventListener(Event.COMPLETE, onCallComplete);
 			
+			var result:Object = fbCall.result;
+
 			//look for an error
-			if(fbCall.getResponse().error_code != undefined)
+			if(result.hasOwnProperty('error_code'))
 			{
 				//dang.  handle the error
-				this.errorCode = fbCall.getResponse().error_code;
-				this.errorMessage = fbCall.getResponse().error_msg;
+				this.errorCode = result.error_code;
+				this.errorMessage = result.error_msg;
 				onError();
 			}
 			else
 			{
 				//send the results to the children
-				handleResult(fbCall.getResponse());
+				handleResult(result);
 				onComplete();
 			}
 		}
 		
-		protected function handleResult(resultXML:XML):void
+		protected function handleResult(result:Object):void
 		{
 			//Children should override this methid
 		}

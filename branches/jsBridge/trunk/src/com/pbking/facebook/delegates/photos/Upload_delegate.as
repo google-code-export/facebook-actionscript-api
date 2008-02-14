@@ -60,11 +60,9 @@ package com.pbking.facebook.delegates.photos
 
 		// RESULT //////////
 
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
-			uploadedPhoto = new FacebookPhoto(resultXML);
+			uploadedPhoto = new FacebookPhoto(result);
 		}
 	}
 }

@@ -40,20 +40,17 @@ package com.pbking.facebook.delegates.friends
 			fbCall.post("facebook.friends.areFriends");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
 			list1 = [];
 			list2 = [];
 			resultList = [];
 
-			var xFriendsList:XMLList = resultXML..friend_info;
-			for each(var xFriendInfo:XML in xFriendsList)
+			for each(var friendInfo:Object in result)
 			{
-				list1.push(totalUserCollection.getItemById(int(xFriendInfo.uid1)));
-				list2.push(totalUserCollection.getItemById(int(xFriendInfo.uid2)));
-				resultList.push(xFriendInfo.are_friends == 1);
+				list1.push(totalUserCollection.getItemById(parseInt(friendInfo.uid1)));
+				list2.push(totalUserCollection.getItemById(parseInt(friendInfo.uid2)));
+				resultList.push(friendInfo.are_friends == 1);
 			} 
 		}
 		

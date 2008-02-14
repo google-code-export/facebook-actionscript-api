@@ -14,16 +14,13 @@ package com.pbking.facebook.delegates.friends
 			fbCall.post("facebook.friends.get");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
 			friends = [];
 			
-			var xFriendsList:XMLList = resultXML..uid;
-			for each(var xUID:XML in xFriendsList)
+			for each(var uid:int in result)
 			{
-				friends.push(fBook.getUser(parseInt(xUID)));
+				friends.push(fBook.getUser(uid));
 			} 
 		}
 		

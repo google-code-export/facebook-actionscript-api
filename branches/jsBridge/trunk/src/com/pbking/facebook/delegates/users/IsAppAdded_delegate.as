@@ -16,11 +16,9 @@ package com.pbking.facebook.delegates.users
 			fbCall.post("facebook.users.isAppAdded");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-
-			isAdded	= parseInt(resultXML.toString()) == 1;
+			isAdded	= parseInt(result.toString()) == 1;
 		}
 		
 	}

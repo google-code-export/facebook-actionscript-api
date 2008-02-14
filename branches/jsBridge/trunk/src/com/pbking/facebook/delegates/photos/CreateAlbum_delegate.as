@@ -24,11 +24,9 @@ package com.pbking.facebook.delegates.photos
 			fbCall.post("facebook.photos.createAlbum");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-
-			newAlbum = new FacebookAlbum(resultXML.toString());
+			newAlbum = new FacebookAlbum(result);
 		}
 	}
 }

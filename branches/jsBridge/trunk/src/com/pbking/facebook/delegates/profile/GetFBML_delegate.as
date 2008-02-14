@@ -19,11 +19,9 @@ package com.pbking.facebook.delegates.profile
 			fbCall.post("facebook.profile.getFBML");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
-			this.markup = resultXML.toString();
+			this.markup = result.toString();
 		}
 		
 	}

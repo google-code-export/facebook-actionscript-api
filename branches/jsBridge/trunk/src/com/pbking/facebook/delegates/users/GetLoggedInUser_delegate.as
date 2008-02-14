@@ -15,11 +15,9 @@ package com.pbking.facebook.delegates.users
 			fbCall.post("facebook.users.getLoggedInUser");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
-			var newUserId:int = parseInt(resultXML.toString());			
+			var newUserId:int = parseInt(result.toString());			
 			user = fBook.getUser(newUserId);
 			user.isLoggedInUser = true;
 		}

@@ -331,10 +331,10 @@ package com.pbking.facebook
 		 * application which CAN BE DECOMPILED!  This mode should ONLY be used for local testing purposes.
 		 * For production you should use the startSecureDesktopSession.
 		 */
-		public function startDesktopSession(api_key:String, secret:String, infinite_session_key:String=""):void
+		public function startDesktopSession(api_key:String, secret:String, infinite_session_key:String=null):void
 		{
 			logger.debug("starting desktop session");
-			logger.warn("startDesktopSession is not sucure and should be used for local testing only!");
+			logger.warn("startDesktopSession is not secure and should be used for local testing only!");
 
 			setSessionType(FacebookSessionType.DESKTOP);
 			
@@ -344,7 +344,7 @@ package com.pbking.facebook
 			this._api_key = api_key;
 			this._secret = secret;
 			
-			if(infinite_session_key != "")
+			if(infinite_session_key)
 			{
 				this._session_key = infinite_session_key;
 
