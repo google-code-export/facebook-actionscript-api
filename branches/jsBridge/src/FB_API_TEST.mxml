@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	xmlns:flexui="flexunit.flexui.*"
+	creationComplete="onCreationComplete();">
+
+	<mx:TraceTarget
+		id="myTraceTarget"
+		filters="pbking.*"
+		fieldSeparator=" | "
+		includeCategory="true"
+		includeLevel="true"
+	/>
+
+	<mx:Script>
+		<![CDATA[
+			import com.pbking.util.logging.PBLogBridge;
+			import com.pbking.util.logging.PBLogger;
+			import com.pbking.util.logging.PBLogEvent;
+			import mx.logging.Log;
+			import mx.logging.LogEvent;
+			import com.pbking.facebook.FacebookSessionType;
+			import com.pbking.facebook.Facebook;
+			import test.pbking.facebook.Facebook_test;
+			import flexunit.framework.TestSuite;
+			
+			private var config_api_key:String = "xxx";
+			private var config_secret:String = "xxx";
+			
+			[Bindable] private var facebook:Facebook = new Facebook();
+						
+			private function onCreationComplete():void
+			{
+				PBLogger.getLogger("pbking.facebook").addEventListener(PBLogEvent.LOG, onLog);
+				PBLogBridge.initialize();
+
+				testRunner.test = createSuite();
+ 				testRunner.startTest();				
+			}
+			
+			private function createSuite():TestSuite
+			{
+				var ts:TestSuite = new TestSuite();
+ 				
+ 				ts.addTest( Facebook_test.suite(facebook, config_api_key, config_secret) ); 				
+
+ 				return ts;
+			}
+
+			private function onLog(le:PBLogEvent):void
+			{
+				logText.text += le.message + "\n";
+			}
+			
+		]]>
+	</mx:Script>
+
+	<mx:VBox width="100%" height="100%">
+		<mx:HBox width="100%" height="50" verticalAlign="middle" horizontalAlign="center">
+			<mx:Button label="Click once logged in . . . "
+				visible="{facebook.sessionType == FacebookSessionType.DESKTOP_APP &amp;&amp; !facebook.isConnected}" 
+				click="facebook.validateDesktopSession();"/>
+		</mx:HBox>
+		<flexui:TestRunnerBase id="testRunner" width="100%" height="100%" />
+		<mx:TextArea id="logText" width="100%" height="50%"/>
+	</mx:VBox>
+
+</mx:Application>
