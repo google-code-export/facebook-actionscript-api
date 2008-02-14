@@ -24,7 +24,7 @@ package com.pbking.facebook.delegates.users
 			//put all of the users uids into an array to send
 			for each(var user:FacebookUser in users)
 				uids.push(user.uid);
-				
+			fbCall.setRequestArgument("format", "JSON");	
 			fbCall.setRequestArgument("uids", uids.join(","));
 			fbCall.setRequestArgument("fields", fields.join(","));
 			fbCall.post("facebook.users.getInfo");

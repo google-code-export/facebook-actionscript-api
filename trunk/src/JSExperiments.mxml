@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute"
+	creationComplete="init();">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.gsolo.encryption.MD5;
+			import mx.controls.Alert;
+			import com.pbking.util.logging.PBLogger;
+			import com.pbking.util.logging.PBLogEvent;
+			import com.pbking.facebook.data.users.FacebookUser;
+			import com.pbking.facebook.delegates.friends.GetFriends_delegate;
+			import com.pbking.facebook.Facebook;
+		
+			private var api_key:String;
+			private var secret:String;
+			private var session_key:String;
+			private var expires:Number;
+			
+			private var logger:PBLogger;
+			private var facebook:Facebook;
+			
+			private var _args:Object = {};
+			
+			private function init():void
+			{
+				logger = PBLogger.getLogger("pbking.facebook");
+				logger.addEventListener(PBLogEvent.LOG, onLog);
+
+				logHack("initting");
+				
+				var flashVars:Object = Application.application.parameters;
+				
+				api_key = flashVars.api_key;
+				secret = flashVars.secret;
+				session_key = flashVars.session_key;
+				expires = flashVars.expires;
+				
+				logHack("api_key: " + api_key);
+				logHack("secret: " + secret);
+				logHack("session_key: " + session_key);
+				logHack("expires: " + expires);
+
+				facebook = new Facebook();
+
+				facebook.startJSBridgeSession(api_key, secret, session_key, expires, flashVars.user_id);
+				
+				facebook.friends.getFriends(onGotFriends);
+
+			}
+
+			private function onGotFriends(e:Event):void
+			{
+				var d:GetFriends_delegate = e.target as GetFriends_delegate;
+				
+				for each(var friend:FacebookUser in d.friends)
+				{
+					logHack("friend id: " + friend.uid);
+				}
+			}
+			
+			private function onLog(le:PBLogEvent):void
+			{
+				logView.text += le.message + "\n";
+			}		
+				
+			private function logHack(message:String):void
+			{
+				logView.text += message + "\n";
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:TextArea id="logView" width="100%" height="100%" />
+	
+</mx:Application>

@@ -40,6 +40,7 @@ package com.pbking.facebook
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.external.ExternalInterface;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
@@ -53,6 +54,7 @@ package com.pbking.facebook
 		
 		private static var callID:int = 0;
 		
+		private var externalInterfaceInitialized:Boolean;
 		private var logger:PBLogger = PBLogger.getLogger("pbking.facebook");
 		
 		private var _fb:Facebook;
@@ -64,8 +66,43 @@ package com.pbking.facebook
 		function FacebookCall(fBook:Facebook)
 		{
 			this._fb = fBook;
+		}
+		
+		// PUBLIC FUNCTIONS //////////
+		
+		private function jsResponse(xmlString:String):void
+		{
+			logger.debug("result: " + xmlString);
+		}
+		
+		/**
+		 * Send this call to the server
+		 */
+		public function post(method:String="no_method_required", url:String=null):void
+		{
+			if(_fb.sessionType == FacebookSessionType.JAVASCRIPT_BRIDGE)
+				post_bridge(method);
+			else
+				post_direct(method, url);
+		}
+		
+		private function post_bridge(method:String):void
+		{
+			if(!externalInterfaceInitialized)
+			{
+				ExternalInterface.addCallback("bridgeFacebookReply", bridgeFacebookReply);
+				externalInterfaceInitialized = true;
+			}
+			
+			ExternalInterface.call("bridgeFacebookCall", method, _args);
+			logger.debug("after call");
+		}
+			
+		private function post_direct(method:String, url:String=null):void
+		{	
+			if(url == null) url = _fb.rest_url;
 
-			setRequestArgument("v", fBook.api_version);
+			setRequestArgument("v", _fb.api_version);
 			
 			if(_fb.api_key != null)
 				setRequestArgument("api_key", _fb.api_key);
@@ -73,40 +110,15 @@ package com.pbking.facebook
 			if(_fb.session_key != null)
 				setRequestArgument("session_key", _fb.session_key);
 
-			// adding time to callID for safer uniqueness - still problematic if lots of clients!
 			var call_id:String = ( new Date().valueOf() ).toString() + ( FacebookCall.callID++ ).toString();
 			this.setRequestArgument( 'call_id', call_id );
 
-			//add ALL fb_sig arguments to request. 
-			//The server will use these to authenticate that our user is who he says he is.
-			if(_fb.sessionType == FacebookSessionType.WIDGET_APP || _fb.useRedirectServer)
-			{
-				for(var prop:String in _fb.fb_sig_values)
-				{
-					this.setRequestArgument(prop, _fb.fb_sig_values[prop]); 
-				}
-			}
-		}
-		
-		// PUBLIC FUNCTIONS //////////
-		
-		/**
-		 * Send this call to the server
-		 */
-		public function post(method:String="no_method_required", url:String=null, forceSig:Boolean=false):void
-		{
-			if(url == null) url = _fb.rest_url;
-			
 			this.setRequestArgument( 'method', method );
 			
-			//we only need to create a sig if we're NOT using a redirect server.
-			//otherwise the server is going to create the sig property on our behalf
-			if(!_fb.useRedirectServer || forceSig)
-			{
-				//create encrypted signature. NOTE: You cannot use setRequestArgument() after calling this or you will bork the checksum!!
-				this.setRequestArgument("sig", this.sig);
-			}
+			//create encrypted signature. NOTE: You cannot use setRequestArgument() after calling this or you will bork the checksum!!
+			this.setRequestArgument("sig", getSig());
 			
+			//construct the log message
 			var loader:URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, onResult);
 			loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
@@ -189,20 +201,13 @@ package com.pbking.facebook
 		private function onResult(event:Event):void
 		{
 			var loader:URLLoader = event.target as URLLoader;
-			//pull the XML out of the loader
-			_xml = new XML(loader.data);
 			
+			_xml = new XML(loader.data);
 			default xml namespace = _fb.FACEBOOK_NAMESPACE;
 
-			//dispatch the response
 			logger.debug("< < < received facebook reply:\n" + _xml.toXMLString());
 
-			if(_xml..error_code == undefined)
-			{
-				//all is well in the kingdom
-			}
-			
-			else
+			if(_xml..error_code != undefined)
 			{
 				//all is NOT well in the kingdom!
 				logger.warn("!THERE WAS A FACEBOOK ERROR!" + _xml..code + ":" + _xml..msg);
@@ -211,11 +216,28 @@ package com.pbking.facebook
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
+		private function bridgeFacebookReply(result:Object, exception:Object):void
+		{
+			logger.debug("result: " + result);
+			for (var s:String in result)
+			{
+				logger.debug("  " + s + result[s]);
+			}
+			logger.debug("exception: " + exception);
+			for (var s2:String in exception)
+			{
+				logger.debug("  " + s2 + exception[s2]);
+			}
+			
+			_xml = new XML();
+			
+			dispatchEvent(new Event(Event.COMPLETE));
+		}
+		
 		/**
 		 * Construct the signature as described by Facebook api documentation
-		 * (will only be used if NOT using a redirect server)
 		 */
-		private function get sig():String
+		private function getSig():String
 		{
 			var a:Array = [];
 			
