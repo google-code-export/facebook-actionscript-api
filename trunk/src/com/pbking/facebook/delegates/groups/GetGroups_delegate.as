@@ -33,35 +33,31 @@ package com.pbking.facebook.delegates.groups
 			fbCall.post("facebook.groups.get");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			super.handleResult(resultXML);
-			
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
 			groups = [];
 			
-			for each(var groupX:XML in resultXML..group)
+			for each(var groupX:Object in result)
 			{
 				var newGroup:FacebookGroup = fBook.getGroup(groupX.gid);
 				groups.push(newGroup);
 				
-				if(groupX.name != undefined)
+				if(groupX.name)
 					newGroup.name = groupX.name;
 				
-				if(groupX.nid != undefined)
+				if(groupX.nid)
 					newGroup.nid = groupX.nid;
 				
-				if(groupX.description != undefined)
+				if(groupX.description)
 					newGroup.description = groupX.description;
 				
-				if(groupX.group_type != undefined)
+				if(groupX.group_type)
 					newGroup.group_type = groupX.group_type;
 				
-				if(groupX.group_subtype != undefined)
+				if(groupX.group_subtype)
 					newGroup.group_subtype = groupX.group_subtype;
 				
-				if(groupX.recent_news != undefined)
+				if(groupX.recent_news)
 				{
 					newGroup.recent_news = [];
 					for each(var rno:XML in groupX.recent_news.children)
@@ -70,25 +66,25 @@ package com.pbking.facebook.delegates.groups
 					}
 				}
 				
-				if(groupX.pic != undefined)
+				if(groupX.pic)
 					newGroup.pic = groupX.pic;
 				
-				if(groupX.pic_big != undefined)
+				if(groupX.pic_big)
 					newGroup.pic_big = groupX.pic_big;
 				
-				if(groupX.pic_small != undefined)
+				if(groupX.pic_small)
 					newGroup.pic_small = groupX.pic_small;
 
-				if(groupX.creator != undefined)
+				if(groupX.creator)
 					newGroup.creator = fBook.getUser(parseInt(groupX.creator));;
 				
-				if(groupX.update_time != undefined)
+				if(groupX.update_time)
 					newGroup.update_time = FacebookDataParser.formatDate(groupX.update_time);
 				
-				if(groupX.website != undefined)
+				if(groupX.website)
 					newGroup.website = groupX.website;
 
-				if(groupX.office != undefined)
+				if(groupX.office)
 				{
 					newGroup.office = new FacebookLocation();
 					newGroup.office.street = groupX.office.street;
@@ -98,7 +94,7 @@ package com.pbking.facebook.delegates.groups
 					newGroup.office.zip = groupX.office.zip;
 				}
 
-				if(groupX.venue != undefined)
+				if(groupX.venue)
 				{
 					newGroup.venue = new FacebookLocation();
 					newGroup.venue.street = groupX.venue.street;

@@ -65,16 +65,13 @@ package com.pbking.facebook.delegates.photos
 			fbCall.post("facebook.photos.get");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
 			photos = [];
 			
-			var xPhotos:XMLList = resultXML..photo;
-			for each(var xPhoto:XML in xPhotos)
+			for each(var photo:Object in result)
 			{
-				photos.push(new FacebookPhoto(xPhoto));
+				photos.push(new FacebookPhoto(photo));
 			} 
 		}
 		

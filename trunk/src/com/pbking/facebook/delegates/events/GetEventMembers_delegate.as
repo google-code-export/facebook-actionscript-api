@@ -16,29 +16,25 @@ package com.pbking.facebook.delegates.events
 			fbCall.post("facebook.events.getMembers");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			super.handleResult(resultXML);
-			
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-
-			var uid:XML;
+			var uid:int;
 
 			event.attending.removeAll();
-			for each(uid in resultXML.attending.children())
-				event.attending.addUser(fBook.getUser(parseInt(uid)));
+			for each(uid in result.attending)
+				event.attending.addUser(fBook.getUser(uid));
 			
 			event.unsure.removeAll();
-			for each(uid in resultXML.unsure.children())
-				event.unsure.addUser(fBook.getUser(parseInt(uid)));
+			for each(uid in result.unsure)
+				event.unsure.addUser(fBook.getUser(uid));
 			
 			event.declined.removeAll();
-			for each(uid in resultXML.declined.children())
-				event.declined.addUser(fBook.getUser(parseInt(uid)));
+			for each(uid in result.declined)
+				event.declined.addUser(fBook.getUser(uid));
 			
 			event.not_replied.removeAll();
-			for each(uid in resultXML.not_replied.children())
-				event.not_replied.addUser(fBook.getUser(parseInt(uid)));
+			for each(uid in result.not_replied)
+				event.not_replied.addUser(fBook.getUser(uid));
 			
 		}
 		

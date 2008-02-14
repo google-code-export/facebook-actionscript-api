@@ -22,11 +22,9 @@ package com.pbking.facebook.delegates.users
 			fbCall.post("facebook.users.hasAppPermission");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-				
-			hasPermission = parseInt(resultXML.toString()) == 1;
+			hasPermission = parseInt(result.toString()) == 1;
 		}
 		
 	}

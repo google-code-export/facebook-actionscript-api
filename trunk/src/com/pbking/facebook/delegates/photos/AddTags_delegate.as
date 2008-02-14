@@ -55,11 +55,9 @@ package com.pbking.facebook.delegates.photos
 			fbCall.post("facebook.photos.addTag");
 		}
 
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
-			this.success = parseInt(fbCall.getResponse().toString()) == 1;
+			this.success = parseInt(result.toString()) == 1;
 		}
 	}
 }

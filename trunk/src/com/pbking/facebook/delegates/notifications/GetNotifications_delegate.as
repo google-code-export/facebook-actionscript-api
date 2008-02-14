@@ -18,29 +18,10 @@ package com.pbking.facebook.delegates.notifications
 			fbCall.post("facebook.notifications.get");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
 			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-				
-			for each(var noteData:XML in resultXML.children())
-			{
-				if(noteData.@list == "true")
-				{
-					var newList:NotificationList = new NotificationList();
-					for each(var listItem:XML in noteData.children)
-					{
-						newList.push(listItem);
-					}
-					notificationLists[noteData.name().localName] = newList;
-				}
-				else
-				{
-					var newNote:Notification = new Notification();
-					newNote.unread = noteData.messages.unread;
-					newNote.most_recent = noteData.messages.most_recent;
-					notifications[noteData.name().localName] = newNote;
-				}
-			}
+			//TODO: write this for JSON handling
 		}
 		
 	}

@@ -12,14 +12,12 @@ package com.pbking.facebook.delegates.marketplace
 			fbCall.post("marketplace.getCategories");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-				
 			categories = [];
-			for each(var catName:XML in resultXML..marketplace_category)
+			for each(var catName:String in result)
 			{
-				categories.push( catName.toString() );
+				categories.push( catName );
 			}
 		}
 	}

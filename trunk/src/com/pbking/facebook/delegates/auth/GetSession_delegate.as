@@ -61,14 +61,14 @@ package com.pbking.facebook.delegates.auth
 		
 		// FUNCTIONS //////////
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
 			default xml namespace = fBook.FACEBOOK_NAMESPACE;
 			
-			session_key = resultXML..session_key;
-			uid = resultXML..uid;
-			secret = resultXML..secret;
-			expires = resultXML..expires;
+			session_key = result.session_key;
+			uid = result.uid;
+			secret = result.secret;
+			expires = result.expires;
 		} 
 		
 

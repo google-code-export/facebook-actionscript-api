@@ -17,11 +17,9 @@ package com.pbking.facebook.delegates.users
 			fbCall.post("facebook.users.setStatus");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
-			success = parseInt(resultXML.toString()) == 1;
+			success = parseInt(result.toString()) == 1;
 		}
 		
 	}

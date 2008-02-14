@@ -31,6 +31,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.pbking.facebook
 {
+	import com.adobe.serialization.json.JSON;
 	import com.gsolo.encryption.MD5;
 	import com.pbking.util.logging.PBLogger;
 	import com.shtif.web.MIMEConstructor;
@@ -59,7 +60,9 @@ package com.pbking.facebook
 		
 		private var _fb:Facebook;
 		private var _args:URLVariables = new URLVariables();
-		private var _xml:XML;
+		
+		[Bindable] public var result:Object;
+		[Bindable] public var exception:Object;
 		
 		// CONSTRUCTION //////////
 		
@@ -70,22 +73,26 @@ package com.pbking.facebook
 		
 		// PUBLIC FUNCTIONS //////////
 		
-		private function jsResponse(xmlString:String):void
-		{
-			logger.debug("result: " + xmlString);
-		}
-		
 		/**
 		 * Send this call to the server
 		 */
 		public function post(method:String="no_method_required", url:String=null):void
 		{
+			//construct the log message
+			var debugString:String = "> > > calling method: " + method;
+			for(var indexName:String in this._args)
+				debugString += "\n  +" + indexName + " = " + this._args[indexName];
+			logger.debug(debugString);
+					
 			if(_fb.sessionType == FacebookSessionType.JAVASCRIPT_BRIDGE)
 				post_bridge(method);
 			else
 				post_direct(method, url);
 		}
 		
+		/**
+		 * Helper function for sending the call through the javascript bridge
+		 */
 		private function post_bridge(method:String):void
 		{
 			if(!externalInterfaceInitialized)
@@ -95,14 +102,17 @@ package com.pbking.facebook
 			}
 			
 			ExternalInterface.call("bridgeFacebookCall", method, _args);
-			logger.debug("after call");
 		}
 			
+		/**
+		 * Helper function for sending the call straight to the server
+		 */
 		private function post_direct(method:String, url:String=null):void
 		{	
 			if(url == null) url = _fb.rest_url;
 
 			setRequestArgument("v", _fb.api_version);
+			setRequestArgument("format", "JSON");
 			
 			if(_fb.api_key != null)
 				setRequestArgument("api_key", _fb.api_key);
@@ -134,13 +144,6 @@ package com.pbking.facebook
 				
 				loader.dataFormat = URLLoaderDataFormat.TEXT;
 				
-				//construct the log message
-				var debugString:String = "> > > sending facebook message:\n" + req.url + "\n args:";
-				for(var indexName:String in this._args)
-					debugString += "\n " + indexName + " = " + this._args[indexName];
-	
-				logger.debug(debugString);
-	
 				//make the request!
 				loader.load(req);
 			}
@@ -155,7 +158,6 @@ package com.pbking.facebook
 				{
 					if(argIndexName != "data")
 					{
-						debugString += "\n " + argIndexName + " = " + this._args[argIndexName];
 						mime.writePostData(argIndexName, this._args[argIndexName]);
 					}
 					else
@@ -165,8 +167,6 @@ package com.pbking.facebook
 				}
 				mime.closePostData();
 
-				logger.debug(debugString);
-				
 				var urlreq:URLRequest = new URLRequest();
 				urlreq.method = URLRequestMethod.POST;
 				urlreq.contentType = "multipart/form-data; boundary="+mime.getBoundary();
@@ -186,11 +186,6 @@ package com.pbking.facebook
 			this._args[name] = value;	
 		}
 		
-		public function getResponse():XML
-		{
-			return _xml;
-		}
-		
 		// PRIVATE FUNCTIONS //////////
 		
 		private function onError(event:ErrorEvent):void
@@ -201,35 +196,21 @@ package com.pbking.facebook
 		private function onResult(event:Event):void
 		{
 			var loader:URLLoader = event.target as URLLoader;
+			var resultString:String = loader.data;
 			
-			_xml = new XML(loader.data);
-			default xml namespace = _fb.FACEBOOK_NAMESPACE;
+			result = JSON.decode(resultString);
 
-			logger.debug("< < < received facebook reply:\n" + _xml.toXMLString());
+			logger.debug("< < < received facebook reply:\n" + resultString);
 
-			if(_xml..error_code != undefined)
-			{
-				//all is NOT well in the kingdom!
-				logger.warn("!THERE WAS A FACEBOOK ERROR!" + _xml..code + ":" + _xml..msg);
-			}
-			
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
 		private function bridgeFacebookReply(result:Object, exception:Object):void
 		{
-			logger.debug("result: " + result);
-			for (var s:String in result)
-			{
-				logger.debug("  " + s + result[s]);
-			}
-			logger.debug("exception: " + exception);
-			for (var s2:String in exception)
-			{
-				logger.debug("  " + s2 + exception[s2]);
-			}
+			this.result = result;
+			this.exception = exception;
 			
-			_xml = new XML();
+			//TODO: Check for & handle exception
 			
 			dispatchEvent(new Event(Event.COMPLETE));
 		}

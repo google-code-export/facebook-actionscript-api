@@ -67,6 +67,7 @@ Actionscript Developers group or send them to me (Jason Crist:jcrist@pbking.com)
 			[Bindable] private var myFriends:ArrayCollection;
 			
 			private var logger:PBLogger;
+			private var storedSession:SharedObject;
 			
 			/**
 			 * Called when the application is ready
@@ -95,6 +96,8 @@ Actionscript Developers group or send them to me (Jason Crist:jcrist@pbking.com)
 					//startWidgetSession has been depreciated
 					//fBook.startWidgetSession(flashVars, config_api_key, config_secret);
 					
+					storedSession = SharedObject.getLocal(flashVars.api_key+"_session");
+					
 					//these flashVars are NOT the flashvars passed in when using an <fb:swf/> tag
 					//they are pulled out of the JS api instance.  See /html/fb_as3_api_example.html for an
 					//example of how to pull those values out and send them here.
@@ -106,8 +109,12 @@ Actionscript Developers group or send them to me (Jason Crist:jcrist@pbking.com)
 			{
 				var keyLoader:URLLoader = e.target as URLLoader;
 				keyLoader.removeEventListener(Event.COMPLETE, onKeySecretLoaded);
+				
 				var keySecret:XML = new XML(keyLoader.data);
-				fBook.startDesktopSession(keySecret.api_key, keySecret.secret);
+				
+				storedSession = SharedObject.getLocal(keySecret.api_key+"_session");
+				
+				fBook.startDesktopSession(keySecret.api_key, keySecret.secret, storedSession.data.infinite_session_key);
 			}
 			
 			/**
@@ -118,6 +125,12 @@ Actionscript Developers group or send them to me (Jason Crist:jcrist@pbking.com)
 			{
 				if(fBook.isConnected)
 				{
+					//save infinate session key if we can
+					if(fBook.expires == 0)
+					{
+						storedSession.data.infinite_session_key = fBook.session_key;
+						storedSession.flush();
+					}
 					//by passing in a callback function, we save the step of adding
 					//a listener to the GetAlbums_delegate that is returned from the
 					//following function

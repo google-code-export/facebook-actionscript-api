@@ -18,11 +18,9 @@ package com.pbking.facebook.delegates.marketplace
 			fbCall.post("marketplace.createListing");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
-			listing.listing_id = parseInt(resultXML.toString());
+			listing.listing_id = Number(result);
 		}
 	}
 }

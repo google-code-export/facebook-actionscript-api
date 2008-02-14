@@ -64,36 +64,27 @@ package com.pbking.facebook.data.photos
 		
 		// CONSTRUCTION //////////
 		
-		function FacebookAlbum(xml:XML)
+		function FacebookAlbum(initObj:Object)
 		{
-			parseXML(xml);
+			this._aid = initObj.aid;
 			
+			if(initObj.cover_pid)
+				this._cover_pid = initObj.cover_pid;
+				
+			this._owner = Facebook.instance.getUser(parseInt(initObj.owner));
+			
+			this._name = initObj.name;
+			this._description = initObj.description;
+			this._location = initObj.location;
+			this._link = initObj.link;
+			
+			this._created = FacebookDataParser.formatDate(initObj.created);
+			this._modified = FacebookDataParser.formatDate(initObj.modified);
+			
+			this._size = Number(initObj.size);
+
 			if(this.size == 0)
 				this._populated = true;
-		}
-		
-		private function parseXML(xml:XML):void
-		{
-			default xml namespace = Facebook.instance.FACEBOOK_NAMESPACE;
-
-			this._aid = xml.aid;
-			
-			if(xml.cover_pid != undefined)
-			{
-				this._cover_pid = xml.cover_pid;
-			}
-				
-			this._owner = Facebook.instance.getUser(parseInt(xml.owner));
-			
-			this._name = xml.name;
-			this._description = xml.description;
-			this._location = xml.location;
-			this._link = xml.link;
-			
-			this._created = FacebookDataParser.formatDate(xml.created);
-			this._modified = FacebookDataParser.formatDate(xml.modified);
-			
-			this._size = Number(xml.size);
 		}
 		
 		

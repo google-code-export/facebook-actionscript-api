@@ -50,57 +50,51 @@ package com.pbking.facebook.delegates.events
 			fbCall.post("facebook.events.get");
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			super.handleResult(resultXML);
-			
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
-			events = [];
-			
-			for each(var eventX:XML in resultXML..event)
+			for each(var event:Object in result)
 			{
-				var newEvent:FacebookEvent = fBook.getEvent(eventX.eid);
+				var newEvent:FacebookEvent = fBook.getEvent(event.eid);
 				events.push(newEvent);
 				
-				if(eventX.name != undefined)
-					newEvent.name = eventX.name;
+				if(event.name)
+					newEvent.name = event.name;
 				
-				if(eventX.nid != undefined)
-					newEvent.nid = eventX.nid;
+				if(event.nid)
+					newEvent.nid = event.nid;
 				
-				if(eventX.description != undefined)
-					newEvent.description = eventX.description;
+				if(event.description)
+					newEvent.description = event.description;
 				
-				if(eventX.event_type != undefined)
-					newEvent.event_type = eventX.event_type;
+				if(event.event_type)
+					newEvent.event_type = event.event_type;
 				
-				if(eventX.event_subtype != undefined)
-					newEvent.event_subtype = eventX.event_subtype;
+				if(event.event_subtype)
+					newEvent.event_subtype = event.event_subtype;
 				
-				if(eventX.pic != undefined)
-					newEvent.pic = eventX.pic;
+				if(event.pic)
+					newEvent.pic = event.pic;
 				
-				if(eventX.pic_big != undefined)
-					newEvent.pic_big = eventX.pic_big;
+				if(event.pic_big)
+					newEvent.pic_big = event.pic_big;
 				
-				if(eventX.pic_small != undefined)
-					newEvent.pic_small = eventX.pic_small;
+				if(event.pic_small)
+					newEvent.pic_small = event.pic_small;
 
-				if(eventX.creator != undefined)
-					newEvent.creator = fBook.getUser(parseInt(eventX.creator));;
+				if(event.creator)
+					newEvent.creator = fBook.getUser(parseInt(event.creator));;
 				
-				if(eventX.update_time != undefined)
-					newEvent.update_time = FacebookDataParser.formatDate(eventX.update_time);
+				if(event.update_time)
+					newEvent.update_time = FacebookDataParser.formatDate(event.update_time);
 				
-				if(eventX.venue != undefined)
+				if(event.venue)
 				{
 					newEvent.venue = new FacebookLocation();
-					newEvent.venue.street = eventX.venue.street;
-					newEvent.venue.city = eventX.venue.city;
-					newEvent.venue.state = eventX.venue.state;
-					newEvent.venue.country = eventX.venue.country;
-					newEvent.venue.zip = eventX.venue.zip;
+					newEvent.venue.street = event.venue.street;
+					newEvent.venue.city = event.venue.city;
+					newEvent.venue.state = event.venue.state;
+					newEvent.venue.country = event.venue.country;
+					newEvent.venue.zip = event.venue.zip;
 				}
 
 			}

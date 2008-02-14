@@ -31,9 +31,6 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.pbking.facebook.delegates.auth
 {
-	import flash.events.Event;
-	import com.pbking.facebook.FacebookCall;
-	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.delegates.FacebookDelegate;
 	
 	public class CreateToken_delegate extends FacebookDelegate
@@ -47,10 +44,9 @@ package com.pbking.facebook.delegates.auth
 			fbCall.post("facebook.auth.createToken", fBook.default_rest_url);
 		}
 		
-		override protected function handleResult(resultXML:XML):void
+		override protected function handleResult(result:Object):void
 		{
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			auth_token = resultXML.toString();
+			auth_token = result.toString();
 		}
 	}
 }

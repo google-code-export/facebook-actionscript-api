@@ -63,22 +63,20 @@ package com.pbking.facebook.delegates.photos
 			fbCall.post("facebook.photos.getAlbums");
 		}
 		
-		override protected function result(e:Event):void
+		override protected function onCallComplete(e:Event):void
 		{
 			//since we're handling the result ourselves, we must
 			//do all the things the super did like event removal
 			//and error handling
 			
-			fbCall.removeEventListener(Event.COMPLETE, result);
+			fbCall.removeEventListener(Event.COMPLETE, onCallComplete);
 
-			default xml namespace = fBook.FACEBOOK_NAMESPACE;
-			
 			//look for an error
-			if(fbCall.getResponse().error_code != undefined)
+			if(fbCall.result.error_code)
 			{
 				//dang.  handle the error
-				this.errorCode = fbCall.getResponse().error_code;
-				this.errorMessage = fbCall.getResponse().error_msg;
+				this.errorCode = fbCall.result.error_code;
+				this.errorMessage = fbCall.result.error_msg;
 				onError();
 			}
 			
@@ -86,11 +84,9 @@ package com.pbking.facebook.delegates.photos
 			{
 				albums = [];
 				
-				var xAlbums:XMLList = fbCall.getResponse()..album;
-				for each(var xAlbum:XML in xAlbums)
+				for each(var album:Object in fbCall.result)
 				{
-					var album:FacebookAlbum = new FacebookAlbum(xAlbum);
-					albums.push(album);
+					albums.push(new FacebookAlbum(album));
 				} 
 				
 				//first we get the covers then the images
