@@ -27,9 +27,9 @@ package com.pbking.facebook.methodGroups
 {
 	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.users.FacebookUser;
-	import com.pbking.facebook.delegates.friends.AreFriends_delegate;
-	import com.pbking.facebook.delegates.friends.GetAppUsers_delegate;
-	import com.pbking.facebook.delegates.friends.GetFriends_delegate;
+	import com.pbking.facebook.delegates.friends.AreFriendsDelegate;
+	import com.pbking.facebook.delegates.friends.GetAppUsersDelegate;
+	import com.pbking.facebook.delegates.friends.GetFriendsDelegate;
 	
 	public class Friends
 	{
@@ -46,13 +46,13 @@ package com.pbking.facebook.methodGroups
 		
 		// FACEBOOK FUNCTION CALLS //////////
 		
-		public function areFriends(list1:Array, list2:Array, callback:Function=null):AreFriends_delegate
+		public function areFriends(list1:Array, list2:Array, callback:Function=null):AreFriendsDelegate
 		{
-			var delegate:AreFriends_delegate = new AreFriends_delegate(facebook, list1, list2);
-			return MethodGroupUtil.addCallback(delegate, callback) as AreFriends_delegate;		
+			var delegate:AreFriendsDelegate = new AreFriendsDelegate(facebook, list1, list2);
+			return MethodGroupUtil.addCallback(delegate, callback) as AreFriendsDelegate;		
 		}
 		
-		public function areFriends2(user:FacebookUser, list:Array, callback:Function=null):AreFriends_delegate
+		public function areFriends2(user:FacebookUser, list:Array, callback:Function=null):AreFriendsDelegate
 		{
 			var newArray:Array = [];
 			for each(var f:* in list)
@@ -61,16 +61,16 @@ package com.pbking.facebook.methodGroups
 			return areFriends(newArray, list, callback);
 		}
 		
-		public function getFriends(callback:Function=null):GetFriends_delegate
+		public function getFriends(callback:Function=null):GetFriendsDelegate
 		{
-			var delegate:GetFriends_delegate = new GetFriends_delegate(facebook);
-			return MethodGroupUtil.addCallback(delegate, callback) as GetFriends_delegate;		
+			var delegate:GetFriendsDelegate = new GetFriendsDelegate(facebook);
+			return MethodGroupUtil.addCallback(delegate, callback) as GetFriendsDelegate;		
 		}
 		
-		public function getAppUsers(callback:Function=null):GetAppUsers_delegate
+		public function getAppUsers(callback:Function=null):GetAppUsersDelegate
 		{
-			var delegate:GetAppUsers_delegate = new GetAppUsers_delegate(facebook);
-			return MethodGroupUtil.addCallback(delegate, callback) as GetAppUsers_delegate;		
+			var delegate:GetAppUsersDelegate = new GetAppUsersDelegate(facebook);
+			return MethodGroupUtil.addCallback(delegate, callback) as GetAppUsersDelegate;		
 		}
 	}
 }

@@ -23,32 +23,32 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package com.pbking.facebook.methodGroups
+/**
+ *  Delegates the call to facebook.auth.createToken
+ * 
+ * @author Jason Crist 
+ * @author Chris Hill
+ */
+package com.pbking.facebook.delegates.auth
 {
 	import com.pbking.facebook.Facebook;
-	import com.pbking.facebook.delegates.fql.FqlQueryDelegate;
+	import com.pbking.facebook.delegates.FacebookDelegate;
 	
-	public class Fql
+	public class CreateTokenDelegate extends FacebookDelegate
 	{
-		// VARIABLES //////////
+		public var auth_token:String;
 		
-		private var facebook:Facebook;
-		
-		// CONSTRUCTION //////////
-		
-		function Fql(facebook:Facebook):void
+		function CreateTokenDelegate(facebook:Facebook)
 		{
-			this.facebook = facebook;
+			super(facebook);
+			//ONLY the default REST url can be used here (redirection doesn't work)
+			//we also have to make sure the sig is generated (which it doesn't if we're redirecting)
+			fbCall.post("facebook.auth.createToken", fBook.default_rest_url);
 		}
 		
-		// FACEBOOK FUNCTION CALLS //////////
-		
-		public function query(query:String, callback:Function=null):FqlQueryDelegate
+		override protected function handleResult(result:Object):void
 		{
-			var d:FqlQueryDelegate = new FqlQueryDelegate(facebook, query);
-			MethodGroupUtil.addCallback(d, callback);
-			return d;
+			auth_token = result.toString();
 		}
-
 	}
 }

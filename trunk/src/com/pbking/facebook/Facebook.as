@@ -37,7 +37,7 @@ package com.pbking.facebook
 {
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.delegates.auth.*;
-	import com.pbking.facebook.delegates.users.GetLoggedInUser_delegate;
+	import com.pbking.facebook.delegates.users.GetLoggedInUserDelegate;
 	import com.pbking.facebook.methodGroups.*;
 	import com.pbking.util.logging.PBLogger;
 	
@@ -338,14 +338,14 @@ package com.pbking.facebook
 			{
 				this._secret = secret;
 				//construct a token and get ready for the user to enter user/pass
-				var delegate:CreateToken_delegate = new CreateToken_delegate(this);
+				var delegate:CreateTokenDelegate = new CreateTokenDelegate(this);
 				delegate.addEventListener(Event.COMPLETE, onDesktopTokenCreated);
 			}
 		}
 		
 		private function verifyInfinateSession(e:Event):void
 		{
-			var d:GetLoggedInUser_delegate = e.target as GetLoggedInUser_delegate;
+			var d:GetLoggedInUserDelegate = e.target as GetLoggedInUserDelegate;
 			if(d.success)
 			{
 				this._user = d.user;
@@ -363,7 +363,7 @@ package com.pbking.facebook
 		
 		private function onDesktopTokenCreated(event:Event):void
 		{
-			var delegate:CreateToken_delegate = event.target as CreateToken_delegate;
+			var delegate:CreateTokenDelegate = event.target as CreateTokenDelegate;
 			if(delegate.success)
 			{
 				_auth_token = delegate.auth_token;
@@ -385,13 +385,13 @@ package com.pbking.facebook
 		public function validateDesktopSession():void
 		{
 			//validate the session
-			var delegate:GetSession_delegate = new GetSession_delegate(this, _auth_token);
+			var delegate:GetSessionDelegate = new GetSessionDelegate(this, _auth_token);
 			delegate.addEventListener(Event.COMPLETE, validateDesktopSessionReply);
 		}
 		
 		private function validateDesktopSessionReply(event:Event):void
 		{
-			var delegate:GetSession_delegate = event.target as GetSession_delegate;
+			var delegate:GetSessionDelegate = event.target as GetSessionDelegate;
 			
 			if(delegate.success)
 			{

@@ -27,12 +27,12 @@ package com.pbking.facebook.methodGroups
 {
 	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.marketplace.MarketplaceListing;
-	import com.pbking.facebook.delegates.marketplace.CreateListing_delegate;
-	import com.pbking.facebook.delegates.marketplace.GetCategories_delegate;
-	import com.pbking.facebook.delegates.marketplace.GetListings_delegate;
-	import com.pbking.facebook.delegates.marketplace.GetSubCategories_delegate;
-	import com.pbking.facebook.delegates.marketplace.RemoveListing_delegate;
-	import com.pbking.facebook.delegates.marketplace.SearchListings_delegate;
+	import com.pbking.facebook.delegates.marketplace.CreateListingDelegate;
+	import com.pbking.facebook.delegates.marketplace.GetCategoriesDelegate;
+	import com.pbking.facebook.delegates.marketplace.GetListingsDelegate;
+	import com.pbking.facebook.delegates.marketplace.GetSubCategoriesDelegate;
+	import com.pbking.facebook.delegates.marketplace.RemoveListingDelegate;
+	import com.pbking.facebook.delegates.marketplace.SearchListingsDelegate;
 	
 	public class Marketplace
 	{
@@ -49,30 +49,30 @@ package com.pbking.facebook.methodGroups
 		
 		// FACEBOOK FUNCTION CALLS //////////
 		
-		public function createListing(listing:MarketplaceListing, show_on_profile:Boolean=true, callback:Function=null):CreateListing_delegate
+		public function createListing(listing:MarketplaceListing, show_on_profile:Boolean=true, callback:Function=null):CreateListingDelegate
 		{
-			var d:CreateListing_delegate = new CreateListing_delegate(facebook, listing, show_on_profile);
+			var d:CreateListingDelegate = new CreateListingDelegate(facebook, listing, show_on_profile);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
 		
-		public function removeListing(listing_id:int, callback:Function):RemoveListing_delegate
+		public function removeListing(listing_id:int, callback:Function):RemoveListingDelegate
 		{
-			var d:RemoveListing_delegate = new RemoveListing_delegate(facebook, listing_id);
+			var d:RemoveListingDelegate = new RemoveListingDelegate(facebook, listing_id);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
 
-		public function getCategories(callback:Function=null):GetCategories_delegate
+		public function getCategories(callback:Function=null):GetCategoriesDelegate
 		{
-			var d:GetCategories_delegate = new GetCategories_delegate(facebook);
+			var d:GetCategoriesDelegate = new GetCategoriesDelegate(facebook);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
 
-		public function getSubCategories(category:String, callback:Function=null):GetSubCategories_delegate
+		public function getSubCategories(category:String, callback:Function=null):GetSubCategoriesDelegate
 		{
-			var d:GetSubCategories_delegate = new GetSubCategories_delegate(facebook, category);
+			var d:GetSubCategoriesDelegate = new GetSubCategoriesDelegate(facebook, category);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
@@ -80,9 +80,9 @@ package com.pbking.facebook.methodGroups
 		/**
 		 * Return all Marketplace listings either by listing ID or by user. 
 		 */
-		public function getListings(listingIds:Array=null, users:Array=null, callback:Function=null):GetListings_delegate
+		public function getListings(listingIds:Array=null, users:Array=null, callback:Function=null):GetListingsDelegate
 		{
-			var d:GetListings_delegate = new GetListings_delegate(facebook, listingIds, users);
+			var d:GetListingsDelegate = new GetListingsDelegate(facebook, listingIds, users);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
@@ -95,9 +95,9 @@ package com.pbking.facebook.methodGroups
  		 * @param query  string  Filter by a query string.  (optional)
 
 		 */
-		public function search(category:String="", subcategory:String="", query:String="", callback:Function=null):SearchListings_delegate
+		public function search(category:String="", subcategory:String="", query:String="", callback:Function=null):SearchListingsDelegate
 		{
-			var d:SearchListings_delegate = new SearchListings_delegate(facebook, category, subcategory, query);
+			var d:SearchListingsDelegate = new SearchListingsDelegate(facebook, category, subcategory, query);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}

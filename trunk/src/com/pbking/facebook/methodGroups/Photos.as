@@ -53,19 +53,19 @@ package com.pbking.facebook.methodGroups
 		 * The only storable values returned from this call are aid and owner. 
 		 * No relationships between them are storable.
 		 */
-		public function createAlbum(name:String, location:String="", description:String="", callback:Function = null):CreateAlbum_delegate
+		public function createAlbum(name:String, location:String="", description:String="", callback:Function = null):CreateAlbumDelegate
 		{
-			var delegate:CreateAlbum_delegate = new CreateAlbum_delegate(facebook, name, location, description);
-			return MethodGroupUtil.addCallback(delegate, callback) as CreateAlbum_delegate;
+			var delegate:CreateAlbumDelegate = new CreateAlbumDelegate(facebook, name, location, description);
+			return MethodGroupUtil.addCallback(delegate, callback) as CreateAlbumDelegate;
 		}
 		
 		/**
 		 * Returns the set of user tags on all photos specified.
 		 */
-		public function getTags(photos:Array, populatePhotosWithTags:Boolean = true, callback:Function = null):GetTags_delegate
+		public function getTags(photos:Array, populatePhotosWithTags:Boolean = true, callback:Function = null):GetTagsDelegate
 		{
-			var delegate:GetTags_delegate = new GetTags_delegate(facebook, photos, populatePhotosWithTags);
-			return MethodGroupUtil.addCallback(delegate, callback) as GetTags_delegate;
+			var delegate:GetTagsDelegate = new GetTagsDelegate(facebook, photos, populatePhotosWithTags);
+			return MethodGroupUtil.addCallback(delegate, callback) as GetTagsDelegate;
 		}
 		
 		/**
@@ -75,10 +75,10 @@ package com.pbking.facebook.methodGroups
 		 * visible on the site. Photos uploaded by applications with the photo_upload extended permission will be visible 
 		 * immediately.
 		 */
-		public function upload(data:ByteArray, album:FacebookAlbum=null, caption:String="", callback:Function=null):Upload_delegate
+		public function upload(data:ByteArray, album:FacebookAlbum=null, caption:String="", callback:Function=null):UploadDelegate
 		{
-			var delegate:Upload_delegate = new Upload_delegate(facebook, data, album, caption) 
-			return MethodGroupUtil.addCallback(delegate, callback) as Upload_delegate;		
+			var delegate:UploadDelegate = new UploadDelegate(facebook, data, album, caption) 
+			return MethodGroupUtil.addCallback(delegate, callback) as UploadDelegate;		
 		}
 		
 		/**
@@ -96,7 +96,7 @@ package com.pbking.facebook.methodGroups
 		/**
 		 * Adds a tag with the given information to a photo.
 		 */
-		public function addTag(pid:int, tag_uid:int, tag_text:String, x:Number, y:Number, callback:Function=null):AddTags_delegate
+		public function addTag(pid:int, tag_uid:int, tag_text:String, x:Number, y:Number, callback:Function=null):AddTagsDelegate
 		{
 			return addTags([{pid:int, tag_uid:tag_uid, tag_text:tag_text, x:x, y:y}], callback);
 		}
@@ -114,29 +114,29 @@ package com.pbking.facebook.methodGroups
 		 * 
 		 * @param tags:Array array of NewTag objects
 		 */
-		public function addTags(tags:Array, callback:Function = null):AddTags_delegate
+		public function addTags(tags:Array, callback:Function = null):AddTagsDelegate
 		{
-			var delegate:AddTags_delegate = new AddTags_delegate(facebook, tags);
-			return MethodGroupUtil.addCallback(delegate, callback) as AddTags_delegate;
+			var delegate:AddTagsDelegate = new AddTagsDelegate(facebook, tags);
+			return MethodGroupUtil.addCallback(delegate, callback) as AddTagsDelegate;
 		}
 		
 		/**
 		 * Returns metadata about all of the photo albums uploaded by the specified user. 
 		 * The values returned from this call are not storable.
 		 */
-		public function getAlbums(user:FacebookUser, getCoverPhotos:Boolean = false, callback:Function = null):GetAlbums_delegate
+		public function getAlbums(user:FacebookUser, getCoverPhotos:Boolean = false, callback:Function = null):GetAlbumsDelegate
 		{
-			var delegate:GetAlbums_delegate = new GetAlbums_delegate(facebook, user, getCoverPhotos);
-			return MethodGroupUtil.addCallback(delegate, callback) as GetAlbums_delegate;
+			var delegate:GetAlbumsDelegate = new GetAlbumsDelegate(facebook, user, getCoverPhotos);
+			return MethodGroupUtil.addCallback(delegate, callback) as GetAlbumsDelegate;
 		}
 		
 		/**
 		 * Returns all visible photos according to the filters specified
 		 */
-		public function getPhotos(subj_id:Object=null, aid:Object=null, pids:Array=null, callback:Function = null):GetPhotos_delegate
+		public function getPhotos(subj_id:Object=null, aid:Object=null, pids:Array=null, callback:Function = null):GetPhotosDelegate
 		{
-			var delegate:GetPhotos_delegate = new GetPhotos_delegate(facebook, subj_id, aid, pids);
-			return MethodGroupUtil.addCallback(delegate, callback) as GetPhotos_delegate;
+			var delegate:GetPhotosDelegate = new GetPhotosDelegate(facebook, subj_id, aid, pids);
+			return MethodGroupUtil.addCallback(delegate, callback) as GetPhotosDelegate;
 		}
 		
 		// HELPER FUNCTIONS //////////
@@ -144,7 +144,7 @@ package com.pbking.facebook.methodGroups
 		/**
 		 * Get all of the pictures for an album
 		 */
-		public function getPhotosForAlbum(album:FacebookAlbum, callback:Function = null):GetPhotos_delegate
+		public function getPhotosForAlbum(album:FacebookAlbum, callback:Function = null):GetPhotosDelegate
 		{
 			return getPhotos(null, album.aid, null, callback);
 		}
