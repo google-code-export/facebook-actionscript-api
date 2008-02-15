@@ -23,32 +23,46 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package com.pbking.facebook.methodGroups
+/**
+ *  Delegates the call to facebook.photo.upload
+ * 
+ * @author Jason Crist 
+ */
+package com.pbking.facebook.delegates.photos
 {
 	import com.pbking.facebook.Facebook;
-	import com.pbking.facebook.delegates.fql.FqlQueryDelegate;
+	import com.pbking.facebook.data.photos.FacebookAlbum;
+	import com.pbking.facebook.data.photos.FacebookPhoto;
+	import com.pbking.facebook.delegates.FacebookDelegate;
 	
-	public class Fql
+	import flash.utils.ByteArray;
+	
+	public class UploadDelegate extends FacebookDelegate
 	{
 		// VARIABLES //////////
 		
-		private var facebook:Facebook;
+		public var uploadedPhoto:FacebookPhoto;
 		
 		// CONSTRUCTION //////////
 		
-		function Fql(facebook:Facebook):void
+		public function UploadDelegate(facebook:Facebook, data:ByteArray, album:FacebookAlbum=null, caption:String="")
 		{
-			this.facebook = facebook;
-		}
-		
-		// FACEBOOK FUNCTION CALLS //////////
-		
-		public function query(query:String, callback:Function=null):FqlQueryDelegate
-		{
-			var d:FqlQueryDelegate = new FqlQueryDelegate(facebook, query);
-			MethodGroupUtil.addCallback(d, callback);
-			return d;
+			super(facebook);
+			
+			fbCall.setRequestArgument("data", data);
+			if(album != null)
+				fbCall.setRequestArgument("aid", album.aid.toString());
+			if(caption != "")
+				fbCall.setRequestArgument("caption", caption);
+
+			fbCall.post("facebook.photos.upload");
 		}
 
+		// RESULT //////////
+
+		override protected function handleResult(result:Object):void
+		{
+			uploadedPhoto = new FacebookPhoto(result);
+		}
 	}
 }

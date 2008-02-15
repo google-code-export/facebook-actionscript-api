@@ -8,15 +8,16 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import com.pbking.facebook.delegates.users.GetUserInfoDelegate;
 			import com.pbking.util.logging.PBLogger;
 			import com.pbking.util.logging.PBLogEvent;
 
 			// IMPORTS //////////
 			
 			import com.pbking.facebook.Facebook;
-			import com.pbking.facebook.delegates.friends.GetFriends_delegate;
+			import com.pbking.facebook.delegates.friends.GetFriendsDelegate;
 			import com.pbking.facebook.delegates.FacebookDelegate;
-			import com.pbking.facebook.delegates.users.GetUserInfo_delegate;
+			import com.pbking.facebook.delegates.users.GetUserInfoDelegate;
 			import com.pbking.facebook.data.users.UserFields;
 			import com.pbking.facebook.data.users.FacebookUser;
 
@@ -82,13 +83,13 @@
 				//get some of the users info
 				user = facebook.user;
 				
-				var d:GetUserInfo_delegate = facebook.users.getInfo([user], [UserFields.name]);
+				var d:GetUserInfoDelegate = facebook.users.getInfo([user], [UserFields.name]);
 				d.addEventListener(Event.COMPLETE, onGotUserInfo);
 			}
 			
 			private function onGotUserInfo(e:Event):void
 			{
-				var d:GetUserInfo_delegate = e.target as GetUserInfo_delegate;
+				var d:GetUserInfoDelegate = e.target as GetUserInfoDelegate;
 				d.removeEventListener(Event.COMPLETE, onGotUserInfo);
 				
 				//check to see if the call was sucessful
@@ -117,7 +118,7 @@
 			
 			private function onGotFriends(e:Event):void
 			{
-				var d:GetFriends_delegate = e.target as GetFriends_delegate;
+				var d:GetFriendsDelegate = e.target as GetFriendsDelegate;
 				if(d.success)
 				{
 					//save my list of friends
@@ -135,7 +136,7 @@
 			
 			private function onGotFriendsName(e:Event):void
 			{
-				var d:GetUserInfo_delegate = e.target as GetUserInfo_delegate;
+				var d:GetUserInfoDelegate = e.target as GetUserInfoDelegate;
 				
 				if(d.success)
 				{
@@ -160,7 +161,7 @@
 			
 			private function onGotFriendInfo(e:Event):void
 			{
-				var d:GetUserInfo_delegate = e.target as GetUserInfo_delegate;
+				var d:GetUserInfoDelegate = e.target as GetUserInfoDelegate;
 				if(d.success)
 				{
 					//our friends info will update and bind

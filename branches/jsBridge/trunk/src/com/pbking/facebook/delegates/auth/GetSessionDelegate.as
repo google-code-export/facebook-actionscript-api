@@ -23,32 +23,58 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package com.pbking.facebook.methodGroups
+/**
+ *  Delegates the call to facebook.auth.getSession
+ * 
+ * @author Jason Crist 
+ * @author Chris Hill
+ */
+package com.pbking.facebook.delegates.auth
 {
 	import com.pbking.facebook.Facebook;
-	import com.pbking.facebook.delegates.fql.FqlQueryDelegate;
+	import com.pbking.facebook.delegates.FacebookDelegate;
+	import com.pbking.util.logging.PBLogger;
 	
-	public class Fql
+	public class GetSessionDelegate extends FacebookDelegate
 	{
 		// VARIABLES //////////
 		
-		private var facebook:Facebook;
+		private var auth_token:String;
+		
+		//results
+		
+		public var session_key:String;
+		public var uid:int;
+		public var secret:String;
+		public var expires:Number;
 		
 		// CONSTRUCTION //////////
 		
-		function Fql(facebook:Facebook):void
+		function GetSessionDelegate(facebook:Facebook, auth_token:String)
 		{
-			this.facebook = facebook;
+			super(facebook);
+			
+			this.auth_token = auth_token;
+
+			PBLogger.getLogger("pbking.facebook").debug("starting facebook session with auth_token: " + auth_token);
+
+			fbCall.setRequestArgument("auth_token", auth_token);
+			
+			fbCall.post("facebook.auth.getSession", fBook.default_rest_url);
 		}
 		
-		// FACEBOOK FUNCTION CALLS //////////
+		// FUNCTIONS //////////
 		
-		public function query(query:String, callback:Function=null):FqlQueryDelegate
+		override protected function handleResult(result:Object):void
 		{
-			var d:FqlQueryDelegate = new FqlQueryDelegate(facebook, query);
-			MethodGroupUtil.addCallback(d, callback);
-			return d;
-		}
+			default xml namespace = fBook.FACEBOOK_NAMESPACE;
+			
+			session_key = result.session_key;
+			uid = result.uid;
+			secret = result.secret;
+			expires = result.expires;
+		} 
+		
 
 	}
 }

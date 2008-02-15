@@ -34,7 +34,7 @@ package com.pbking.facebook.data.photos
 	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.data.util.FacebookDataParser;
-	import com.pbking.facebook.delegates.photos.GetPhotos_delegate;
+	import com.pbking.facebook.delegates.photos.GetPhotosDelegate;
 	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -169,7 +169,7 @@ package com.pbking.facebook.data.photos
 		}
 		private function onPopulationComplete(event:Event):void
 		{
-			var delegate:GetPhotos_delegate = event.target as GetPhotos_delegate;
+			var delegate:GetPhotosDelegate = event.target as GetPhotosDelegate;
 			this._photos = delegate.photos;
 			
 			_populating = false;
