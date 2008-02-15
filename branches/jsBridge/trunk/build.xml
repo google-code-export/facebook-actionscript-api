@@ -26,9 +26,17 @@
 	
 	<target name='document'>
 		<echo message="Documenting Facebook API  ${src}" />
+
+		<delete dir="${doc}"/>
+		<mkdir dir="${doc}"/>
+
 		<exec executable="${ASDOC}" failonerror="true">
+			<arg line="-main-title 'Facebook AS3 API Documentation'" />
+			<arg line="-window-title 'Facebook AS3 API Documentation'" />
 			<arg line="-source-path '${src}'" />
-			<arg line="-doc-sources '${src}/com/pbking/facebook'" />
+			<arg line="-doc-sources '${src}/com/pbking'" />
+			<arg line="-library-path+='${basedir}/lib/as3'" />
+			<arg line="-left-frameset-width 300" />
 			<arg line="-output '${doc}'" />
 		</exec>
 	</target>
@@ -37,7 +45,10 @@
 	
 	<target name='package' depends="build_example,document,build_swc">
 		
-		<!-- package API -->
+		<delete dir="${deliverables}"/>
+		<mkdir dir="${deliverables}"/>
+
+			<!-- package API -->
 		<zip destfile='${deliverables}/facebook_as3_api_v${version}.zip' excludes='**/.svn/**'>
 			<zipfileset dir='${src}/' prefix='facebook_as3_api_v${version}'/>
 		</zip>
@@ -73,9 +84,9 @@
 	    		debug="false"
 	    		actionscript-file-encoding="UTF-8">
 	    	
-	    		<el dir="${basedir}/lib/as3">
-	    	        <include name="corelib.swc"/>    
-	    	    </el> 
+	    		<compiler.library-path dir="${basedir}/lib/as3" append="true">
+	    			<include name="corelib.swc"/>
+	    		</compiler.library-path>
 	    	
 	    		<load-config filename="${FLEX_CONFIG}"/>
 	        	<source-path path-element="${FLEX_FRAMEWORKS}"/>
@@ -95,23 +106,24 @@
 	
 	<target name='unit_test'>
 
-		<!-- build unit test -->
-		
 		<echo message="Building Facebook unit test"/>
 	
-	    <mxmlc  file="${src}/FB_API_TEST.mxml" 
-	            output="${bin}/FB_API_TEST.swf"
-	    		debug="false"
-	    		actionscript-file-encoding="UTF-8">
-	    	
-	    		<el dir="${basedir}/lib/as3">
-	    	        <include name="corelib.swc"/>    
-	    	        <include name="flexunit.swc"/>    
-	    	    </el> 
+		<delete dir="${build}/test"/>
+		<mkdir dir="${build}/test"/>
 
-	    		<load-config filename="${FLEX_CONFIG}"/>
-	        	<source-path path-element="${FLEX_FRAMEWORKS}"/>
-	            <default-size width="800" height="600" />
+		<mxmlc  file="${src}/FB_API_TEST.mxml" 
+            output="${build}/test/FB_API_TEST.swf"
+    		debug="false"
+    		actionscript-file-encoding="UTF-8">
+    	
+    		<compiler.library-path dir="${basedir}/lib/as3" append="true">
+    			<include name="corelib.swc"/>
+    	        <include name="flexunit.swc"/>    
+    		</compiler.library-path>
+
+    		<load-config filename="${FLEX_CONFIG}"/>
+        	<source-path path-element="${FLEX_FRAMEWORKS}"/>
+            <default-size width="800" height="600" />
 		</mxmlc>
 	
 		<echo message="Finished building Facebook unit test"/>
@@ -124,9 +136,15 @@
 
 		<echo message="Building Facebook API swc"/>
 	
-		<compc output="${bin}/facebook_as3_api.swc"
-			include-classes="com.pbking.facebook.Facebook">
-			<source-path path-element="${src}"/>   
+		<delete dir="${build}/swc"/>
+		<mkdir dir="${build}/swc"/>
+
+			<compc output="${build}/swc/facebook_as3_api.swc">
+			<source-path path-element="${src}"/>
+    		<compiler.external-library-path dir="${basedir}/lib/as3" append="true">
+    			<include name="corelib.swc"/>
+    		</compiler.external-library-path>
+			<include-sources dir="${src}/com" includes="*"/>
 		</compc>
 		
 		<echo message="Finished building Facebook swc"/>
