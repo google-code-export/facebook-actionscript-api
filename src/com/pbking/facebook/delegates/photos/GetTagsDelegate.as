@@ -23,7 +23,6 @@ package com.pbking.facebook.delegates.photos
 			super(facebook);
 			
 			this.photos = photos;
-			this.populatePhotosWithTags = populatePhotosWithTags;
 			
 			var pids:Array = [];
 			for(var i:int=0; i<photos.length; i++)

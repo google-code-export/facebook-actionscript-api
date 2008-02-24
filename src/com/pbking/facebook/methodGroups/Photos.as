@@ -64,9 +64,9 @@ package com.pbking.facebook.methodGroups
 		/**
 		 * Returns the set of user tags on all photos specified.
 		 */
-		public function getTags(photos:Array, populatePhotosWithTags:Boolean = true, callback:Function = null):GetTagsDelegate
+		public function getTags(photos:Array, callback:Function = null):GetTagsDelegate
 		{
-			var delegate:GetTagsDelegate = new GetTagsDelegate(facebook, photos, populatePhotosWithTags);
+			var delegate:GetTagsDelegate = new GetTagsDelegate(facebook, photos);
 			if(callback != null)
 				delegate.addCallback(callback);
 			return delegate;
