@@ -68,18 +68,16 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function getEvents(user:FacebookUser=null, eventsFilter:Array=null, start_time:Date=null, end_time:Date=null, rsvp_status_filter:String="", callback:Function=null):GetEventsDelegate
 		{
-			var delegate:GetEventsDelegate = new GetEventsDelegate(facebook, user, eventsFilter, start_time, end_time, rsvp_status_filter);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			var d:GetEventsDelegate = new GetEventsDelegate(facebook, user, eventsFilter, start_time, end_time, rsvp_status_filter);
+			MethodGroupUtil.addCallback(d, callback);
+			return d;
 		}
 		
 		public function getEventMembers(event:FacebookEvent, callback:Function=null):GetEventMembersDelegate
 		{
-			var delegate:GetEventMembersDelegate = new GetEventMembersDelegate(facebook, event);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			var d:GetEventMembersDelegate = new GetEventMembersDelegate(facebook, event);
+			MethodGroupUtil.addCallback(d, callback);
+			return d;
 		}
 	}
 }

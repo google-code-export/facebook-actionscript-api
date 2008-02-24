@@ -108,7 +108,7 @@ package test.pbking.facebook.delegates
 		public function testGetTags():void
 		{
 			var ta:FacebookAlbum = testAlbum;
-			facebook.photos.getTags(ta.photos.source, true, addAsync(testGetTagsReply, Facebook_test.timeoutTime));
+			facebook.photos.getTags(ta.photos.source, addAsync(testGetTagsReply, Facebook_test.timeoutTime));
 		}
 		private function testGetTagsReply(e:Event):void
 		{

@@ -51,9 +51,7 @@ package com.pbking.facebook.methodGroups
 		public function getInfo(users:Array, fields:Array, callback:Function=null):GetUserInfoDelegate
 		{
 			var delegate:GetUserInfoDelegate = new GetUserInfoDelegate(facebook, users, fields);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as GetUserInfoDelegate;
 		}
 		
 		/**
@@ -62,9 +60,7 @@ package com.pbking.facebook.methodGroups
 		public function getLoggedInUser(callback:Function=null):GetLoggedInUserDelegate
 		{
 			var delegate:GetLoggedInUserDelegate = new GetLoggedInUserDelegate(facebook);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as GetLoggedInUserDelegate;
 		}
 		
 		/**
@@ -77,9 +73,7 @@ package com.pbking.facebook.methodGroups
 		public function hasAppPermission(extendedPermission:String, callback:Function=null):HasAppPermissionDelegate
 		{
 			var delegate:HasAppPermissionDelegate = new HasAppPermissionDelegate(facebook, extendedPermission);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as HasAppPermissionDelegate;
 		}
 		
 		/**
@@ -88,9 +82,7 @@ package com.pbking.facebook.methodGroups
 		public function isAppAdded(callback:Function=null):IsAppAddedDelegate
 		{
 			var delegate:IsAppAddedDelegate = new IsAppAddedDelegate(facebook);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as IsAppAddedDelegate;
 		}
 		
 		/**
@@ -100,9 +92,7 @@ package com.pbking.facebook.methodGroups
 		public function setStatus(status:String, clear:Boolean=false, callback:Function=null):SetStatusDelegate
 		{
 			var delegate:SetStatusDelegate = new SetStatusDelegate(facebook, status, clear);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as SetStatusDelegate;
 		}
 		
 	}
