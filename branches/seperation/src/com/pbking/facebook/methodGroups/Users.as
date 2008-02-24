@@ -51,7 +51,9 @@ package com.pbking.facebook.methodGroups
 		public function getInfo(users:Array, fields:Array, callback:Function=null):GetUserInfoDelegate
 		{
 			var delegate:GetUserInfoDelegate = new GetUserInfoDelegate(facebook, users, fields);
-			return MethodGroupUtil.addCallback(delegate, callback) as GetUserInfoDelegate;
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 		
 		/**
@@ -60,7 +62,9 @@ package com.pbking.facebook.methodGroups
 		public function getLoggedInUser(callback:Function=null):GetLoggedInUserDelegate
 		{
 			var delegate:GetLoggedInUserDelegate = new GetLoggedInUserDelegate(facebook);
-			return MethodGroupUtil.addCallback(delegate, callback) as GetLoggedInUserDelegate;
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 		
 		/**
@@ -73,7 +77,9 @@ package com.pbking.facebook.methodGroups
 		public function hasAppPermission(extendedPermission:String, callback:Function=null):HasAppPermissionDelegate
 		{
 			var delegate:HasAppPermissionDelegate = new HasAppPermissionDelegate(facebook, extendedPermission);
-			return MethodGroupUtil.addCallback(delegate, callback) as HasAppPermissionDelegate;
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 		
 		/**
@@ -82,7 +88,9 @@ package com.pbking.facebook.methodGroups
 		public function isAppAdded(callback:Function=null):IsAppAddedDelegate
 		{
 			var delegate:IsAppAddedDelegate = new IsAppAddedDelegate(facebook);
-			return MethodGroupUtil.addCallback(delegate, callback) as IsAppAddedDelegate;
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 		
 		/**
@@ -92,7 +100,9 @@ package com.pbking.facebook.methodGroups
 		public function setStatus(status:String, clear:Boolean=false, callback:Function=null):SetStatusDelegate
 		{
 			var delegate:SetStatusDelegate = new SetStatusDelegate(facebook, status, clear);
-			return MethodGroupUtil.addCallback(delegate, callback) as SetStatusDelegate;
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 		
 	}

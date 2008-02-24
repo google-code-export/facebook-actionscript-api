@@ -51,30 +51,34 @@ package com.pbking.facebook.methodGroups
 		
 		public function createListing(listing:MarketplaceListing, show_on_profile:Boolean=true, callback:Function=null):CreateListingDelegate
 		{
-			var d:CreateListingDelegate = new CreateListingDelegate(facebook, listing, show_on_profile);
-			MethodGroupUtil.addCallback(d, callback);
-			return d;
+			var delegate:CreateListingDelegate = new CreateListingDelegate(facebook, listing, show_on_profile);
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 		
 		public function removeListing(listing_id:int, callback:Function):RemoveListingDelegate
 		{
-			var d:RemoveListingDelegate = new RemoveListingDelegate(facebook, listing_id);
-			MethodGroupUtil.addCallback(d, callback);
-			return d;
+			var delegate:RemoveListingDelegate = new RemoveListingDelegate(facebook, listing_id);
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 
 		public function getCategories(callback:Function=null):GetCategoriesDelegate
 		{
-			var d:GetCategoriesDelegate = new GetCategoriesDelegate(facebook);
-			MethodGroupUtil.addCallback(d, callback);
-			return d;
+			var delegate:GetCategoriesDelegate = new GetCategoriesDelegate(facebook);
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 
 		public function getSubCategories(category:String, callback:Function=null):GetSubCategoriesDelegate
 		{
-			var d:GetSubCategoriesDelegate = new GetSubCategoriesDelegate(facebook, category);
-			MethodGroupUtil.addCallback(d, callback);
-			return d;
+			var delegate:GetSubCategoriesDelegate = new GetSubCategoriesDelegate(facebook, category);
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 
 		/**
@@ -82,9 +86,10 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function getListings(listingIds:Array=null, users:Array=null, callback:Function=null):GetListingsDelegate
 		{
-			var d:GetListingsDelegate = new GetListingsDelegate(facebook, listingIds, users);
-			MethodGroupUtil.addCallback(d, callback);
-			return d;
+			var delegate:GetListingsDelegate = new GetListingsDelegate(facebook, listingIds, users);
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 
 		/**
@@ -97,9 +102,10 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function search(category:String="", subcategory:String="", query:String="", callback:Function=null):SearchListingsDelegate
 		{
-			var d:SearchListingsDelegate = new SearchListingsDelegate(facebook, category, subcategory, query);
-			MethodGroupUtil.addCallback(d, callback);
-			return d;
+			var delegate:SearchListingsDelegate = new SearchListingsDelegate(facebook, category, subcategory, query);
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 
 	}

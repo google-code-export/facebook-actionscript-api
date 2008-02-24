@@ -27,12 +27,11 @@ OTHER DEALINGS IN THE SOFTWARE.
  * Makes the call to the Facebook REST service  
  * 
  * @author Jason Crist 
- * @author Chris Hill
  */
 package com.pbking.facebook
 {
+	import com.adobe.crypto.MD5;
 	import com.adobe.serialization.json.JSON;
-	import com.gsolo.encryption.MD5;
 	import com.pbking.util.logging.PBLogger;
 	import com.shtif.web.MIMEConstructor;
 	
@@ -241,7 +240,7 @@ package com.pbking.facebook
 			
 			s += _fb.secret;
 			
-			return MD5.encrypt( s );
+			return MD5.hash( s );
 		}	
 		
 		private function ioErrorHandler(event:IOErrorEvent):void
