@@ -342,8 +342,9 @@ package com.pbking.facebook
 			}
 		}
 		
-		private function verifyInfinateSession(d:GetLoggedInUserDelegate):void
+		private function verifyInfinateSession(event:Event):void
 		{
+			var d:GetLoggedInUserDelegate = event.target as GetLoggedInUserDelegate;
 			if(d.success)
 			{
 				this._user = d.user;
@@ -359,8 +360,9 @@ package com.pbking.facebook
 			}
 		}
 		
-		private function onDesktopTokenCreated(delegate:CreateTokenDelegate):void
+		private function onDesktopTokenCreated(event:Event):void
 		{
+			var delegate:CreateTokenDelegate = event.target as CreateTokenDelegate;
 			if(delegate.success)
 			{
 				_auth_token = delegate.auth_token;
@@ -386,8 +388,9 @@ package com.pbking.facebook
 			delegate.addEventListener(Event.COMPLETE, validateDesktopSessionReply);
 		}
 		
-		private function validateDesktopSessionReply(delegate:GetSessionDelegate):void
+		private function validateDesktopSessionReply(event:Event):void
 		{
+			var delegate:GetSessionDelegate = event.target as GetSessionDelegate;
 			if(delegate.success)
 			{
 				this._user = FacebookUser.getUser(delegate.uid);

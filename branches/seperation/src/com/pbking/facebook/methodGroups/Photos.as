@@ -56,9 +56,7 @@ package com.pbking.facebook.methodGroups
 		public function createAlbum(name:String, location:String="", description:String="", callback:Function = null):CreateAlbumDelegate
 		{
 			var delegate:CreateAlbumDelegate = new CreateAlbumDelegate(facebook, name, location, description);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as CreateAlbumDelegate;
 		}
 		
 		/**
@@ -67,9 +65,7 @@ package com.pbking.facebook.methodGroups
 		public function getTags(photos:Array, callback:Function = null):GetTagsDelegate
 		{
 			var delegate:GetTagsDelegate = new GetTagsDelegate(facebook, photos);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as GetTagsDelegate;
 		}
 		
 		/**
@@ -81,10 +77,8 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function upload(data:ByteArray, album:FacebookAlbum=null, caption:String="", callback:Function=null):UploadDelegate
 		{
-			var delegate:UploadDelegate = new UploadDelegate(facebook, data, album, caption);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			var delegate:UploadDelegate = new UploadDelegate(facebook, data, album, caption) 
+			return MethodGroupUtil.addCallback(delegate, callback) as UploadDelegate;		
 		}
 		
 		/**
@@ -123,9 +117,7 @@ package com.pbking.facebook.methodGroups
 		public function addTags(tags:Array, callback:Function = null):AddTagsDelegate
 		{
 			var delegate:AddTagsDelegate = new AddTagsDelegate(facebook, tags);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as AddTagsDelegate;
 		}
 		
 		/**
@@ -135,9 +127,7 @@ package com.pbking.facebook.methodGroups
 		public function getAlbums(user:FacebookUser, getCoverPhotos:Boolean = false, callback:Function = null):GetAlbumsDelegate
 		{
 			var delegate:GetAlbumsDelegate = new GetAlbumsDelegate(facebook, user, getCoverPhotos);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as GetAlbumsDelegate;
 		}
 		
 		/**
@@ -146,9 +136,7 @@ package com.pbking.facebook.methodGroups
 		public function getPhotos(subj_id:Object=null, aid:Object=null, pids:Array=null, callback:Function = null):GetPhotosDelegate
 		{
 			var delegate:GetPhotosDelegate = new GetPhotosDelegate(facebook, subj_id, aid, pids);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as GetPhotosDelegate;
 		}
 		
 		// HELPER FUNCTIONS //////////

@@ -58,9 +58,7 @@ package com.pbking.facebook.methodGroups
 		public function setFBML(markup:String, user:FacebookUser=null, callback:Function=null):SetFBMLDelegate
 		{
 			var delegate:SetFBMLDelegate = new SetFBMLDelegate(facebook, markup, user);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as SetFBMLDelegate;		
 		}
 
 		/**
@@ -72,9 +70,7 @@ package com.pbking.facebook.methodGroups
 		public function getFBML(user:FacebookUser=null, callback:Function=null):GetFBMLDelegate
 		{
 			var delegate:GetFBMLDelegate = new GetFBMLDelegate(facebook, user);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as GetFBMLDelegate;		
 		}
 
 	}

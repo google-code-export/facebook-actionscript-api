@@ -86,8 +86,9 @@ package com.pbking.facebook.delegates.photos
 			fBook.photos.getPhotos(undefined, undefined, cover_pids, onGotCovers );
 		}
 		
-		private function onGotCovers(d:GetPhotosDelegate):void
+		private function onGotCovers(event:Event):void
 		{
+			var d:GetPhotosDelegate = event.target as GetPhotosDelegate;
 			if(d.success)
 			{
 				for each(var photo:FacebookPhoto in d.photos)

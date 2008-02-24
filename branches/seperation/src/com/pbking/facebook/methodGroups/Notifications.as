@@ -50,9 +50,7 @@ package com.pbking.facebook.methodGroups
 		public function getNotifications(callback:Function=null):GetNotificationsDelegate
 		{
 			var delegate:GetNotificationsDelegate = new GetNotificationsDelegate(facebook);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as GetNotificationsDelegate;
 		}
 
 		/**
@@ -73,9 +71,7 @@ package com.pbking.facebook.methodGroups
 		public function send(notification:String, users:Array=null, callback:Function=null):SendNotificationDelegate
 		{
 			var delegate:SendNotificationDelegate = new SendNotificationDelegate(facebook, notification, users);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			return MethodGroupUtil.addCallback(delegate, callback) as SendNotificationDelegate;
 		}
 
 	}

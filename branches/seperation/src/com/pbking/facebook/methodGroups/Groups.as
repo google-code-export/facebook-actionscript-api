@@ -60,18 +60,16 @@ package com.pbking.facebook.methodGroups
 		 */
 		public function getGroups(user:FacebookUser=null, groupsFilter:Array=null, callback:Function=null):GetGroupsDelegate
 		{
-			var delegate:GetGroupsDelegate = new GetGroupsDelegate(facebook, user, groupsFilter);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			var d:GetGroupsDelegate = new GetGroupsDelegate(facebook, user, groupsFilter);
+			MethodGroupUtil.addCallback(d, callback);
+			return d;
 		}
 
 		public function getMembers(group:FacebookGroup, callback:Function=null):GetGroupMembersDelegate
 		{
-			var delegate:GetGroupMembersDelegate = new GetGroupMembersDelegate(facebook, group);
-			if(callback != null)
-				delegate.addCallback(callback);
-			return delegate;
+			var d:GetGroupMembersDelegate = new GetGroupMembersDelegate(facebook, group);
+			MethodGroupUtil.addCallback(d, callback);
+			return d;
 		}
 
 	}
