@@ -30,7 +30,6 @@ OTHER DEALINGS IN THE SOFTWARE.
  * 
  * @see http://developers.facebook.com/documentation.php?v=1.0
  * @author Jason Crist 
- * @author Chris Hill
  */
 
 package com.pbking.facebook

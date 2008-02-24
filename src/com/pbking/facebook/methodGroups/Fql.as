@@ -45,9 +45,10 @@ package com.pbking.facebook.methodGroups
 		
 		public function query(query:String, callback:Function=null):FqlQueryDelegate
 		{
-			var d:FqlQueryDelegate = new FqlQueryDelegate(facebook, query);
-			MethodGroupUtil.addCallback(d, callback);
-			return d;
+			var delegate:FqlQueryDelegate = new FqlQueryDelegate(facebook, query);
+			if(callback != null)
+				delegate.addCallback(callback);
+			return delegate;
 		}
 
 	}

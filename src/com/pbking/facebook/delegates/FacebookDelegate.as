@@ -27,7 +27,6 @@ OTHER DEALINGS IN THE SOFTWARE.
  *  Base class for all Facebook Delegates
  * 
  * @author Jason Crist 
- * @author Chris Hill
  */
 package com.pbking.facebook.delegates
 {
@@ -54,6 +53,8 @@ package com.pbking.facebook.delegates
 		public var errorCode:int = 0;
 		public var errorMessage:String = "";
 		
+		private var callbackFunctions:Array = [];
+		
 		// CONSTRUCTION //////////
 		
 		function FacebookDelegate(facebook:Facebook)
@@ -79,6 +80,11 @@ package com.pbking.facebook.delegates
 		public function get result():Object
 		{
 			return fbCall.result;
+		}
+		
+		public function addCallback(callbackFunction:Function):void
+		{
+			this.callbackFunctions.push(callbackFunction);
 		}
 		
 		protected function onCallError(event:ErrorEvent):void
@@ -117,16 +123,21 @@ package com.pbking.facebook.delegates
 			//Children should override this methid
 		}
 		
-		protected function onComplete():void
+		protected function onComplete(success:Boolean=true):void
 		{
-			this.success = true;
+			this.success = success;
+			
+			for each(var cbFunc:Function in this.callbackFunctions)
+			{
+				cbFunc(this);
+			}
+			
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
 
 		protected function onError():void
 		{
-			this.success = false;
-			dispatchEvent(new Event(Event.COMPLETE));
+			onComplete(false);
 		}
 	}
 }
