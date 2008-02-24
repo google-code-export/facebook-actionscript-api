@@ -124,9 +124,9 @@ package com.pbking.facebook.methodGroups
 		 * Returns metadata about all of the photo albums uploaded by the specified user. 
 		 * The values returned from this call are not storable.
 		 */
-		public function getAlbums(user:FacebookUser, getCoverPhotos:Boolean = false, callback:Function = null):GetAlbumsDelegate
+		public function getAlbums(uid:int, getCoverPhotos:Boolean = false, callback:Function = null):GetAlbumsDelegate
 		{
-			var delegate:GetAlbumsDelegate = new GetAlbumsDelegate(facebook, user, getCoverPhotos);
+			var delegate:GetAlbumsDelegate = new GetAlbumsDelegate(facebook, uid, getCoverPhotos);
 			return MethodGroupUtil.addCallback(delegate, callback) as GetAlbumsDelegate;
 		}
 		

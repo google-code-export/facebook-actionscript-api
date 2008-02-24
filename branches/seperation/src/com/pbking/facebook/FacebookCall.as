@@ -111,6 +111,7 @@ package com.pbking.facebook
 			if(url == null) url = _fb.rest_url;
 
 			setRequestArgument("v", _fb.api_version);
+			
 			setRequestArgument("format", "JSON");
 			
 			if(_fb.api_key != null)

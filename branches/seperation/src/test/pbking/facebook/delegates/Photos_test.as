@@ -75,7 +75,7 @@ package test.pbking.facebook.delegates
 		
 		public function testGetAlbums():void
 		{
-			facebook.photos.getAlbums(facebook.user, false, addAsync(testGetAlbumsReply, Facebook_test.timeoutTime));
+			facebook.photos.getAlbums(facebook.user.uid, false, addAsync(testGetAlbumsReply, Facebook_test.timeoutTime));
 		}
 		private function testGetAlbumsReply(e:Event):void
 		{

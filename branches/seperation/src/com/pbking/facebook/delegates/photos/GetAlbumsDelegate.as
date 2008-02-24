@@ -26,14 +26,14 @@ package com.pbking.facebook.delegates.photos
 		
 		// CONSTRUCTION //////////
 		
-		public function GetAlbumsDelegate(facebook:Facebook, user:FacebookUser, doGetCovers:Boolean = false, doGetImages:Boolean = false)
+		public function GetAlbumsDelegate(facebook:Facebook, uid:int, doGetCovers:Boolean = false, doGetImages:Boolean = false)
 		{
 			super(facebook);
 			
 			this.doGetCovers = doGetCovers;
 			this.doGetImages = doGetImages;
 			
-			fbCall.setRequestArgument("uid", user.uid.toString());
+			fbCall.setRequestArgument("uid", uid.toString());
 			fbCall.post("facebook.photos.getAlbums");
 		}
 		
