@@ -60,16 +60,16 @@ package com.pbking.facebook.methodGroups
 			return d;
 		}
 
-		public function isFan(page_id:Number, uid:Number=null, callback:Function):IsFanDelegate
+		public function isFan(page_id:Number, uid:String=null, callback:Function=null):IsFanDelegate
 		{
 			var d:IsFanDelegate = new IsFanDelegate(facebook, page_id, uid);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
 
-		public function getInfo(page_id:Number, fields:Array, page_ids:Array=null, uid:Number=null, type:String=null, callback:Function=null):GetPageInfoDelegate
+		public function getInfo(fields:Array, page_ids:Array=null, uid:String=null, type:String=null, callback:Function=null):GetPageInfoDelegate
 		{
-			var d:GetPageInfoDelegate = new GetPageInfoDelegat(facebook, page_id, fields, page_ids, uid, type);
+			var d:GetPageInfoDelegate = new GetPageInfoDelegate(facebook, fields, page_ids, uid, type);
 			MethodGroupUtil.addCallback(d, callback);
 			return d;
 		}
