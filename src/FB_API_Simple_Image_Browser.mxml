@@ -67,7 +67,7 @@
 			
 			private function selectPhoto(photo:FacebookPhoto):void
 			{
-				trace("selected: " + photo.pid);
+				selectedImage.source = photo.src_big;
 			}
 			
 		]]>
@@ -94,12 +94,17 @@
 			labelField="name"
 			change="selectAlbum(albumList.selectedItem as FacebookAlbum);"/>
 		
-		<mx:Label text="Images"/>
-		<mx:TileList id="imageList" 
-			width="100%" 
-			height="100%"
-			change="selectPhoto(imageList.selectedItem as FacebookPhoto);"/>
-		
 	</mx:VBox>
-	<mx:Image id="selectedImage" top="10" bottom="10" left="208" right="10"/>
+	<mx:Image id="selectedImage" top="10" bottom="10" left="401" right="10"/>
+	<mx:Label text="Images" x="208" y="26"/>
+	<mx:TileList id="imageList" 		change="selectPhoto(imageList.selectedItem as FacebookPhoto);" 
+		left="208" 
+		top="52" 
+		width="175" bottom="0">
+		<mx:itemRenderer>
+			<mx:Component>
+				<mx:Image verticalAlign="middle" width="130" height="130" source="{data.src}"/>
+			</mx:Component>
+		</mx:itemRenderer>
+	</mx:TileList>
 </mx:Application>
