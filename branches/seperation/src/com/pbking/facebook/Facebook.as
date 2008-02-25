@@ -261,8 +261,6 @@ package com.pbking.facebook
 			return this._notifications; 
 		}
 		
-		/*
-		Removed until the pages delegates have been created. -jc
 		private var _pages:Pages;
 		public function get pages():Pages 
 		{ 
@@ -270,7 +268,6 @@ package com.pbking.facebook
 				_pages = new Pages(this)
 			return this._pages; 
 		}
-		*/
 		
 		private var _profile:Profile;
 		public function get profile():Profile 
