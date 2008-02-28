@@ -15,4 +15,4 @@ This is the simplest and fastest way to connect to Facebook from an embedded app
 
 
 ====[JavaScriptBridgeSession Example 4 - Using JavaScript as a Bridge]====
-Facebook has created a JavaScript API we can use as a bridge for our own communications.  
+Facebook has created a !JavaScript API we can use as a bridge for our own communications.  
