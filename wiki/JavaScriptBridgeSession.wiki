@@ -1,3 +1,5 @@
+==Step 4: !JavaScript Bridge Session==
+
 I mentioned earlier that using the WidgetSession was not secure because the secret was compiled into the .swf.  Facebook has created a secure !JavaScript API that does not require us to compile the secret into our .swf.  Unfortunately (for now) we have to use this API as a bridge for our own communications.  This results in slightly slower response and somewhat limited functionality (we can’t upload pictures with the JS API).  But in my opinion it’s a descent (temporary) price to pay for a secure application.
 
 For this example I am using version 0.9.1 of the API.  Make sure you are using the most up-to-date version.
