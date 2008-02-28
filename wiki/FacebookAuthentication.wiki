@@ -2,6 +2,12 @@
 
 = Introduction =
 
-There are a number of ways to get your application to connect to Facebook with the API.  The three basic ways are "Desktop", "Widget" and "JavaScript Bridge".  This guide gives step-by-step instructions to connect in all three ways.
+There are a number of ways to get your application to connect to Facebook with the API.  The three basic ways are "Desktop", "Widget" and "!JavaScript Bridge".  This guide gives step-by-step instructions to connect in all three ways.
 
-[Step 1 : Facebook Project Setup]
+[Step 1 - Facebook Project Setup]
+
+[Step 2 - Desktop Session]
+
+[Step 3 - Embedded Application (Widget Session)]
+
+[Step 4 - Using JavaScript as a Bridge]
