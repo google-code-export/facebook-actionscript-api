@@ -20,5 +20,6 @@ When you’re editing your fields make sure to pay attention to these fields:
  
 
 And that’s it!  Once you’ve setup your application you’ll be returned to the main “My Applications page.  Take note of your API Key and Secret.  You’re going to need them to connect.
+
  
 [DesktopSession Step 2 - Desktop Session] 
