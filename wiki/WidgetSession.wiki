@@ -22,7 +22,7 @@ echo "<fb:swf swfsrc=’http://pbking.com/projects/facebook-api/helloWorld/hello
 ?>
 }}}
 
-Next we need to modify our Flex application to run as a widget. (Here I'm referring to part 2 of this howto).  That part couldn’t be simpler.  Simply change the startDesktopSession to startWidgetSession and pass in your flashVars.  (Since this is a Flex example the flashVars are gotten from the Application instance.)  The API will handle pulling the necessary bits from the flashVars passed into the .swf by the fb:swf tag.  You can also get rid of the button from the desktop example since there isn’t a need to login again.
+Next we need to modify our Flex application to run as a widget. (Here I'm referring to [DesktopSession part 2] of this HOWTO).  That part couldn’t be simpler.  Simply change the startDesktopSession to startWidgetSession and pass in your flashVars.  (Since this is a Flex example the flashVars are gotten from the Application instance.)  The API will handle pulling the necessary bits from the flashVars passed into the .swf by the fb:swf tag.  You can also get rid of the button from the desktop example since there isn’t a need to login again.
 {{{
 private function init():void
 {
