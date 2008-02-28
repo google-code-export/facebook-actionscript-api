@@ -78,3 +78,6 @@ private function onGotName(e:Event):void
 }}}
 
 And that’s it!  You’re now successfully making calls to the Facebook Server from within a Flex application!
+
+
+[WidgetSession Step 3 - Widget Session]
