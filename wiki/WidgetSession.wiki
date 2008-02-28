@@ -36,3 +36,5 @@ private function init():void
 }
 }}}
 Now just compile your .swf and put it on our server.  Make sure your <fb:swf> tag correctly points to it (it must be an ABSOLUTE path!).  Then just browse to your application on facebook (for example http://apps.facebook.com/ashelloWorld) and viola!  You’re app is on Facebook!
+
+[JavaScriptBridgeSession Step 4 - !JavaScript Bridge Session]
