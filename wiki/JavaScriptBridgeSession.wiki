@@ -1,4 +1,4 @@
-I mentioned earlier that using the WidgetSession was not secure because the secret was compiled into the .swf.  Facebook has created a secure JavaScript API that does not require us to compile the secret into our .swf.  Unfortunately (for now) we have to use this API as a bridge for our own communications.  This results in slightly slower response and somewhat limited functionality (we can’t upload pictures with the JS API).  But in my opinion it’s a descent (temporary) price to pay for a secure application.
+I mentioned earlier that using the WidgetSession was not secure because the secret was compiled into the .swf.  Facebook has created a secure !JavaScript API that does not require us to compile the secret into our .swf.  Unfortunately (for now) we have to use this API as a bridge for our own communications.  This results in slightly slower response and somewhat limited functionality (we can’t upload pictures with the JS API).  But in my opinion it’s a descent (temporary) price to pay for a secure application.
 
 For this example I am using version 0.9.1 of the API.  Make sure you are using the most up-to-date version.
 
@@ -8,7 +8,7 @@ On your server you need to setup some things so that the JS API works.  (Detaile
 
 Next setup your .html file.  You’ll need to include the client API.  You’ll also need some way to load your .swf.  I prefer to use [http://code.google.com/p/swfobject/ swfobject] so I am demonstrating that in my example.  (make sure to copy the swfobject.js file to your server as well).
 
-In this file we are starting up the JavaScript API client and, similarly to the PHP client, forcing the client to be logged in before they continue.  Once that happens the nested function will run which loads the .swf into the page.  Make sure to pass the site relative location of the xd_receiver.htm file.
+In this file we are starting up the !JavaScript API client and, similarly to the PHP client, forcing the client to be logged in before they continue.  Once that happens the nested function will run which loads the .swf into the page.  Make sure to pass the site relative location of the xd_receiver.htm file.
 
 There are a few things that are gathered from the api, the uid of the logged in user, the api key, the special secret used only for this session, a session key, and the time that session key expires.  Those things must be passed into the .swf for it to operate correctly.  Additionally we are also passing in the name of the JS api instance that we created.  This is so that the flash element can communicate with the JS element.
 
@@ -53,7 +53,7 @@ fb_js_api.requireLogin(function(exception)
         //pass in the flashvars.
 	
         swfobject.embedSWF("helloWorld.swf", "flashContent", "100%", "100%", "9.0.0", "expressInstall.swf", flashVars);
-			});
+});
 </script>
 
 <div id="flashContent"></div>
