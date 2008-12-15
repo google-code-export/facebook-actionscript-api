@@ -75,6 +75,10 @@ package com.pbking.facebook.session
 			return null;
 		}
 
+		public function callMethod(method:String, args:Object, callback:Function=null):void
+		{
+		}
+		
 		// UTILITIES //////////
 
 		protected function verifyInfinateSession(event:Event):void
