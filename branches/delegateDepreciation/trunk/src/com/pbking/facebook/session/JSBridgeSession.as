@@ -50,9 +50,16 @@ package com.pbking.facebook.session
 			return ExternalInterface.call(call);
         }
 
+		// These are the two different ways you can make a call
+
 		public function callMethod(method:String, args:Object, callback:Function=null):void
 		{
 			postBridgeAsync(method, args, callback);
+		}
+		
+		public function makeCall(call:FacebookCall):void
+		{
+			
 		}
 		
 		// UTILITIES //////////

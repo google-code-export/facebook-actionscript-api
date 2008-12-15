@@ -55,17 +55,18 @@ package com.pbking.facebook
 		
 		protected var logger:PBLogger = PBLogger.getLogger("pbking.facebook");
 		
-		protected var _fb:Facebook;
-		protected var _args:URLVariables = new URLVariables();
+		[Bindable] public var args:URLVariables;
+		[Bindable] public var method:String;
 		
 		[Bindable] public var result:Object;
 		[Bindable] public var exception:Object;
 		
 		// CONSTRUCTION //////////
 		
-		function FacebookCall(fBook:Facebook)
+		function FacebookCall(method:String="no_method_required", args:URLVariables=null)
 		{
-			this._fb = fBook;
+			this.method = method;
+			this.args = args ? args : new URLVariables();
 		}
 		
 		// PUBLIC FUNCTIONS //////////
@@ -73,7 +74,7 @@ package com.pbking.facebook
 		/**
 		 * Send this call to the server
 		 */
-		public function post(method:String="no_method_required", url:String=null):void
+		public function post():void
 		{
 			//construct the log message
 			var debugString:String = "> > > calling method: " + method;
@@ -87,14 +88,6 @@ package com.pbking.facebook
 				post_direct(method, url);
 		}
 		
-		/**
-		 * Helper function for sending the call through the javascript bridge
-		 */
-		protected function post_bridge(method:String):void
-		{
-			FacebookJSBridge.postBridgeAsync(method, _args, bridgeFacebookReply, _fb.fb_js_api_name, _fb.as_app_name);
-		}
-			
 		/**
 		 * Helper function for sending the call straight to the server
 		 */
