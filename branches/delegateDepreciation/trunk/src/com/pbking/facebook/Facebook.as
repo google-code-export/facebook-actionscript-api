@@ -39,6 +39,7 @@ package com.pbking.facebook
 	import com.pbking.facebook.events.FacebookActionEvent;
 	import com.pbking.facebook.methodGroups.*;
 	import com.pbking.facebook.session.IFacebookSession;
+	import com.pbking.facebook.session.LocalDebugSession;
 	import com.pbking.util.logging.PBLogger;
 	
 	import flash.events.EventDispatcher;
@@ -52,7 +53,6 @@ package com.pbking.facebook
 		// VARIABLES //////////
 		
 		public var logger:PBLogger = PBLogger.getLogger("pbking.facebook");
-		public var isConnected:Boolean = false;
 		public var connectionErrorMessage:String;
 
 		protected static var _facebook_namespace:Namespace;
@@ -68,6 +68,27 @@ package com.pbking.facebook
 		
 		// GETTERS and SETTERS //////////
 		
+		public function get is_connected():Boolean 
+		{ return _currentSession ? this._currentSession.is_connected : false; }
+		
+		public function get api_key():String 
+		{ return _currentSession ? this._currentSession.api_key : null; }
+
+		public function get secret():String 
+		{ return _currentSession ? this._currentSession.secret : null; } 
+	
+		public function get session_key():String 
+		{ return _currentSession ? this._currentSession.session_key : null; }
+		
+		public function get expires():Number 
+		{ return _currentSession ? this._currentSession.expires : -1; }
+	
+		public function get uid():String 
+		{ return _currentSession ? this._currentSession.uid : null; }
+
+		public function get api_version():String 
+		{ return _currentSession ? this._currentSession.api_version : null; }
+
 		/**
 		 * Facebook namespace to use when pulling out XML data responses
 		 */
@@ -102,6 +123,12 @@ package com.pbking.facebook
 			return null;
 		}
 		
+		public function validateDesktopSession():void
+		{
+			if(!is_connected && _currentSession is LocalDebugSession)
+				LocalDebugSession(_currentSession).validateDesktopSession();
+		}
+		
 		// UTILS //////////
 		
 		/**
@@ -109,8 +136,6 @@ package com.pbking.facebook
 		 */
 		protected function onSessionConnected(session:IFacebookSession):void
 		{
-			this.isConnected = session.is_connected;
-			
 			dispatchEvent(new FacebookActionEvent(FacebookActionEvent.COMPLETE));
 		}
 		
