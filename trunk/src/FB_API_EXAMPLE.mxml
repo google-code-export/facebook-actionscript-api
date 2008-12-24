@@ -49,6 +49,7 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 
 	<mx:Script>
 		<![CDATA[
+			import com.pbking.facebook.FacebookSessionUtil;
 			import com.pbking.facebook.FacebookCall;
 			import com.pbking.facebook.session.LocalDebugSession;
 			import com.pbking.facebook.session.JSBridgeSession;
@@ -77,41 +78,13 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 				logger = PBLogger.getLogger("pbking.facebook");
 				logger.addEventListener(PBLogEvent.LOG, onLog);
 				
-				//create our facebook instance
-				fBook = new Facebook();
+				//create our facebook instance with the session util
+				var fsu:FacebookSessionUtil = new FacebookSessionUtil();
+				
+				fBook = fsu.facebook;
 				fBook.addEventListener(Event.COMPLETE, onFacebookReady);
-				
-				//start a js session
-				//var session:JSBridgeSession = new JSBridgeSession("flashContent");
-				
-				//start a localTest session
-				session = new LocalDebugSession("2b7eb429aca38c8d2b2f372f4672c6e0", "5753296b3c2518bc1098dbaa9a8d26c1");
-				
-				fBook.startSession(session);
-				
-				/*
-				//determine if we're running locally.  if we are we'll run this
-				//app as an unsecure desktop app.  Otherwise fire up a JSAuth session
-				if(Application.application.url.slice(0, 5) == "file:")
-				{
-					var keyLoader:URLLoader = new URLLoader();
-					keyLoader.addEventListener(Event.COMPLETE, onKeySecretLoaded);
-					keyLoader.load(new URLRequest("api_key_secret.xml"));
-				}
-				else
-				{
-					var flashVars:Object = Application.application.parameters;
-					//startWidgetSession has been depreciated
-					//fBook.startWidgetSession(flashVars, config_api_key, config_secret);
-					
-					storedSession = getStoredSession(flashVars.api_key);
-					
-					//these flashVars are NOT the flashvars passed in when using an <fb:swf/> tag
-					//they are pulled out of the JS api instance.  See /html/fb_as3_api_example.html for an
-					//example of how to pull those values out and send them here.
-					fBook.startJSBridgeSession(flashVars.api_key, flashVars.secret, flashVars.session_key, flashVars.expires, flashVars.user_id, flashVars.fb_js_api_name, flashVars.as_app_name); 
-				}
-				*/
+
+				fsu.connect();
 			}
 			
 			/**
@@ -120,7 +93,7 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 			 */
 			private function onFacebookReady(event:Event):void
 			{
-				if(fBook.isConnected)
+				if(fBook.is_connected)
 				{
 					var call:FacebookCall = new FacebookCall("friends.get");
 					fBook.post(call);
@@ -142,7 +115,7 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 		]]>
 	</mx:Script>
 	
-	<mx:Button label="validate" click="session.validateDesktopSession();" />
+	<mx:Button label="validate" click="fBook.validateDesktopSession();" />
 	
 	<mx:TextArea id="logText" right="10" left="10" top="216" bottom="10"/>
 	

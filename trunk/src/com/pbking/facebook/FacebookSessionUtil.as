@@ -1,6 +1,8 @@
 package com.pbking.facebook
 {
 	import com.pbking.facebook.events.FacebookActionEvent;
+	import com.pbking.facebook.session.JSBridgeSession;
+	import com.pbking.facebook.session.LocalDebugSession;
 	
 	import flash.events.Event;
 	import flash.net.SharedObject;
@@ -13,13 +15,18 @@ package com.pbking.facebook
 	{
 		public var facebook:Facebook;
 		public var storedSession:SharedObject;
+		public var localKeyFile:String;
 		
 		function FacebookSessionUtil(localKeyFile:String="api_key_secret.xml")
 		{
+			this.localKeyFile = localKeyFile;
 			//create our facebook instance
 			facebook = new Facebook();
 			facebook.addEventListener(FacebookActionEvent.COMPLETE, onFacebookReady);
-			
+		}
+		
+		public function connect():void
+		{
 			//determine if we're running locally.  if we are we'll run this
 			//app as an unsecure desktop app.  Otherwise fire up a JSAuth session
 			if(Application.application.url.slice(0, 5) == "file:")
@@ -31,10 +38,7 @@ package com.pbking.facebook
 			else
 			{
 				var flashVars:Object = Application.application.parameters;
-				
-				storedSession = getStoredSession(flashVars.api_key);
-				
-				facebook.startJSBridgeSession(flashVars.api_key, flashVars.secret, flashVars.session_key, flashVars.expires, flashVars.user_id, flashVars.fb_js_api_name, flashVars.as_app_name); 
+				facebook.startSession(new JSBridgeSession(flashVars.as_app_name));
 			}
 		}
 		
@@ -52,16 +56,15 @@ package com.pbking.facebook
 			
 			storedSession = getStoredSession(keySecret.api_key);
 			
-			facebook.startDesktopSession(keySecret.api_key, keySecret.secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret);
+			facebook.startSession(new LocalDebugSession(keySecret.api_key, keySecret.secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret));
 		}
 		
 		/**
 		 * Called with the facebook connection is ready.
-		 * Makes the call to get a list of the user's albums
 		 */
 		private function onFacebookReady(event:Event):void
 		{
-			if(facebook.isConnected)
+			if(facebook.is_connected)
 			{
 				//save infinate session key if we can
 				if(facebook.expires == 0)
