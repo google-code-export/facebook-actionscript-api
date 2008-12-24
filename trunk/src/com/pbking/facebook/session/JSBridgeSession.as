@@ -1,24 +1,45 @@
 package com.pbking.facebook.session
 {
+	import com.pbking.facebook.FacebookCall;
+	import com.pbking.facebook.delegates.IFacebookCallDelegate;
+	import com.pbking.facebook.delegates.JSBridgeDelegate;
+	
 	import flash.external.ExternalInterface;
 	
 	public class JSBridgeSession implements IFacebookSession
 	{
+		// VARIABLES //////////
+		
 		public var as_app_name:String;
 		
-		private var externalInterfaceCallId:uint = 0;
-		private var externalInterfaceCallbacks:Object = {};
+		private var _api_version:String = "1.0";
+		
+		// CONSTRUCTION //////////
 		
 		public function JSBridgeSession(as_app_name:String)
 		{
 			this.as_app_name = as_app_name;
 
-			ExternalInterface.addCallback("bridgeFacebookReply", postBridgeAsyncReply);
 		}
 
 		// INTERFACE IMPLEMENTATION //////////
 
-		// These are all quickies.  We're just reaching into the JS API and are sync calls
+		public function get is_connected():Boolean { return true; }
+
+		public function get api_version():String { return this._api_version; }
+		public function set api_version(newVal:String):void { this._api_version = newVal; }
+
+		public function addConnectionCallback(callback:Function):void
+		{
+			//not used by this session type
+		}
+
+		public function post(call:FacebookCall):IFacebookCallDelegate
+		{
+			return new JSBridgeDelegate(call, this);
+		}
+		
+		// We're just reaching into the JS API and are sync calls
 
 		public function get api_key():String 
 		{
@@ -50,18 +71,6 @@ package com.pbking.facebook.session
 			return ExternalInterface.call(call);
         }
 
-		// These are the two different ways you can make a call
-
-		public function callMethod(method:String, args:Object, callback:Function=null):void
-		{
-			postBridgeAsync(method, args, callback);
-		}
-		
-		public function makeCall(call:FacebookCall):void
-		{
-			
-		}
-		
 		// UTILITIES //////////
 
 		public function get sig():String 
@@ -70,31 +79,5 @@ package com.pbking.facebook.session
 			return ExternalInterface.call(call);
         }
 		
-		protected function postBridgeAsync(method:String, args:Object, instanceCallback:Function=null):void
-		{
-			externalInterfaceCallId++;
-			
-			externalInterfaceCallbacks[externalInterfaceCallId] = instanceCallback;
-			
-			var bridgeCallFunctionName:String = "bridgeFacebookCall_"+externalInterfaceCallId;
-
-			var bridgeCall:String = 
-				"function "+bridgeCallFunctionName+"(method, args){"+
-					"FB.Facebook.apiClient._callMethod(method, args, " + 
-							"function(result, exception){" + 
-								"document."+as_app_name+".bridgeFacebookReply(result, exception, "+externalInterfaceCallId+");" + 
-							"});" + 
-				"}";
-
-			ExternalInterface.call(bridgeCall, method, args);
-		}
-		
-		protected static function postBridgeAsyncReply(result:Object, exception:Object, exCallId:uint):void
-		{
-			externalInterfaceCallbacks[exCallId](result, exception);
-			delete externalInterfaceCallbacks[exCallId];
-		}
-		
-
 	}
 }

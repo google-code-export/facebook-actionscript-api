@@ -34,7 +34,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 package com.pbking.facebook
 {
-	import com.pbking.facebook.data.users.FacebookUser;
+	import com.pbking.facebook.delegates.IFacebookCallDelegate;
 	import com.pbking.facebook.delegates.auth.*;
 	import com.pbking.facebook.events.FacebookActionEvent;
 	import com.pbking.facebook.methodGroups.*;
@@ -47,7 +47,7 @@ package com.pbking.facebook
 	[Event(name="waiting_for_login", type="com.pbking.facebook.events.FacebookActionEvent")]
 
 	[Bindable]
-	public class Facebook extends EventDispatcher implements IFacebookSession
+	public class Facebook extends EventDispatcher
 	{	
 		// VARIABLES //////////
 		
@@ -56,7 +56,8 @@ package com.pbking.facebook
 		public var connectionErrorMessage:String;
 
 		protected static var _facebook_namespace:Namespace;
-		public static var api_version:String = "1.0";
+		
+		private var _currentSession:IFacebookSession;
 		
 		// CONSTRUCTION //////////
 		
@@ -79,28 +80,36 @@ package com.pbking.facebook
 			return _facebook_namespace;
 		}
 		
+		public function startSession(session:IFacebookSession):void
+		{
+			_currentSession = session;
+			
+			if(_currentSession.is_connected)
+			{
+				dispatchEvent(new FacebookActionEvent(FacebookActionEvent.COMPLETE));
+			}
+			else
+			{
+				_currentSession.addConnectionCallback(onSessionConnected);
+			}
+		}
+		
+		public function post(call:FacebookCall):IFacebookCallDelegate
+		{
+			if(_currentSession)
+				return _currentSession.post(call);
+			
+			return null;
+		}
+		
 		// UTILS //////////
 		
 		/**
 		 * Helper function.  Called when the connection is ready.
 		 */
-		protected function onReady():void
+		protected function onSessionConnected(session:IFacebookSession):void
 		{
-			isConnected = true;
-			
-			dispatchEvent(new FacebookActionEvent(FacebookActionEvent.COMPLETE));
-		}
-		
-		/**
-		 * Helper function.  Called when the connection fails to be made.
-		 */
-		protected function onConnectionError(errorMessage:String):void
-		{
-			isConnected = false;
-			
-			connectionErrorMessage = errorMessage;
-			
-			logger.fatal(errorMessage);
+			this.isConnected = session.is_connected;
 			
 			dispatchEvent(new FacebookActionEvent(FacebookActionEvent.COMPLETE));
 		}
