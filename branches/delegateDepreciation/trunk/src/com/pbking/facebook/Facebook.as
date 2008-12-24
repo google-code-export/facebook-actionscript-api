@@ -39,7 +39,7 @@ package com.pbking.facebook
 	import com.pbking.facebook.events.FacebookActionEvent;
 	import com.pbking.facebook.methodGroups.*;
 	import com.pbking.facebook.session.IFacebookSession;
-	import com.pbking.facebook.session.LocalDebugSession;
+	import com.pbking.facebook.session.DesktopSession;
 	import com.pbking.util.logging.PBLogger;
 	
 	import flash.events.EventDispatcher;
@@ -125,8 +125,8 @@ package com.pbking.facebook
 		
 		public function validateDesktopSession():void
 		{
-			if(!is_connected && _currentSession is LocalDebugSession)
-				LocalDebugSession(_currentSession).validateDesktopSession();
+			if(!is_connected && _currentSession is DesktopSession)
+				DesktopSession(_currentSession).validateDesktopSession();
 		}
 		
 		// UTILS //////////

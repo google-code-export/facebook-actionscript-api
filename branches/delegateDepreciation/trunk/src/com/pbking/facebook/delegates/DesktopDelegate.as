@@ -4,7 +4,7 @@ package com.pbking.facebook.delegates
 	import com.adobe.serialization.json.JSON;
 	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.session.IFacebookSession;
-	import com.pbking.facebook.session.LocalDebugSession;
+	import com.pbking.facebook.session.DesktopSession;
 	import com.pbking.util.logging.PBLogger;
 	
 	import flash.events.ErrorEvent;
@@ -17,7 +17,7 @@ package com.pbking.facebook.delegates
 	import flash.net.URLRequestMethod;
 	import flash.utils.ByteArray;
 	
-	public class LocalDebugDelegate implements IFacebookCallDelegate
+	public class DesktopDelegate implements IFacebookCallDelegate
 	{
 		// VARIABLES //////////
 		
@@ -25,7 +25,7 @@ package com.pbking.facebook.delegates
 		private static var logger:PBLogger = PBLogger.getLogger("pbking.facebook");
 		
 		private var _call:FacebookCall;
-		private var _session:LocalDebugSession;
+		private var _session:DesktopSession;
 		
 		// GETTERS and SETTERS //////////
 		
@@ -33,11 +33,11 @@ package com.pbking.facebook.delegates
 		public function set call(newVal:FacebookCall):void { _call = newVal; }
 
 		public function get session():IFacebookSession { return _session; }
-		public function set session(newVal:IFacebookSession):void { _session = newVal as LocalDebugSession; }
+		public function set session(newVal:IFacebookSession):void { _session = newVal as DesktopSession; }
 
 		// CONSTRUCTION //////////
 
-		public function LocalDebugDelegate(call:FacebookCall, session:LocalDebugSession)
+		public function DesktopDelegate(call:FacebookCall, session:DesktopSession)
 		{
 			this.call = call;
 			this.session = session;

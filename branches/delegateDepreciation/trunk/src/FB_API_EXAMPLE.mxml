@@ -51,7 +51,7 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 		<![CDATA[
 			import com.pbking.facebook.FacebookSessionUtil;
 			import com.pbking.facebook.FacebookCall;
-			import com.pbking.facebook.session.LocalDebugSession;
+			import com.pbking.facebook.session.DesktopSession;
 			import com.pbking.facebook.session.JSBridgeSession;
 			import com.pbking.util.logging.PBLogger;
 			import com.pbking.util.logging.PBLogEvent;
@@ -63,7 +63,7 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 			import com.pbking.facebook.Facebook;
 		
 			[Bindable] private var fBook:Facebook;
-			[Bindable] private var session:LocalDebugSession;
+			[Bindable] private var session:DesktopSession;
 			[Bindable] private var myFriends:ArrayCollection;
 			
 			private var logger:PBLogger;
