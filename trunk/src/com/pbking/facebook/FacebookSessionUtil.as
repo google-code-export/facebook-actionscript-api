@@ -2,7 +2,7 @@ package com.pbking.facebook
 {
 	import com.pbking.facebook.events.FacebookActionEvent;
 	import com.pbking.facebook.session.JSBridgeSession;
-	import com.pbking.facebook.session.LocalDebugSession;
+	import com.pbking.facebook.session.DesktopSession;
 	
 	import flash.events.Event;
 	import flash.net.SharedObject;
@@ -56,7 +56,7 @@ package com.pbking.facebook
 			
 			storedSession = getStoredSession(keySecret.api_key);
 			
-			facebook.startSession(new LocalDebugSession(keySecret.api_key, keySecret.secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret));
+			facebook.startSession(new DesktopSession(keySecret.api_key, keySecret.secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret));
 		}
 		
 		/**

@@ -2,13 +2,13 @@ package com.pbking.facebook.session
 {
 	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.delegates.IFacebookCallDelegate;
-	import com.pbking.facebook.delegates.LocalDebugDelegate;
+	import com.pbking.facebook.delegates.DesktopDelegate;
 	import com.pbking.util.logging.PBLogger;
 	
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	
-	public class LocalDebugSession implements IFacebookSession
+	public class DesktopSession implements IFacebookSession
 	{
 		protected var _auth_token:String;
 		protected var _api_key:String; 
@@ -40,7 +40,7 @@ package com.pbking.facebook.session
 
 		// CONSTRUCTION //////////
 		
-		public function LocalDebugSession(api_key:String, secret:String, infinite_session_key:String=null, infinite_session_secret:String=null)
+		public function DesktopSession(api_key:String, secret:String, infinite_session_key:String=null, infinite_session_secret:String=null)
 		{
 			this._api_key = api_key;
 			this._secret = secret;
@@ -88,7 +88,7 @@ package com.pbking.facebook.session
 
 		public function post(call:FacebookCall):IFacebookCallDelegate
 		{
-			return new LocalDebugDelegate(call, this);
+			return new DesktopDelegate(call, this);
 		}
 		
 		public function addConnectionCallback(callback:Function):void
