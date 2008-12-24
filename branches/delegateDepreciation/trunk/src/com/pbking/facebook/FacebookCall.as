@@ -30,23 +30,14 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.pbking.facebook
 {
-	import com.adobe.crypto.MD5;
-	import com.adobe.serialization.json.JSON;
+	import com.pbking.facebook.delegates.IFacebookCallDelegate;
+	import com.pbking.facebook.session.IFacebookSession;
 	import com.pbking.util.logging.PBLogger;
-	import com.shtif.web.MIMEConstructor;
 	
-	import flash.events.ErrorEvent;
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.events.IOErrorEvent;
-	import flash.events.SecurityErrorEvent;
-	import flash.net.URLLoader;
-	import flash.net.URLLoaderDataFormat;
-	import flash.net.URLRequest;
-	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
-	import flash.utils.ByteArray;
 	
+	[Bindable]
 	public class FacebookCall extends EventDispatcher
 	{
 		// VARIABLES //////////
@@ -55,11 +46,19 @@ package com.pbking.facebook
 		
 		protected var logger:PBLogger = PBLogger.getLogger("pbking.facebook");
 		
-		[Bindable] public var args:URLVariables;
-		[Bindable] public var method:String;
+		public var args:URLVariables;
+		public var method:String;
 		
-		[Bindable] public var result:Object;
-		[Bindable] public var exception:Object;
+		public var result:Object;
+		public var exception:Object;
+
+		public var success:Boolean = false;
+		public var errorCode:int = 0;
+		public var errorMessage:String = "";
+
+		public var session:IFacebookSession;
+		
+		public var callbacks:Array = [];
 		
 		// CONSTRUCTION //////////
 		
@@ -69,171 +68,61 @@ package com.pbking.facebook
 			this.args = args ? args : new URLVariables();
 		}
 		
-		// PUBLIC FUNCTIONS //////////
+		// PUBLIC METHODS //////////
 		
 		/**
-		 * Send this call to the server
-		 */
-		public function post():void
-		{
-			//construct the log message
-			var debugString:String = "> > > calling method: " + method;
-			for(var indexName:String in this._args)
-				debugString += "\n  +" + indexName + " = " + this._args[indexName];
-			logger.debug(debugString);
-					
-			if(_fb.sessionType == FacebookSessionType.JAVASCRIPT_BRIDGE)
-				post_bridge(method);
-			else
-				post_direct(method, url);
-		}
-		
-		/**
-		 * Helper function for sending the call straight to the server
-		 */
-		protected function post_direct(method:String, url:String=null):void
-		{	
-			if(url == null) url = _fb.rest_url;
-
-			setRequestArgument("v", _fb.api_version);
-			
-			setRequestArgument("format", "JSON");
-			
-			if(_fb.api_key != null)
-				setRequestArgument("api_key", _fb.api_key);
-
-			if(_fb.session_key != null)
-				setRequestArgument("session_key", _fb.session_key);
-
-			var call_id:String = ( new Date().valueOf() ).toString() + ( FacebookCall.callID++ ).toString();
-			this.setRequestArgument( 'call_id', call_id );
-
-			this.setRequestArgument( 'method', method );
-			
-			//create encrypted signature. NOTE: You cannot use setRequestArgument() after calling this or you will bork the checksum!!
-			this.setRequestArgument("sig", getSig());
-			
-			//construct the log message
-			var loader:URLLoader = new URLLoader();
-			loader.addEventListener(Event.COMPLETE, onResult);
-			loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
-			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
-
-			if(method != "facebook.photos.upload")
-			{
-				//create the service request
-				var req:URLRequest = new URLRequest(url);
-				req.contentType = "application/x-www-form-urlencoded";
-				req.method = URLRequestMethod.POST;
-				req.data = _args;
-				
-				loader.dataFormat = URLLoaderDataFormat.TEXT;
-				
-				//make the request!
-				loader.load(req);
-			}
-			else
-			{
-				//special construction for uploads
-
-				var mime:MIMEConstructor = new MIMEConstructor();
-				var data:ByteArray;
-
-				for(var argIndexName:String in this._args)
-				{
-					if(argIndexName != "data")
-					{
-						mime.writePostData(argIndexName, this._args[argIndexName]);
-					}
-					else
-					{
-						mime.writeFileData("fn"+this._args['call_id']+".jpg", this._args[argIndexName]); 
-					}
-				}
-				mime.closePostData();
-
-				var urlreq:URLRequest = new URLRequest();
-				urlreq.method = URLRequestMethod.POST;
-				urlreq.contentType = "multipart/form-data; boundary="+mime.getBoundary();
-				urlreq.data = mime.getPostData();
-				urlreq.url = url;
-				
-				loader.dataFormat = URLLoaderDataFormat.BINARY;
-				loader.load(urlreq);				
-			}
-		}
-		
-		/**
-		 * Set a name value pair to be sent in request postdata
+		 * Set a name value pair to be sent in request postdata.  
+		 * You could of course set these directly on the args variable 
+		 * but this method proves handy too.
 		 */
 		public function setRequestArgument( name:String, value:* ):void
 		{
-			this._args[name] = value;	
+			this.args[name] = value;	
 		}
 		
-		// PRIVATE FUNCTIONS //////////
-		
-		protected function onError(event:ErrorEvent):void
+		public function execute(session:IFacebookSession=null):IFacebookCallDelegate
 		{
-			dispatchEvent(event.clone());
+			if(session)
+				return session.post(this);
+				
+			else if(this.session)
+				return this.session.post(this);
+				
+			return null;
 		}
 		
-		protected function onResult(event:Event):void
-		{
-			var loader:URLLoader = event.target as URLLoader;
-			var resultString:String = loader.data;
-			
-			this.result = JSON.decode(resultString);
-
-			logger.debug("< < < received facebook reply:\n" + resultString);
-
-			dispatchEvent(new Event(Event.COMPLETE));
-		}
-		
-		protected function bridgeFacebookReply(result:Object, exception:Object):void
+		public function handleResult(result:Object, exception:Object):void
 		{
 			this.result = result;
 			this.exception = exception;
 			
-			logger.debug("< < < received facebook reply:\n" + result.toString());
-			
+			//look for an error
+			if(result && result.hasOwnProperty('error_code'))
+			{
+				//dang.  handle the error
+				this.errorCode = result.error_code;
+				this.errorMessage = result.error_msg;
+				this.success = false;
+			}
+			else
+			{
+				this.success = true;
+			}
+
 			dispatchEvent(new Event(Event.COMPLETE));
+			
+			for each(var f:Function in callbacks)
+				f(this);
 		}
 		
-		/**
-		 * Construct the signature as described by Facebook api documentation
-		 */
-		protected function getSig():String
+		public function addCallback(callback:Function):void
 		{
-			var a:Array = [];
-			
-			for( var p:String in this._args )
-			{
-				var arg:* = this._args[p];
-				if( p !== 'sig' && !(arg is ByteArray)){
-					a.push( p + '=' + arg.toString() );
-				}
-			}
-			
-			a.sort();
-			
-			var s:String = '';
-			
-			for( var i:Number = 0; i < a.length; i++ )
-			{
-				s += a[i];
-			}
-			
-			s += _fb.secret;
-			
-			return MD5.hash( s );
-		}	
-		
-		protected function ioErrorHandler(event:IOErrorEvent):void
-		{
-			//do nothing with unhandled ioError events
+			for each(var f:Function in callbacks)
+				if(f == callback) 
+					return;
+
+			callbacks.push(callback);
 		}
-		
 		
 	}
 }

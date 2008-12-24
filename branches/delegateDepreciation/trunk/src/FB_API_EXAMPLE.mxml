@@ -49,23 +49,20 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 
 	<mx:Script>
 		<![CDATA[
+			import com.pbking.facebook.FacebookCall;
+			import com.pbking.facebook.session.LocalDebugSession;
+			import com.pbking.facebook.session.JSBridgeSession;
 			import com.pbking.util.logging.PBLogger;
 			import com.pbking.util.logging.PBLogEvent;
 			import mx.controls.Alert;
 			import mx.collections.ArrayCollection;
-			import com.pbking.facebook.delegates.users.GetUserInfoDelegate;
-			import com.pbking.facebook.data.users.FacebookUser;
-			import com.pbking.facebook.data.users.UserFields;
-			import com.pbking.facebook.delegates.friends.GetFriendsDelegate;
-			import com.pbking.facebook.FacebookSessionType;
 			import mx.logging.LogEvent;
 			import mx.logging.ILogger;
 			import mx.logging.Log;
-			import com.pbking.facebook.data.photos.FacebookAlbum;
-			import com.pbking.facebook.delegates.photos.GetAlbumsDelegate;
 			import com.pbking.facebook.Facebook;
 		
 			[Bindable] private var fBook:Facebook;
+			[Bindable] private var session:LocalDebugSession;
 			[Bindable] private var myFriends:ArrayCollection;
 			
 			private var logger:PBLogger;
@@ -84,6 +81,15 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 				fBook = new Facebook();
 				fBook.addEventListener(Event.COMPLETE, onFacebookReady);
 				
+				//start a js session
+				//var session:JSBridgeSession = new JSBridgeSession("flashContent");
+				
+				//start a localTest session
+				session = new LocalDebugSession("2b7eb429aca38c8d2b2f372f4672c6e0", "5753296b3c2518bc1098dbaa9a8d26c1");
+				
+				fBook.startSession(session);
+				
+				/*
 				//determine if we're running locally.  if we are we'll run this
 				//app as an unsecure desktop app.  Otherwise fire up a JSAuth session
 				if(Application.application.url.slice(0, 5) == "file:")
@@ -105,23 +111,7 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 					//example of how to pull those values out and send them here.
 					fBook.startJSBridgeSession(flashVars.api_key, flashVars.secret, flashVars.session_key, flashVars.expires, flashVars.user_id, flashVars.fb_js_api_name, flashVars.as_app_name); 
 				}
-			}
-			
-			private function getStoredSession(apiKey:String):SharedObject
-			{
-				return SharedObject.getLocal(apiKey+"_stored_session");
-			}
-			
-			private function onKeySecretLoaded(e:Event):void
-			{
-				var keyLoader:URLLoader = e.target as URLLoader;
-				keyLoader.removeEventListener(Event.COMPLETE, onKeySecretLoaded);
-				
-				var keySecret:XML = new XML(keyLoader.data);
-				
-				storedSession = getStoredSession(keySecret.api_key);
-				
-				fBook.startDesktopSession(keySecret.api_key, keySecret.secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret);
+				*/
 			}
 			
 			/**
@@ -132,23 +122,8 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 			{
 				if(fBook.isConnected)
 				{
-					//save infinate session key if we can
-					if(fBook.expires == 0)
-					{
-						storedSession.data.infinite_session_key = fBook.session_key;
-						storedSession.data.stored_secret = fBook.secret;
-						storedSession.flush();
-					}
-					//by passing in a callback function, we save the step of adding
-					//a listener to the GetAlbums_delegate that is returned from the
-					//following function
-					fBook.friends.getFriends(onGetFriendsReply);
-	
-					// the following code would do the same thing
-					/*
-					var delegate:GetFriends_delegate = fBook.friends.getFriends();
-					delegate.addEventListener(Event.COMPLETE, onGetFriendsReply);
-					*/
+					var call:FacebookCall = new FacebookCall("friends.get");
+					fBook.post(call);
 				}
 				else
 				{
@@ -156,22 +131,6 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 				}
 			}
 			
-			/**
-			 * All calls to the Facebook server return a FacebookDelegate in the event.
-			 * The results of the calls are public properties of that specific delegate.
-			 * Here we are turning around and getting some info for all of our friends.
-			 */
-			private function onGetFriendsReply(event:Event):void
-			{
-				var delegate:GetFriendsDelegate = event.target as GetFriendsDelegate;
-				fBook.users.getInfo(delegate.friends, [UserFields.name, UserFields.pic_big], onGetInfoReply);
-			}
-			
-			private function onGetInfoReply(event:Event):void
-			{
-				var delegate:GetUserInfoDelegate = event.target as GetUserInfoDelegate;
-				this.myFriends = new ArrayCollection(delegate.users);
-			}
 
 			/**
 			 * util to show logging on the stage
@@ -183,35 +142,7 @@ or send them to me (Jason Crist:jcrist@pbking.com)
 		]]>
 	</mx:Script>
 	
-	<!--
-		Desktop Validation button.
-		Press this after the Facebook Login page has been launched
-		and you have logged in.
-	-->
-		
-	<mx:Button x="200" y="182" 
-		label="Validate (desktop app)" 
-		click="fBook.validateDesktopSession();"
-		visible="{fBook.sessionType == FacebookSessionType.DESKTOP &amp;&amp; !fBook.isConnected}"/>
-
-	<!--
-		List of the logged in user's friends
-	-->
-	<mx:List id="friendList"
-		x="200" y="10" 
-		width="156" height="164"
-		labelField="name" 
-		dataProvider="{myFriends}"
-		allowMultipleSelection="false"
-		change="userPicture.source = FacebookUser(friendList.selectedItem).pic_big"/>
-	
-	<!--
-		pic of the selected user
-	-->
-	<mx:Image id="userPicture" 
-		left="364" top="10" right="10" height="198"/>
-	
-	<mx:Text x="10" y="10" text="This is a VERY primitive example of how to use the AS3 Facebook API.  You must replace the API_KEY and SECRET values in this file with your own to get it to operate correctly.  It loads a list of the albums of the logged-in user.  Running this app locally will put it in &quot;desktop&quot; mode.  After logging in, click the Validate button to continue.  In widget mode validation isn't necessary." width="180"/>
+	<mx:Button label="validate" click="session.validateDesktopSession();" />
 	
 	<mx:TextArea id="logText" right="10" left="10" top="216" bottom="10"/>
 	
