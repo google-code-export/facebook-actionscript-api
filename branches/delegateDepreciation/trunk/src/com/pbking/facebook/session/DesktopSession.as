@@ -45,28 +45,22 @@ package com.pbking.facebook.session
 			this._api_key = api_key;
 			this._secret = secret;
 			
-			
-			createToken();
-			
-			/*
 			if(infinite_session_key)
 			{
 				this.non_inf_session_secret = secret;
 				this._secret = infinite_session_secret;
 				this._session_key = infinite_session_key;
 
-				//TODO: make a call to verify our session (and grab our user while we're at it)
-				//this.users.getLoggedInUser(verifyInfinateSession);
+				//make a call to verify our session
+				var call:FacebookCall = new FacebookCall();
+				call.addCallback(verifyInfinateSession);
+				this.post(call);
 			}
 			else
 			{
 				this._secret = secret;
-
-				//construct a token and get ready for the user to enter user/pass
-				var delegate:CreateTokenDelegate = new CreateTokenDelegate(this);
-				delegate.addEventListener(Event.COMPLETE, onDesktopTokenCreated);
+				createToken();
 			}
-			*/
 		}
 
 		// INTERFACE REQUIREMENTS //////////
@@ -172,25 +166,20 @@ package com.pbking.facebook.session
 			_connectionCallbacks = [];
 		}
 
-		/*
-		protected function verifyInfinateSession(event:Event):void
+		protected function verifyInfinateSession(call:FacebookCall):void
 		{
-			var d:GetLoggedInUserDelegate = event.target as GetLoggedInUserDelegate;
-			if(d.success)
+			if(call.success)
 			{
-				this._user = d.user;
-				this._user.isLoggedInUser = true;
 				onReady();
 			}
 			else
 			{
 				//infinate session didn't work out.  just start over without it
-				this.session_key = null;
+				this._session_key = null;
 				this._secret = this.non_inf_session_secret;
-				startDesktopSession(this._api_key, this._secret);
+				createToken();
 			}
 		}
-		*/
 		
 	}
 }
