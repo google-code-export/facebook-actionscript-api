@@ -33,7 +33,7 @@ package com.pbking.facebook.data.photos
 	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.data.util.FacebookDataParser;
-	import com.pbking.facebook.delegates.photos.GetPhotosDelegate;
+	//import com.pbking.facebook.delegates.photos.GetPhotosDelegate;
 	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -159,7 +159,7 @@ package com.pbking.facebook.data.photos
 			if(!_populating && !_populated)
 			{
 				_populating = true;
-				facebookReference.photos.getPhotos(undefined, this.aid, undefined, onPopulationComplete);
+				//facebookReference.photos.getPhotos(undefined, this.aid, undefined, onPopulationComplete);
 			}
 			else if(_populated)
 			{
@@ -168,8 +168,8 @@ package com.pbking.facebook.data.photos
 		}
 		private function onPopulationComplete(event:Event):void
 		{
-			var delegate:GetPhotosDelegate = event.target as GetPhotosDelegate;
-			this.photos = delegate.photos;
+			//var delegate:GetPhotosDelegate = event.target as GetPhotosDelegate;
+			//this.photos = delegate.photos;
 			
 			_populating = false;
 			_populated = true;

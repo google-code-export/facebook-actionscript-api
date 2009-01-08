@@ -37,6 +37,8 @@ package com.pbking.facebook
 	import flash.events.EventDispatcher;
 	import flash.net.URLVariables;
 	
+	[Event(name="complete", type="flash.events.Event")]
+	
 	[Bindable]
 	public class FacebookCall extends EventDispatcher
 	{
@@ -80,6 +82,16 @@ package com.pbking.facebook
 			this.args[name] = value;	
 		}
 		
+		public function clearRequestArguments():void
+		{
+			this.args = new URLVariables();
+		}
+		
+		public function initialize():void
+		{
+			//override in case something needs to be initialized prior to execution
+		}
+		
 		public function execute(session:IFacebookSession=null):IFacebookCallDelegate
 		{
 			if(session)
@@ -107,6 +119,7 @@ package com.pbking.facebook
 			else
 			{
 				this.success = true;
+				handleSuccess(result);
 			}
 
 			dispatchEvent(new Event(Event.COMPLETE));
@@ -115,6 +128,11 @@ package com.pbking.facebook
 				f(this);
 		}
 		
+		protected function handleSuccess(result:Object):void
+		{
+			//override this
+		}
+
 		public function addCallback(callback:Function):void
 		{
 			for each(var f:Function in callbacks)
