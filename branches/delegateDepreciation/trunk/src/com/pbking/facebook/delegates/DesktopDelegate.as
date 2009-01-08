@@ -55,6 +55,8 @@ package com.pbking.facebook.delegates
 				return;
 			}
 			
+			call.initialize();
+			
 			//construct the log message
 			var debugString:String = "> > > calling method [localDebug]: " + call.method;
 			for(var indexName:String in call.args)

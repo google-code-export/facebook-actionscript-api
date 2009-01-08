@@ -36,8 +36,8 @@ package com.pbking.facebook
 {
 	import com.pbking.facebook.delegates.IFacebookCallDelegate;
 	import com.pbking.facebook.events.FacebookActionEvent;
-	import com.pbking.facebook.session.IFacebookSession;
 	import com.pbking.facebook.session.DesktopSession;
+	import com.pbking.facebook.session.IFacebookSession;
 	import com.pbking.util.logging.PBLogger;
 	
 	import flash.events.EventDispatcher;
@@ -113,10 +113,13 @@ package com.pbking.facebook
 			}
 		}
 		
-		public function post(call:FacebookCall):IFacebookCallDelegate
+		public function post(call:FacebookCall, callback:Function=null):IFacebookCallDelegate
 		{
 			if(_currentSession)
+			{
+				call.addCallback(callback);
 				return _currentSession.post(call);
+			}
 			
 			return null;
 		}
