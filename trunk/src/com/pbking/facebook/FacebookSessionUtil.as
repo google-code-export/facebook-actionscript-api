@@ -86,7 +86,7 @@ package com.pbking.facebook
 			this.api_key = keySecret.api_key;
 			this.secret = keySecret.secret;
 			
-			
+			startDesktopSession();
 		}
 		
 		protected function startDesktopSession():void

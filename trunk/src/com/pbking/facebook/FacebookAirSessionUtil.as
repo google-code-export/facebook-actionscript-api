@@ -9,19 +9,13 @@ package com.pbking.facebook
 	
 	public class FacebookAirSessionUtil extends FacebookSessionUtil 
 	{
-		public var facebook:Facebook;
-		public var storedSession:SharedObject;
-		public var localKeyFile:String;
-		
-		function FacebookSessionUtil(localKeyFile:String="api_key_secret.xml")
+		function FacebookAirSessionUtil()
 		{
-			super(localKeyFile);
+			super();
 		}
 		
-		public function connect(api_key:String=null, secret:String=null, localKeyFile:String="api_key_secret.xml"):void
+		override public function connect(api_key:String=null, secret:String=null, localKeyFile:String="api_key_secret.xml"):void
 		{
-			super.connect(api_key, secret, localKeyFile);
-			
 			if(api_key && secret)
 			{
 				startDesktopSession();
