@@ -1,8 +1,8 @@
 package com.pbking.facebook.session
 {
 	import com.pbking.facebook.FacebookCall;
-	import com.pbking.facebook.delegates.IFacebookCallDelegate;
 	import com.pbking.facebook.delegates.DesktopDelegate;
+	import com.pbking.facebook.delegates.IFacebookCallDelegate;
 	import com.pbking.util.logging.PBLogger;
 	
 	import flash.net.URLRequest;
@@ -120,7 +120,7 @@ package com.pbking.facebook.session
 				onConnectionError(call.errorMessage);
 			}
 		}
-
+		
 		/**
 		 * Once a token has been created and a user has logged in we must manually validate this session
 		 * with a call to this method.  Once this has been sucessfully called, the Facebook session is ready

@@ -1,15 +1,12 @@
 package com.pbking.facebook
 {
 	import com.pbking.facebook.events.FacebookActionEvent;
-	import com.pbking.facebook.session.JSBridgeSession;
-	import com.pbking.facebook.session.DesktopSession;
+	import com.pbking.facebook.session.AirSession;
 	
 	import flash.events.Event;
 	import flash.net.SharedObject;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	
-	import mx.core.Application;
 	
 	public class FacebookSessionUtil
 	{
@@ -29,17 +26,18 @@ package com.pbking.facebook
 		{
 			//determine if we're running locally.  if we are we'll run this
 			//app as an unsecure desktop app.  Otherwise fire up a JSAuth session
-			if(Application.application.url.slice(0, 5) == "file:")
-			{
+			
+			//if(Application.application.url.slice(0, 5) == "file:")
+			//{
 				var keyLoader:URLLoader = new URLLoader();
 				keyLoader.addEventListener(Event.COMPLETE, onKeySecretLoaded);
 				keyLoader.load(new URLRequest(localKeyFile));
-			}
-			else
-			{
-				var flashVars:Object = Application.application.parameters;
-				facebook.startSession(new JSBridgeSession(flashVars.as_app_name));
-			}
+			//}
+			//else
+			//{
+			//	var flashVars:Object = Application.application.parameters;
+			//	facebook.startSession(new JSBridgeSession(flashVars.as_app_name));
+			//}
 		}
 		
 		private function getStoredSession(apiKey:String):SharedObject
@@ -56,7 +54,8 @@ package com.pbking.facebook
 			
 			storedSession = getStoredSession(keySecret.api_key);
 			
-			facebook.startSession(new DesktopSession(keySecret.api_key, keySecret.secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret));
+			//facebook.startSession(new DesktopSession(keySecret.api_key, keySecret.secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret));
+			facebook.startSession(new AirSession(keySecret.api_key, keySecret.secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret));
 		}
 		
 		/**

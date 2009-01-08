@@ -35,9 +35,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 package com.pbking.facebook
 {
 	import com.pbking.facebook.delegates.IFacebookCallDelegate;
-	import com.pbking.facebook.delegates.auth.*;
 	import com.pbking.facebook.events.FacebookActionEvent;
-	import com.pbking.facebook.methodGroups.*;
 	import com.pbking.facebook.session.IFacebookSession;
 	import com.pbking.facebook.session.DesktopSession;
 	import com.pbking.util.logging.PBLogger;
