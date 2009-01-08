@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="1024"
+	height="768"
+	layout="absolute"
+	creationComplete="init();">
+	
+	<mx:TraceTarget
+		id="myTraceTarget"
+		filters="pbking.*"
+		fieldSeparator=" | "
+		includeCategory="true"
+		includeLevel="true"
+	/>
+
+	<mx:Script>
+		<![CDATA[
+			import com.pbking.facebook.FacebookSessionUtil;
+			import com.pbking.facebook.FacebookCall;
+			import com.pbking.facebook.session.DesktopSession;
+			import com.pbking.facebook.session.JSBridgeSession;
+			import com.pbking.util.logging.PBLogger;
+			import com.pbking.util.logging.PBLogEvent;
+			import mx.controls.Alert;
+			import mx.collections.ArrayCollection;
+			import mx.logging.LogEvent;
+			import mx.logging.ILogger;
+			import mx.logging.Log;
+			import com.pbking.facebook.Facebook;
+		
+			[Bindable] private var fBook:Facebook;
+			[Bindable] private var session:DesktopSession;
+			[Bindable] private var myFriends:ArrayCollection;
+			
+			private var logger:PBLogger;
+			private var storedSession:SharedObject;
+			
+			/**
+			 * Called when the application is ready
+			 */
+			private function init():void
+			{
+				//instantiate our Flash Friendly logger and listen for facebook logs
+				logger = PBLogger.getLogger("pbking.facebook");
+				logger.addEventListener(PBLogEvent.LOG, onLog);
+				
+				//create our facebook instance with the session util
+				var fsu:FacebookSessionUtil = new FacebookSessionUtil();
+				
+				fBook = fsu.facebook;
+				fBook.addEventListener(Event.COMPLETE, onFacebookReady);
+
+				fsu.connect();
+			}
+			
+			/**
+			 * Called with the facebook connection is ready.
+			 * Makes the call to get a list of the user's albums
+			 */
+			private function onFacebookReady(event:Event):void
+			{
+				if(fBook.is_connected)
+				{
+					var call:FacebookCall = new FacebookCall("friends.get");
+					fBook.post(call);
+				}
+				else
+				{
+					Alert.show("Failed to connect to facebook: " + fBook.connectionErrorMessage);
+				}
+			}
+			
+
+			/**
+			 * util to show logging on the stage
+			 */
+			private function onLog(le:PBLogEvent):void
+			{
+				logText.text += le.message + "\n";
+			}			
+		]]>
+	</mx:Script>
+	
+	<mx:Button label="validate" click="fBook.validateDesktopSession();" />
+	
+	<mx:TextArea id="logText" right="10" left="10" top="216" bottom="10"/>
+	
+</mx:WindowedApplication>
