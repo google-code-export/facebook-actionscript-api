@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties version="1">
+  <includeClasses>
+    <classEntry path="com.pbking.facebook.Facebook"/>
+    <classEntry path="com.pbking.facebook.FacebookCall"/>
+    <classEntry path="com.pbking.facebook.FacebookSessionUtil"/>
+    <classEntry path="com.pbking.facebook.delegates.DesktopDelegate"/>
+    <classEntry path="com.pbking.facebook.delegates.IFacebookCallDelegate"/>
+    <classEntry path="com.pbking.facebook.delegates.JSBridgeDelegate"/>
+    <classEntry path="com.pbking.facebook.events.FacebookActionEvent"/>
+    <classEntry path="com.pbking.facebook.session.AirSession"/>
+    <classEntry path="com.pbking.facebook.session.DesktopSession"/>
+    <classEntry path="com.pbking.facebook.session.IFacebookSession"/>
+    <classEntry path="com.pbking.facebook.session.JSBridgeSession"/>
+    <classEntry path="com.pbking.util.collection.HashableArray"/>
+    <classEntry path="com.pbking.util.logging.PBLogBridge"/>
+    <classEntry path="com.pbking.util.logging.PBLogEvent"/>
+    <classEntry path="com.pbking.util.logging.PBLogLevel"/>
+    <classEntry path="com.pbking.util.logging.PBLogger"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
