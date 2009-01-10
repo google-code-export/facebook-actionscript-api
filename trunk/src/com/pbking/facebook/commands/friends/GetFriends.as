@@ -3,6 +3,7 @@ package com.pbking.facebook.commands.friends
 	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.data.users.FacebookUser;
 	
+	[Bindable]
 	public class GetFriends extends FacebookCall
 	{
 		public var friends:Array;
@@ -14,12 +15,14 @@ package com.pbking.facebook.commands.friends
 		
 		override protected function handleSuccess(result:Object):void
 		{
-			friends = [];
+			var myFriends:Array = [];
 			
 			for each(var uid:int in result)
 			{
-				friends.push(FacebookUser.getUser(uid));
+				myFriends.push(FacebookUser.getUser(uid));
 			} 
+			
+			friends = myFriends;
 		}
 		
 	}

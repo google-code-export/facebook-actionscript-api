@@ -65,7 +65,7 @@ package com.pbking.facebook.delegates
 			}
 			logger.debug(debugString);
 					
-			post()
+			post();
 		}
 
 		/**

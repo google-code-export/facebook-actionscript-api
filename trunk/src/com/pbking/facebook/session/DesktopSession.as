@@ -3,12 +3,17 @@ package com.pbking.facebook.session
 	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.delegates.DesktopDelegate;
 	import com.pbking.facebook.delegates.IFacebookCallDelegate;
+	import com.pbking.facebook.events.FacebookActionEvent;
 	import com.pbking.util.logging.PBLogger;
 	
+	import flash.events.EventDispatcher;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	
-	public class DesktopSession implements IFacebookSession
+	[Event(name="connect", type="com.pbking.facebook.events.FacebookActionEvent")]
+	[Event(name="waiting_for_login", type="com.pbking.facebook.events.FacebookActionEvent")]
+
+	public class DesktopSession extends EventDispatcher implements IFacebookSession
 	{
 		protected var _auth_token:String;
 		protected var _api_key:String; 
@@ -19,8 +24,9 @@ package com.pbking.facebook.session
 		protected var _expires:Number;
 		protected var _api_version:String = "1.0";
 		protected var _is_connected:Boolean = false;
-		protected var _connectionCallbacks:Array = [];
+		protected var _waiting_for_login:Boolean = false;
 		protected var logger:PBLogger = PBLogger.getLogger("pbking.facebook");
+
 		/**
 		 * The URL of the REST server that you will be using.
 		 * Change this if you are using a redirect server. (not recommended)
@@ -52,7 +58,8 @@ package com.pbking.facebook.session
 				this._session_key = infinite_session_key;
 
 				//make a call to verify our session
-				var call:FacebookCall = new FacebookCall();
+				logger.debug("testing infinate session");
+				var call:FacebookCall = new FacebookCall("facebook.users.getLoggedInUser");
 				call.addCallback(verifyInfinateSession);
 				this.post(call);
 			}
@@ -79,15 +86,12 @@ package com.pbking.facebook.session
 		public function get expires():Number { return _expires; }
 		
 		public function get uid():String { return _uid; } 
+		
+		public function get waiting_for_login():Boolean { return _waiting_for_login; }
 
 		public function post(call:FacebookCall):IFacebookCallDelegate
 		{
 			return new DesktopDelegate(call, this);
-		}
-		
-		public function addConnectionCallback(callback:Function):void
-		{
-			_connectionCallbacks.push(callback);
 		}
 		
 		// UTILITIES //////////
@@ -96,7 +100,7 @@ package com.pbking.facebook.session
 		{
 			var call:FacebookCall = new FacebookCall("auth.createToken");
 			call.addCallback(onTokenCreated);
-			call.execute(this);
+			post(call);
 		}
 
 		protected function onTokenCreated(call:FacebookCall):void
@@ -108,6 +112,9 @@ package com.pbking.facebook.session
 				//now that we have an auth_token we need the user to login with it
 				var authenticateLoginURL:String = login_url + "?api_key="+api_key+"&v="+api_version+"&auth_token="+_auth_token;
 				navigateToURL(new URLRequest(authenticateLoginURL), "_blank");
+				
+				this._waiting_for_login = true;
+				this.dispatchEvent(new FacebookActionEvent(FacebookActionEvent.WAITING_FOR_LOGIN));
 			}
 			else
 			{
@@ -116,16 +123,20 @@ package com.pbking.facebook.session
 		}
 		
 		/**
-		 * Once a token has been created and a user has logged in we must manually validate this session
-		 * with a call to this method.  Once this has been sucessfully called, the Facebook session is ready
+		 * Once a token has been created and a user has logged in we must manually 
+		 * validate this session with a call to this method.  Once this has been 
+		 * sucessfully called, the Facebook session is ready
 		 */
 		public function validateDesktopSession():void
 		{
+			_waiting_for_login = false;
+			
 			//validate the session
 			var call:FacebookCall = new FacebookCall("auth.getSession");
 			call.setRequestArgument("auth_token", _auth_token);
 			call.addCallback(validateDesktopSessionReply);
-			call.execute(this);
+			
+			post(call);
 		}
 		
 		protected function validateDesktopSessionReply(call:FacebookCall):void
@@ -148,33 +159,28 @@ package com.pbking.facebook.session
 		protected function onReady():void
 		{
 			_is_connected = true;
-			callCallbacks();
+			this.dispatchEvent(new FacebookActionEvent(FacebookActionEvent.CONNECT));
 		}
 		
 		protected function onConnectionError(message:String):void
 		{
 			logger.warn(message);
 			_is_connected = false;
-			callCallbacks();
-		}
-
-		protected function callCallbacks():void
-		{
-			for each(var f:Function in _connectionCallbacks)
-				f(this);
-			
-			_connectionCallbacks = [];
+			this.dispatchEvent(new FacebookActionEvent(FacebookActionEvent.CONNECT));
 		}
 
 		protected function verifyInfinateSession(call:FacebookCall):void
 		{
 			if(call.success)
 			{
+				logger.debug("infinate session success");
+				this._uid = call.result.toString();
 				onReady();
 			}
 			else
 			{
 				//infinate session didn't work out.  just start over without it
+				logger.warn("infinate session failed.  logging user in");
 				this._session_key = null;
 				this._secret = this.non_inf_session_secret;
 				createToken();

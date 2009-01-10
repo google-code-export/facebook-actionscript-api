@@ -58,7 +58,7 @@ package com.pbking.facebook
 		public var errorCode:int = 0;
 		public var errorMessage:String = "";
 
-		public var session:IFacebookSession;
+		public var facebook:Facebook;
 		
 		public var callbacks:Array = [];
 		
@@ -92,14 +92,14 @@ package com.pbking.facebook
 			//override in case something needs to be initialized prior to execution
 		}
 		
-		public function execute(session:IFacebookSession=null):IFacebookCallDelegate
+		public function execute(facebook:Facebook=null):IFacebookCallDelegate
 		{
-			if(session)
-				return session.post(this);
+			if(facebook)
+				return facebook.post(this);
 				
-			else if(this.session)
-				return this.session.post(this);
-				
+			else if(this.facebook)
+				return this.facebook.post(this);
+
 			return null;
 		}
 		

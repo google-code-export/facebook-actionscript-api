@@ -5,6 +5,7 @@ package com.pbking.facebook.commands.users
 	import com.pbking.facebook.delegates.IFacebookCallDelegate;
 	import com.pbking.facebook.session.IFacebookSession;
 
+	[Bindable]
 	public class GetUserInfo extends FacebookCall
 	{
 		public var users:Array = [];
