@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="1024"
 	height="768"
-	layout="absolute"
+	layout="horizontal"
 	creationComplete="init();">
 	
 	<mx:TraceTarget
@@ -16,6 +16,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import com.pbking.facebook.events.FacebookActionEvent;
 			import com.pbking.facebook.data.users.UserFields;
 			import com.pbking.facebook.commands.users.GetUserInfo;
 			import com.pbking.facebook.commands.friends.GetFriends;
@@ -37,7 +38,6 @@
 			[Bindable] private var myFriends:ArrayCollection;
 			
 			private var logger:PBLogger;
-			private var storedSession:SharedObject;
 			
 			/**
 			 * Called when the application is ready
@@ -52,9 +52,9 @@
 				var fsu:FacebookAirSessionUtil = new FacebookAirSessionUtil();
 				
 				fBook = fsu.facebook;
-				fBook.addEventListener(Event.COMPLETE, onFacebookReady);
+				fBook.addEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
 
-				fsu.connect();
+				fsu.connect("2b7eb429aca38c8d2b2f372f4672c6e0", "5753296b3c2518bc1098dbaa9a8d26c1");
 			}
 			
 			/**
@@ -97,9 +97,9 @@
 	</mx:Script>
 	
 	<mx:List id="friendList"
-		x="10" y="10" width="270" height="746"
-		itemRenderer="com.pbking.facebook.view.renderers.ProfileRendererSimple"/>
+		width="250" height="100%"
+		itemRenderer="renderers.ProfileRendererSimple"/>
 
-	<mx:TextArea id="logText" right="10" left="288" top="10" bottom="10"/>
+	<mx:TextArea id="logText" width="100%" height="100%"/>
 	
 </mx:WindowedApplication>
