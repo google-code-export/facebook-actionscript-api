@@ -5,8 +5,9 @@ package com.pbking.facebook.session
 	import com.pbking.facebook.delegates.JSBridgeDelegate;
 	
 	import flash.external.ExternalInterface;
+	import flash.events.EventDispatcher;
 	
-	public class JSBridgeSession implements IFacebookSession
+	public class JSBridgeSession extends EventDispatcher implements IFacebookSession
 	{
 		// VARIABLES //////////
 		
@@ -25,14 +26,10 @@ package com.pbking.facebook.session
 		// INTERFACE IMPLEMENTATION //////////
 
 		public function get is_connected():Boolean { return true; }
+		public function get waiting_for_login():Boolean { return false; }
 
 		public function get api_version():String { return this._api_version; }
 		public function set api_version(newVal:String):void { this._api_version = newVal; }
-
-		public function addConnectionCallback(callback:Function):void
-		{
-			//not used by this session type
-		}
 
 		public function post(call:FacebookCall):IFacebookCallDelegate
 		{

@@ -42,7 +42,7 @@ package com.pbking.facebook
 	
 	import flash.events.EventDispatcher;
 	
-	[Event(name="complete", type="com.pbking.facebook.events.FacebookActionEvent")]
+	[Event(name="connect", type="com.pbking.facebook.events.FacebookActionEvent")]
 	[Event(name="waiting_for_login", type="com.pbking.facebook.events.FacebookActionEvent")]
 
 	[Bindable]
@@ -52,6 +52,7 @@ package com.pbking.facebook
 		
 		public var logger:PBLogger = PBLogger.getLogger("pbking.facebook");
 		public var connectionErrorMessage:String;
+		public var waiting_for_login:Boolean;
 
 		protected static var _facebook_namespace:Namespace;
 		
@@ -105,11 +106,12 @@ package com.pbking.facebook
 			
 			if(_currentSession.is_connected)
 			{
-				dispatchEvent(new FacebookActionEvent(FacebookActionEvent.COMPLETE));
+				dispatchEvent(new FacebookActionEvent(FacebookActionEvent.CONNECT));
 			}
 			else
 			{
-				_currentSession.addConnectionCallback(onSessionConnected);
+				_currentSession.addEventListener(FacebookActionEvent.CONNECT, onSessionConnected);
+				_currentSession.addEventListener(FacebookActionEvent.WAITING_FOR_LOGIN, onWaitingForLogin);
 			}
 		}
 		
@@ -117,7 +119,9 @@ package com.pbking.facebook
 		{
 			if(_currentSession)
 			{
-				call.addCallback(callback);
+				if(callback != null)
+					call.addCallback(callback);
+					
 				return _currentSession.post(call);
 			}
 			
@@ -126,8 +130,12 @@ package com.pbking.facebook
 		
 		public function validateDesktopSession():void
 		{
-			if(!is_connected && _currentSession is DesktopSession)
+			if(!is_connected && 
+				_currentSession is DesktopSession && 
+				DesktopSession(_currentSession).waiting_for_login)
+			{
 				DesktopSession(_currentSession).validateDesktopSession();
+			}
 		}
 		
 		// UTILS //////////
@@ -135,9 +143,17 @@ package com.pbking.facebook
 		/**
 		 * Helper function.  Called when the connection is ready.
 		 */
-		protected function onSessionConnected(session:IFacebookSession):void
+		protected function onSessionConnected(e:FacebookActionEvent):void
 		{
-			dispatchEvent(new FacebookActionEvent(FacebookActionEvent.COMPLETE));
+			var session:IFacebookSession = e.target as IFacebookSession;
+			
+			dispatchEvent(new FacebookActionEvent(FacebookActionEvent.CONNECT));
+		}
+		
+		protected function onWaitingForLogin(e:FacebookActionEvent):void
+		{
+			waiting_for_login = true;
+			dispatchEvent(new FacebookActionEvent(FacebookActionEvent.WAITING_FOR_LOGIN));
 		}
 		
 	}

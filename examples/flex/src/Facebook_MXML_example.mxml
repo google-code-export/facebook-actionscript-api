@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:facebook="com.pbking.facebook.*"
+	xmlns:friends="com.pbking.facebook.commands.friends.*"
+	xmlns:users="com.pbking.facebook.commands.users.*" 
+	layout="horizontal"
+	creationComplete="init();" >
+
+	<mx:TraceTarget
+		id="myTraceTarget"
+		filters="pbking.*"
+		fieldSeparator=" | "
+		includeCategory="true"
+		includeLevel="true"
+	/>
+
+	<mx:Script>
+		<![CDATA[
+			import com.pbking.util.logging.PBLogger;
+			import com.pbking.util.logging.PBLogEvent;
+			import mx.controls.Alert;
+			import com.pbking.facebook.Facebook;
+			import com.pbking.facebook.events.FacebookActionEvent;
+
+			import com.pbking.facebook.data.users.UserFields;
+			import com.pbking.facebook.FacebookSessionUtil;
+
+			[Bindable]
+			protected var fBook:Facebook;
+
+			private var logger:PBLogger;
+
+			private function init():void
+			{
+				//instantiate our Flash Friendly logger and listen for facebook logs
+				logger = PBLogger.getLogger("pbking.facebook");
+				logger.addEventListener(PBLogEvent.LOG, onLog);
+
+				//create our facebook instance with the session util
+				var fsu:FacebookSessionUtil = new FacebookSessionUtil();
+				fBook = fsu.facebook;
+				fBook.addEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
+				
+				//connect.  
+				//The type of connection that is used is automatically chosen.
+				fsu.connect();
+			}
+
+			/**
+			 * Called with the facebook connection is ready.
+			 * 
+			 * Makes the call to get a list of the user's albums
+			 */
+			private function onFacebookReady(event:Event):void
+			{
+				fBook.removeEventListener(Event.COMPLETE, onFacebookReady);
+				
+				if(fBook.is_connected)
+				{
+					getFriendsCommand.execute();
+				}
+				else
+				{
+					Alert.show("Failed to connect to facebook: " + fBook.connectionErrorMessage);
+				}
+			}
+
+			/**
+			 * util to show logging on the stage
+			 */
+			private function onLog(le:PBLogEvent):void
+			{
+				logText.text += le.message + "\n";
+			}			
+		]]>
+	</mx:Script>
+
+	<!-- COMMANDS -->
+
+	<friends:GetFriends id="getFriendsCommand" 
+		facebook="{fBook}"
+		complete="getUserInfoCommand.execute();"/>
+	
+	<users:GetUserInfo id="getUserInfoCommand" 
+		facebook="{fBook}"
+		users="{getFriendsCommand.friends}"
+		fields="{[UserFields.pic_square, UserFields.name]}"/>
+
+	<!-- VIEW -->
+
+	<mx:List id="friendList"
+		width="200"
+		height="100%"
+		dataProvider="{getUserInfoCommand.users}"
+		itemRenderer="renderers.ProfileRendererSimple"/>
+
+	<mx:TextArea id="logText" width="100%" height="100%"/>
+	
+</mx:Application>

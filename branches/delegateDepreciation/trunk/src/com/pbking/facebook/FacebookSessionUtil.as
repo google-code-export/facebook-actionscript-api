@@ -10,6 +10,8 @@ package com.pbking.facebook
 	import flash.net.URLRequest;
 	
 	import mx.core.Application;
+	import mx.controls.Alert;
+	import mx.events.CloseEvent;
 	
 	public class FacebookSessionUtil
 	{
@@ -26,7 +28,7 @@ package com.pbking.facebook
 		{
 			//create our facebook instance
 			facebook = new Facebook();
-			facebook.addEventListener(FacebookActionEvent.COMPLETE, onFacebookReady);
+			facebook.addEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
 		}
 		
 		// PUBLIC FUNCTIONS //////////
@@ -92,7 +94,21 @@ package com.pbking.facebook
 		protected function startDesktopSession():void
 		{
 			var storedSession:SharedObject = getStoredSession(api_key);
-			facebook.startSession(new DesktopSession(api_key, secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret));
+			var session:DesktopSession = new DesktopSession(api_key, secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret);
+			
+			session.addEventListener(FacebookActionEvent.WAITING_FOR_LOGIN, onWaitingForLogin);
+			 
+			facebook.startSession(session);
+		}
+		
+		protected function onWaitingForLogin(e:FacebookActionEvent):void
+		{
+			Alert.show("A Facebook login prompt is opening in a browser window.  Login and when instructed close that window and click 'OK'.", "Facebook Login", 4, null, onLoginAlertClose);
+		}
+		
+		protected function onLoginAlertClose(e:CloseEvent):void
+		{
+			facebook.validateDesktopSession();
 		}
 		
 		/**
