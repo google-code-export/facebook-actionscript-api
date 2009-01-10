@@ -18,6 +18,9 @@ package com.pbking.facebook
 		{
 			if(api_key && secret)
 			{
+				this.api_key = api_key;
+				this.secret = secret;
+				
 				startDesktopSession();
 			}
 			else
