@@ -12,6 +12,7 @@ package com.pbking.facebook
 	import mx.core.Application;
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
+	import com.pbking.util.logging.PBLogger;
 	
 	public class FacebookSessionUtil
 	{
@@ -19,6 +20,8 @@ package com.pbking.facebook
 		
 		public var localKeyFile:String;
 		
+		protected var logger:PBLogger = PBLogger.getLogger("pbking.facebook");
+
 		protected var api_key:String;
 		protected var secret:String; 
 		
@@ -47,6 +50,8 @@ package com.pbking.facebook
 			
 			if(Application.application.url.slice(0, 5) == "file:")
 			{
+				logger.debug("determined a desktop application");
+
 				if(api_key && secret)
 				{
 					startDesktopSession();
@@ -60,6 +65,8 @@ package com.pbking.facebook
 			}
 			else
 			{
+				logger.debug("determined a jsBridge application");
+				
 				var flashVars:Object = Application.application.parameters;
 				facebook.startSession(new JSBridgeSession(flashVars.as_app_name));
 			}
@@ -93,6 +100,8 @@ package com.pbking.facebook
 		
 		protected function startDesktopSession():void
 		{
+			logger.debug("starting desktop session");
+			
 			var storedSession:SharedObject = getStoredSession(api_key);
 			var session:DesktopSession = new DesktopSession(api_key, secret, storedSession.data.infinite_session_key, storedSession.data.stored_secret);
 			
