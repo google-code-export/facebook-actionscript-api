@@ -115,6 +115,8 @@ package com.pbking.facebook
 				this.errorCode = result.error_code;
 				this.errorMessage = result.error_msg;
 				this.success = false;
+
+				logger.debug('error making call: ' + errorCode +"|"+errorMessage);
 			}
 			else
 			{

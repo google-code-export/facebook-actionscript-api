@@ -100,10 +100,11 @@ package com.pbking.facebook.delegates
 		{
 			logger.debug("< < < received facebook reply [jsb]:\n" + result.toString());
 
-			var call:FacebookCall = externalInterfaceCalls[exCallId](result, exception);
-			delete externalInterfaceCalls[exCallId];
+			var call:FacebookCall = externalInterfaceCalls[exCallId];
 
 			call.handleResult(result, exception);			
+
+			delete externalInterfaceCalls[exCallId];
 		}
 		
 
