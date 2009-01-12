@@ -1,25 +1,26 @@
 package com.pbking.facebook.delegates.groups
 {
-	import com.pbking.facebook.Facebook;
+	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.data.groups.FacebookGroup;
 	import com.pbking.facebook.data.users.FacebookUser;
-	import com.pbking.facebook.delegates.FacebookDelegate;
 
-	public class GetGroupMembersDelegate extends FacebookDelegate
+	public class GetGroupMembers extends FacebookCall
 	{
 		public var group:FacebookGroup;
 		
-		public function GetGroupMembersDelegate(facebook:Facebook, group:FacebookGroup)
+		public function GetGroupMembers(group:FacebookGroup)
 		{
-			super(facebook);
+			super("facebook.groups.getMembers");
 			
 			this.group = group;
-			
-			fbCall.setRequestArgument("gid", group.gid.toString());
-			fbCall.post("facebook.groups.getMembers");
 		}
 		
-		override protected function handleResult(result:Object):void
+		override public function initialize():void
+		{
+			setRequestArgument("gid", group.gid);
+		}
+		
+		override protected function handleSuccess(result:Object):void
 		{
 			var uid:int;
 
