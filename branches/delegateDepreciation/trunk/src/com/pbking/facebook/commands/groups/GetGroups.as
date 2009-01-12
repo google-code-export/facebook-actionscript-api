@@ -1,41 +1,42 @@
 package com.pbking.facebook.delegates.groups
 {
 	import com.pbking.facebook.Facebook;
+	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.data.groups.FacebookGroup;
 	import com.pbking.facebook.data.misc.FacebookLocation;
 	import com.pbking.facebook.data.users.FacebookUser;
 	import com.pbking.facebook.data.util.FacebookDataParser;
-	import com.pbking.facebook.delegates.FacebookDelegate;
 
-	public class GetGroupsDelegate extends FacebookDelegate
+	public class GetGroups extends FacebookCall
 	{
 		public var user:FacebookUser;
 		public var groupsFilter:Array;
 		
 		public var groups:Array;
 		
-		public function GetGroupsDelegate(facebook:Facebook, user:FacebookUser=null, groupsFilter:Array=null)
+		public function GetGroups(user:FacebookUser=null, groupsFilter:Array=null)
 		{
-			super(facebook);
+			super("facebook.groups.get");
 			
 			this.user = user;
 			this.groups = groups;
-			
+		}
+		
+		override public function initialize():void
+		{
 			if(user)
-				fbCall.setRequestArgument("uid", user.uid.toString());
+				setRequestArgument("uid", user.uid.toString());
 			
 			if(groups && groups.length > 0)
 			{
 				var gids:Array;
 				for each(var group:FacebookGroup in groups)
 					gids.push(group.gid);
-				fbCall.setRequestArgument("gids", gids.join(","));
+				setRequestArgument("gids", gids.join(","));
 			}
-			
-			fbCall.post("facebook.groups.get");
 		}
 		
-		override protected function handleResult(result:Object):void
+		override protected function handleSuccess(result:Object):void
 		{
 			groups = [];
 			
