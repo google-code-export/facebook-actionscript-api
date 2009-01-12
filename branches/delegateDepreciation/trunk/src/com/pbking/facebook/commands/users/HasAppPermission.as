@@ -1,9 +1,9 @@
 package com.pbking.facebook.delegates.users
 {
 	import com.pbking.facebook.Facebook;
-	import com.pbking.facebook.delegates.FacebookDelegate;
+	import com.pbking.facebook.FacebookCall;
 	
-	public class HasAppPermissionDelegate extends FacebookDelegate
+	public class HasAppPermission extends FacebookCall
 	{
 		/**
 		 * String identifier for the extended permission that is being checked for. 
@@ -12,20 +12,20 @@ package com.pbking.facebook.delegates.users
 		public var extendedPermission:String;
 		public var hasPermission:Boolean;
 		
-		public function HasAppPermissionDelegate(facebook:Facebook, extendedPermission:String)
+		public function HasAppPermission(extendedPermission:String=null)
 		{
-			super(facebook);
-			
+			super("facebook.users.hasAppPermission");
 			this.extendedPermission = extendedPermission;
-			
-			fbCall.setRequestArgument("ext_perm", extendedPermission);
-			fbCall.post("facebook.users.hasAppPermission");
 		}
 		
-		override protected function handleResult(result:Object):void
+		override public function initialize():void
+		{
+			setRequestArgument("ext_perm", extendedPermission);
+		}
+		
+		override protected function handleSuccess(result:Object):void
 		{
 			hasPermission = Boolean(result);
-
 		}
 		
 	}
