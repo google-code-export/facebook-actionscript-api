@@ -1,16 +1,21 @@
 package com.pbking.facebook.delegates.fql
 {
 	import com.pbking.facebook.Facebook;
-	import com.pbking.facebook.delegates.FacebookDelegate;
 
 	public class FqlQueryDelegate extends FacebookDelegate
 	{
-		public function FqlQueryDelegate(facebook:Facebook, query:String)
+		public var query:String;
+		
+		public function FqlQueryDelegate(query:String = null)
 		{
-			super(facebook);
+			super("facebook.fql.query");
 			
-			fbCall.setRequestArgument("query", query);
-			fbCall.post("facebook.fql.query");
+			this.query = query;
+		}
+		
+		override public function inialize():void
+		{			
+			setRequestArgument("query", query);
 		}
 		
 	}
