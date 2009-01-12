@@ -1,29 +1,26 @@
 package com.pbking.facebook.delegates.friends
 {
-	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.data.users.FacebookUser;
-	import com.pbking.facebook.delegates.FacebookDelegate;
-	import com.pbking.util.logging.PBLogger;
 	
-	import flash.events.Event;
-	
-	public class GetAppUsersDelegate extends FacebookDelegate
+	public class GetAppUsers extends FacebookCall
 	{
+		public var uids:Array;
 		public var users:Array;
 		
-		public function GetAppUsersDelegate(facebook:Facebook)
+		public function GetAppUsers()
 		{
-			super(facebook);
-			fbCall.post("facebook.friends.getAppUsers");
+			super("facebook.friends.getAppUsers");
 		}
 		
-		override protected function handleResult(result:Object):void
+		override protected function handleSuccess(result:Object):void
 		{
+			uids = [];
 			users = [];
 			
 			for each(var uid:int in result)
 			{
+				uids.push(uid);
 				users.push(FacebookUser.getUser(uid));
 			} 
 		}
