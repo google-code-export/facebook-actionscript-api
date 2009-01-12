@@ -1,26 +1,35 @@
 package com.pbking.facebook.delegates.users
 {
-	import com.pbking.facebook.Facebook;
-	import com.pbking.facebook.delegates.FacebookDelegate;
+	import com.pbking.facebook.FacebookCall;
 	
-	public class SetStatusDelegate extends FacebookDelegate
+	public class SetStatus extends FacebookCall
 	{
-		public function SetStatusDelegate(facebook:Facebook, status:String, clear:Boolean=false)
+		public var status:String;
+		public var clear:Boolean;
+		public var status_includes_verb:Boolean;
+		
+		public function SetStatus(status:String=null, clear:Boolean=false, status_includes_verb:Boolean=false)
 		{
-			super(facebook);
+			super("facebook.users.setStatus");
+			
+			this.status = status;
+			this.clear = clear;
+			this.status_includes_verb = status_includes_verb;
+		}
+		
+		override public function initialize():void
+		{
+			clearRequestArguments();
 			
 			if(clear)
-				fbCall.setRequestArgument("clear", "true");
+			{
+				setRequestArgument("clear", "true");
+			}
 			else
-				fbCall.setRequestArgument("status", status);
-
-			fbCall.post("facebook.users.setStatus");
+			{
+				setRequestArgument("status", status);
+				setRequestArgument("status_includes_verb", status_includes_verb);
+			}
 		}
-		
-		override protected function handleResult(result:Object):void
-		{
-			this.success = Boolean(result);
-		}
-		
 	}
 }

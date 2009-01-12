@@ -11,14 +11,12 @@ package com.pbking.facebook.delegates.users
 		public var user:FacebookUser;
 		public var uid:uint;
 		
-		public function GetLoggedInUserDelegate(facebook:Facebook)
+		public function GetLoggedInUser(facebook:Facebook)
 		{
-			super(facebook);
-			
-			fbCall.post("facebook.users.getLoggedInUser");
+			super("facebook.users.getLoggedInUser");
 		}
 		
-		override protected function handleResult(result:Object):void
+		override protected function handleSuccess(result:Object):void
 		{
 			uid = parseInt(result.toString());			
 			user = FacebookUser.getUser(uid);
