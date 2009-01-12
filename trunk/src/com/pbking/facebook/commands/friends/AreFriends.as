@@ -1,46 +1,64 @@
 package com.pbking.facebook.delegates.friends
 {
-	import com.pbking.facebook.Facebook;
+	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.data.users.FacebookUser;
-	import com.pbking.facebook.delegates.FacebookDelegate;
 	import com.pbking.util.collection.HashableArray;
 	
-	public class AreFriendsDelegate extends FacebookDelegate
+	public class AreFriendsDelegate extends FacebookCall
 	{
 		public var list1:Array;
 		public var list2:Array;
+		
 		public var resultList:Array;
 		
 		private var totalUserCollection:HashableArray = new HashableArray("uid", false);
 		
-		public function AreFriendsDelegate(facebook:Facebook, list1:Array, list2:Array)
+		public function AreFriendsDelegate(list1:Array=null, list2:Arraynull)
 		{
-			super(facebook);
+			super("facebook.friends.areFriends");
 			
+			this.list1 = list1;
+			this.list2 = list2;
+		}
+		
+		override public function initialize():void
+		{
 			var user:FacebookUser;
 			var uids1:Array = [];
 			var uids2:Array = [];
 			
-			for each(user in list1)
+			for (var i:int=0; i<list1.length; i++)
 			{
+				if(list1[i] is FacebookUser)
+					user = list1[i] as FacebookUser;
+				else
+					user = FacebookUser.getUser(list1[i]);
+				
 				uids1.push(user.uid);
+
 				if(!totalUserCollection.contains(user))
 					totalUserCollection.addItem(user);
 			}
 			
-			for each(user in list2)
+			for (var j:int=0; j<list2.length; j++)
 			{
+				if(list2[j] is FacebookUser)
+					user = list2[j] as FacebookUser;
+				else
+					user = FacebookUser.getUser(list2[j]);
+				
 				uids2.push(user.uid);
+
 				if(!totalUserCollection.contains(user))
 					totalUserCollection.addItem(user);
 			}
 			
-			fbCall.setRequestArgument("uids1", uids1.join(","));
-			fbCall.setRequestArgument("uids2", uids2.join(","));
-			fbCall.post("facebook.friends.areFriends");
+
+			setRequestArgument("uids1", uids1.join(","));
+			setRequestArgument("uids2", uids2.join(","));
 		}
 		
-		override protected function handleResult(result:Object):void
+		override protected function handleSuccess(result:Object):void
 		{
 			list1 = [];
 			list2 = [];
