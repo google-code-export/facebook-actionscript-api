@@ -5,26 +5,29 @@
  */
 package com.pbking.facebook.delegates.photos
 {
-	import com.pbking.facebook.Facebook;
+	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.data.photos.FacebookPhoto;
 	import com.pbking.facebook.data.photos.FacebookTag;
-	import com.pbking.facebook.delegates.FacebookDelegate;
 	import com.pbking.util.collection.HashableArray;
 		
-	public class GetTagsDelegate extends FacebookDelegate
+	public class GetTags extends FacebookCall
 	{
 		public var photos:Array;
 		public var tags:Array;
 
 		private var photoCollection:HashableArray = new HashableArray('pid', false);
 		
-		function GetTagsDelegate(facebook:Facebook, photos:Array)
+		function GetTags(photos:Array=null)
 		{
-			super(facebook);
+			super("facebook.photos.getTags");
 			
 			this.photos = photos;
-			
+		}
+		
+		override protected function initialize():void
+		{
 			var pids:Array = [];
+			
 			for(var i:int=0; i<photos.length; i++)
 			{
 				if(photos[i] is FacebookPhoto)
@@ -38,11 +41,10 @@ package com.pbking.facebook.delegates.photos
 				}
 			}
 				
-			fbCall.setRequestArgument("photos", pids.join(","));
-			fbCall.post("facebook.photos.getTags");
+			setRequestArgument("photos", pids.join(","));
 		}
 
-		override protected function handleResult(result:Object):void
+		override protected function handleSuccess(result:Object):void
 		{
 			//create all of the tag objects
 			this.tags = [];

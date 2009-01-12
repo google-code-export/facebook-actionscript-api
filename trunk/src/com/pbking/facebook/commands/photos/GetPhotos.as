@@ -5,42 +5,54 @@
  */
 package com.pbking.facebook.delegates.photos
 {
-	import com.pbking.facebook.Facebook;
+	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.data.*;
 	import com.pbking.facebook.data.photos.FacebookPhoto;
-	import com.pbking.facebook.delegates.FacebookDelegate;
-	import com.pbking.util.logging.PBLogger;
 	
-	public class GetPhotosDelegate extends FacebookDelegate
+	public class GetPhotos extends FacebookCall
 	{
 		// VARIABLES //////////
+		
+		public var subj_id:String;
+		public var aid:String;
+		public var pids:Array;
 		
 		public var photos:Array;
 		
 		// CONSTRUCTION //////////
 		
-		public function GetPhotosDelegate(facebook:Facebook, subj_id:Object=null, aid:Object=null, pids:Array=null)
+		public function GetPhotos(subj_id:String=null, aid:String=null, pids:Array=null)
 		{
-			super(facebook);
+			super("facebook.photos.get");
 			
+			this.subj_id = subj_id;
+			this.aid = aid;
+			this.pids = pids;
+		}
+		
+		override public function initialize():void
+		{
 			if(subj_id==null && aid==null && pids==null)
 				throw new Error('GetPhotos must have at least one of the values subj_id, aid, or pids set');
+		
+			clearRequestArguments();
 			
-			PBLogger.getLogger("pbking.facebook").debug("getting photos based on query: subj_id: " + subj_id + " aid: " + aid + " pids: " + pids);
-
 			//strip out any 0's from our pids.  We can't get 0's.
 			if(pids)
 				while(pids.indexOf("0") != -1)
 					pids.splice(pids.indexOf("0"), 1);
 
-			if(subj_id){ fbCall.setRequestArgument("subj_id", subj_id.toString()); }
-			if(aid){ fbCall.setRequestArgument("aid", aid.toString()); }
-			if(pids){ fbCall.setRequestArgument("pids", pids.toString()); }
-			
-			fbCall.post("facebook.photos.get");
+			if(subj_id) 
+				setRequestArgument("subj_id", subj_id);
+				 
+			if(aid) 
+				setRequestArgument("aid", aid);
+				 
+			if(pids) 
+				setRequestArgument("pids", pids); 
 		}
 		
-		override protected function handleResult(result:Object):void
+		override protected function handleSuccess(result:Object):void
 		{
 			photos = [];
 			

@@ -30,32 +30,47 @@ OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.pbking.facebook.delegates.photos
 {
-	import com.pbking.facebook.Facebook;
-	import com.pbking.facebook.data.photos.FacebookAlbum;
+	import com.pbking.facebook.FacebookCall;
 	import com.pbking.facebook.data.photos.FacebookPhoto;
-	import com.pbking.facebook.delegates.FacebookDelegate;
 	
 	import flash.utils.ByteArray;
 	
-	public class UploadDelegate extends FacebookDelegate
+	public class UploadPhoto extends FacebookCall
 	{
 		// VARIABLES //////////
+		
+		public var data:ByteArray;
+		public var aid:String;
+		public var caption:String;
 		
 		public var uploadedPhoto:FacebookPhoto;
 		
 		// CONSTRUCTION //////////
 		
-		public function UploadDelegate(facebook:Facebook, data:ByteArray, album:FacebookAlbum=null, caption:String="")
+		public function UploadPhoto(data:ByteArray=null, aid:String=null, caption:String=null)
 		{
-			super(facebook);
+			super("facebook.photos.upload");
 			
-			fbCall.setRequestArgument("data", data);
-			if(album != null)
-				fbCall.setRequestArgument("aid", album.aid.toString());
-			if(caption != "")
-				fbCall.setRequestArgument("caption", caption);
-
-			fbCall.post("facebook.photos.upload");
+			this.data = data;
+			this.aid = aid;
+			this.caption = caption;
+			
+			//TODO: Fix Upload Photo in environments that use JavaScript to communicate with the API
+			//The IFacebookCallDelegate classes will likely also need to be involved with this fix.
+			throw new Error(":(  Unfortunately, the UploadPhoto command doesn't work in most situations and is currently depreciated.");
+		}
+		
+		override public function initialize():void
+		{
+			clearRequestArguments();
+			
+			setRequestArgument("data", data);
+			
+			if(aid != null)
+				setRequestArgument("aid", aid);
+				
+			if(caption != null && caption != "")
+				setRequestArgument("caption", caption);
 		}
 
 		// RESULT //////////
