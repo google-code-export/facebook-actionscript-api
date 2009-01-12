@@ -13,6 +13,7 @@ package com.pbking.facebook
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
 	import com.pbking.util.logging.PBLogger;
+	import com.pbking.facebook.session.FBJSBridgeSession;
 	
 	public class FacebookSessionUtil
 	{
@@ -48,6 +49,8 @@ package com.pbking.facebook
 			//determine if we're running locally.  if we are we'll run this
 			//app as an unsecure desktop app.  Otherwise fire up a JSAuth session
 			
+			var flashVars:Object = Application.application.parameters;
+			
 			if(Application.application.url.slice(0, 5) == "file:")
 			{
 				logger.debug("determined a desktop application");
@@ -63,11 +66,14 @@ package com.pbking.facebook
 					keyLoader.load(new URLRequest(localKeyFile));
 				}
 			}
+			else if(flashVars.fb_local_connection)
+			{
+				logger.debug("determined a fbjsBridge application (with " + flashVars.fb_local_connection + ")");
+				facebook.startSession(new FBJSBridgeSession(flashVars.fb_local_connection));
+			}
 			else
 			{
 				logger.debug("determined a jsBridge application");
-				
-				var flashVars:Object = Application.application.parameters;
 				facebook.startSession(new JSBridgeSession(flashVars.as_app_name));
 			}
 		}
