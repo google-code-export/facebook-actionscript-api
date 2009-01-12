@@ -119,6 +119,9 @@ package com.pbking.facebook
 		{
 			if(_currentSession)
 			{
+				call.facebook = this;
+				call.initialize();
+			
 				if(callback != null)
 					call.addCallback(callback);
 					
