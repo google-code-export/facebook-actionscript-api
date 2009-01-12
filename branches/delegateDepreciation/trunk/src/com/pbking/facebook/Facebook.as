@@ -127,6 +127,10 @@ package com.pbking.facebook
 					
 				return _currentSession.post(call);
 			}
+			else
+			{
+				throw new Error("cannot post a call; no session has been set");
+			}
 			
 			return null;
 		}
