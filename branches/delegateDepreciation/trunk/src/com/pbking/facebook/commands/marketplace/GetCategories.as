@@ -3,19 +3,19 @@ package com.pbking.facebook.delegates.marketplace
 	import com.pbking.facebook.Facebook;
 	import com.pbking.facebook.delegates.FacebookDelegate;
 
-	public class GetCategoriesDelegate extends FacebookDelegate
+	public class GetCategories extends FacebookDelegate
 	{
 		public var categories:Array;
 		
-		function GetCategoriesDelegate(facebook:Facebook)
+		function GetCategories()
 		{
-			super(facebook);
-			fbCall.post("marketplace.getCategories");
+			super("marketplace.getCategories");
 		}
 		
-		override protected function handleResult(result:Object):void
+		override protected function handleSuccess(result:Object):void
 		{
 			categories = [];
+			
 			for each(var catName:String in result)
 			{
 				categories.push( catName );
