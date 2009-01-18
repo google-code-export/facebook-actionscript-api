@@ -5,7 +5,7 @@
 	xmlns:friends="com.pbking.facebook.commands.friends.*"
 	xmlns:users="com.pbking.facebook.commands.users.*" 
 	layout="horizontal"
-	creationComplete="init();" >
+	creationComplete="init();" xmlns:photos="com.pbking.facebook.commands.photos.*">
 
 	<mx:TraceTarget
 		id="myTraceTarget"
