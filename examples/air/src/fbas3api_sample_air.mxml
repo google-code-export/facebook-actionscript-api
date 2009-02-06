@@ -53,6 +53,7 @@
 				
 				fBook = fsu.facebook;
 				fBook.addEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
+				fBook.addEventListener(FacebookActionEvent.CONNECTION_ERROR, onFacebookConnectionError);
 
 				fsu.connect("2b7eb429aca38c8d2b2f372f4672c6e0", "5753296b3c2518bc1098dbaa9a8d26c1");
 			}
@@ -62,9 +63,9 @@
 			 * 
 			 * Makes the call to get a list of the user's albums
 			 */
-			private function onFacebookReady(event:Event):void
+			private function onFacebookReady(event:FacebookActionEvent):void
 			{
-				fBook.removeEventListener(Event.COMPLETE, onFacebookReady);
+				fBook.removeEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
 				
 				if(fBook.is_connected)
 				{
@@ -72,8 +73,13 @@
 				}
 				else
 				{
-					Alert.show("Failed to connect to facebook: " + fBook.connectionErrorMessage);
+					onFacebookConnectionError(event);
 				}
+			}
+			
+			private function onFacebookConnectionError(event:FacebookActionEvent):void
+			{
+				Alert.show("Failed to connect to facebook: " + event.message);
 			}
 			
 			private function onGotFriends(call:GetFriends):void
