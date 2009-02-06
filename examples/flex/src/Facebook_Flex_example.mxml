@@ -17,6 +17,8 @@
 
 	<mx:Script>
 		<![CDATA[
+			import com.pbking.facebook.commands.users.GetUserInfo;
+			import com.pbking.facebook.commands.friends.GetFriends;
 			import com.pbking.util.logging.PBLogger;
 			import com.pbking.util.logging.PBLogEvent;
 			import mx.controls.Alert;
@@ -49,7 +51,7 @@
 			}
 
 			/**
-			 * Called with the facebook connection is ready.
+			 * Called when the facebook connection is ready.
 			 * 
 			 * Makes the call to get a list of the user's albums
 			 */
@@ -59,7 +61,7 @@
 				
 				if(fBook.is_connected)
 				{
-					getFriendsCommand.execute();
+					fBook.post(new GetFriends(), onGotFriends);
 				}
 				else
 				{
@@ -72,6 +74,16 @@
 				Alert.show("Failed to connect to facebook: " + event.message);
 			}
 
+			private function onGotFriends(call:GetFriends):void
+			{
+				fBook.post(new GetUserInfo(call.friends, [UserFields.pic_square, UserFields.name]), onGotUserInfo);
+			}
+			
+			private function onGotUserInfo(call:GetUserInfo):void
+			{
+				friendList.dataProvider = call.users;
+			}
+
 			/**
 			 * util to show logging on the stage
 			 */
@@ -82,23 +94,11 @@
 		]]>
 	</mx:Script>
 
-	<!-- COMMANDS -->
-
-	<friends:GetFriends id="getFriendsCommand" 
-		facebook="{fBook}"
-		complete="getUserInfoCommand.execute();"/>
-	
-	<users:GetUserInfo id="getUserInfoCommand" 
-		facebook="{fBook}"
-		users="{getFriendsCommand.friends}"
-		fields="{[UserFields.pic_square, UserFields.name]}"/>
-
 	<!-- VIEW -->
 
 	<mx:List id="friendList"
 		width="200"
 		height="100%"
-		dataProvider="{getUserInfoCommand.users}"
 		itemRenderer="renderers.ProfileRendererSimple"/>
 
 	<mx:TextArea id="logText" width="100%" height="100%"/>
