@@ -17,6 +17,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import flash.net.navigateToURL;
 			import com.pbking.facebook.commands.users.GetUserInfo;
 			import com.pbking.facebook.commands.friends.GetFriends;
 			import com.pbking.util.logging.PBLogger;
@@ -61,12 +62,45 @@
 				
 				if(fBook.is_connected)
 				{
-					fBook.post(new GetFriends(), onGotFriends);
+					//we're connected . . but it's possible we're connected "sessionlessly"
+					//a "sessionless connection" isn't possible as a desktop app, but a web
+					//app can have a connection without a user having installed the application.
+					//You MAY have some code (JS, etc) that forces a user to have the app installed
+					//but if you choose not to then you might need to do something with that
+					//information here
+					
+					if(fBook.is_sessionless)
+					{
+						handleSessionlessSession();
+					}
+					else
+					{
+						//we're groovy.  the user has installed the app.
+						//full speed ahead!
+						fBook.post(new GetFriends(), onGotFriends);
+					}
 				}
 				else
 				{
 					onFacebookConnectionError(event);
 				}
+			}
+			
+			private function handleSessionlessSession():void
+			{
+				var message:String = "You must allow this application access to use it.  " + 
+						"You don't have to allow ALL applications, you can do some things without allowing access. " + 
+						"for instance, we know that your Facebook UID is " + fBook.uid + "." +
+						"But for this example you do have to allow access.  " + 
+						"Click OK to open the install page.";
+						
+				Alert.show(message, "Please Install . . .", 4, null, onAlertClose);
+			}
+			
+			private function onAlertClose(e:Event):void
+			{
+				var request:URLRequest = new URLRequest(fBook.getInstallationURL());
+				navigateToURL(request, "_top");
 			}
 			
 			private function onFacebookConnectionError(event:FacebookActionEvent):void
