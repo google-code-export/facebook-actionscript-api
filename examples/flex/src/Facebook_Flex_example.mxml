@@ -17,6 +17,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import com.pbking.facebook.util.FacebookFlexSessionUtil;
 			import flash.net.navigateToURL;
 			import com.pbking.facebook.commands.users.GetUserInfo;
 			import com.pbking.facebook.commands.friends.GetFriends;
@@ -25,9 +26,7 @@
 			import mx.controls.Alert;
 			import com.pbking.facebook.Facebook;
 			import com.pbking.facebook.events.FacebookActionEvent;
-
 			import com.pbking.facebook.data.users.UserFields;
-			import com.pbking.facebook.FacebookSessionUtil;
 
 			[Bindable]
 			protected var fBook:Facebook;
@@ -41,7 +40,7 @@
 				logger.addEventListener(PBLogEvent.LOG, onLog);
 
 				//create our facebook instance with the session util
-				var fsu:FacebookSessionUtil = new FacebookSessionUtil();
+				var fsu:FacebookFlexSessionUtil = new FacebookFlexSessionUtil();
 				fBook = fsu.facebook;
 				fBook.addEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
 				fBook.addEventListener(FacebookActionEvent.CONNECTION_ERROR, onFacebookConnectionError);
