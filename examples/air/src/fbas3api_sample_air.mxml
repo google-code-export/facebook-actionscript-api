@@ -55,7 +55,7 @@
 				fBook.addEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
 				fBook.addEventListener(FacebookActionEvent.CONNECTION_ERROR, onFacebookConnectionError);
 
-				fsu.connect("2b7eb429aca38c8d2b2f372f4672c6e0", "5753296b3c2518bc1098dbaa9a8d26c1");
+				fsu.connect("API_KEY_GOES_HERE", "SECRET_KEY_GOES_HERE");
 			}
 			
 			/**
