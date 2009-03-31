@@ -1,3 +1,4 @@
+#labels Deprecated
 ==Part Two: Desktop Session==
 
 Now that you’ve got your settings in Facebook all worked out let’s start a Flex project and get it to connect to the Server.  We’re going to do this with a desktop connection so that we can run it locally from !FlexBuilder and won’t have to publish it to our site just yet.  I’m doing this example using !FlexBuilder 3 but you should be able to follow along if you are using a different setup.
