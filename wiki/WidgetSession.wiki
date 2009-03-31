@@ -1,3 +1,4 @@
+#labels Deprecated
 ==Part Three: Embedded application (!WidgetSession)==
 
 Using the Widget session on the Facebook API is not secure.  Your secret is compiled into your .swf and a determined hacker could decompile it and do bad things with it.  However, it is the simplest and fastest way to connect to Facebook from an embedded application.
