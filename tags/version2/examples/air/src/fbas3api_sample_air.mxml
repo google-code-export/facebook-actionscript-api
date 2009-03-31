@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="1024"
+	height="768"
+	layout="horizontal"
+	creationComplete="init();">
+	
+	<mx:TraceTarget
+		id="myTraceTarget"
+		filters="pbking.*"
+		fieldSeparator=" | "
+		includeCategory="true"
+		includeLevel="true"
+	/>
+
+	<mx:Script>
+		<![CDATA[
+			import com.pbking.facebook.util.FacebookAirSessionUtil;
+			import com.pbking.facebook.events.FacebookActionEvent;
+			import com.pbking.facebook.data.users.UserFields;
+			import com.pbking.facebook.commands.users.GetUserInfo;
+			import com.pbking.facebook.commands.friends.GetFriends;
+			import com.pbking.facebook.FacebookCall;
+			import com.pbking.facebook.session.DesktopSession;
+			import com.pbking.facebook.session.JSBridgeSession;
+			import com.pbking.util.logging.PBLogger;
+			import com.pbking.util.logging.PBLogEvent;
+			import mx.controls.Alert;
+			import mx.collections.ArrayCollection;
+			import mx.logging.LogEvent;
+			import mx.logging.ILogger;
+			import mx.logging.Log;
+			import com.pbking.facebook.Facebook;
+		
+			[Bindable] private var fBook:Facebook;
+			[Bindable] private var session:DesktopSession;
+			[Bindable] private var myFriends:ArrayCollection;
+			
+			private var logger:PBLogger;
+			
+			/**
+			 * Called when the application is ready
+			 */
+			private function init():void
+			{
+				//instantiate our Flash Friendly logger and listen for facebook logs
+				logger = PBLogger.getLogger("pbking.facebook");
+				logger.addEventListener(PBLogEvent.LOG, onLog);
+				
+				//create our facebook instance with the session util
+				var fsu:FacebookAirSessionUtil = new FacebookAirSessionUtil();
+				
+				fBook = fsu.facebook;
+				fBook.addEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
+				fBook.addEventListener(FacebookActionEvent.CONNECTION_ERROR, onFacebookConnectionError);
+
+				fsu.connect("API_KEY_GOES_HERE", "SECRET_KEY_GOES_HERE");
+			}
+			
+			/**
+			 * Called with the facebook connection is ready.
+			 * 
+			 * Makes the call to get a list of the user's albums
+			 */
+			private function onFacebookReady(event:FacebookActionEvent):void
+			{
+				fBook.removeEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
+				
+				if(fBook.is_connected)
+				{
+					fBook.post(new GetFriends(), onGotFriends);
+				}
+				else
+				{
+					onFacebookConnectionError(event);
+				}
+			}
+			
+			private function onFacebookConnectionError(event:FacebookActionEvent):void
+			{
+				Alert.show("Failed to connect to facebook: " + event.message);
+			}
+			
+			private function onGotFriends(call:GetFriends):void
+			{
+				fBook.post(new GetUserInfo(call.friends, [UserFields.pic_square, UserFields.name]), onGotUserInfo);
+			}
+			
+			private function onGotUserInfo(call:GetUserInfo):void
+			{
+				friendList.dataProvider = call.users;
+			}
+
+			/**
+			 * util to show logging on the stage
+			 */
+			private function onLog(le:PBLogEvent):void
+			{
+				logText.text += le.message + "\n";
+			}			
+		]]>
+	</mx:Script>
+	
+	<mx:List id="friendList"
+		width="250" height="100%"
+		itemRenderer="renderers.ProfileRendererSimple"/>
+
+	<mx:TextArea id="logText" width="100%" height="100%"/>
+	
+</mx:WindowedApplication>

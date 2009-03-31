@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:facebook="com.pbking.facebook.*"
+	xmlns:friends="com.pbking.facebook.commands.friends.*"
+	xmlns:users="com.pbking.facebook.commands.users.*" 
+	layout="horizontal"
+	creationComplete="init();" xmlns:photos="com.pbking.facebook.commands.photos.*">
+
+	<mx:TraceTarget
+		id="myTraceTarget"
+		filters="pbking.*"
+		fieldSeparator=" | "
+		includeCategory="true"
+		includeLevel="true"
+	/>
+
+	<mx:Script>
+		<![CDATA[
+			import com.pbking.facebook.util.FacebookFlexSessionUtil;
+			import flash.net.navigateToURL;
+			import com.pbking.facebook.commands.users.GetUserInfo;
+			import com.pbking.facebook.commands.friends.GetFriends;
+			import com.pbking.util.logging.PBLogger;
+			import com.pbking.util.logging.PBLogEvent;
+			import mx.controls.Alert;
+			import com.pbking.facebook.Facebook;
+			import com.pbking.facebook.events.FacebookActionEvent;
+			import com.pbking.facebook.data.users.UserFields;
+
+			[Bindable]
+			protected var fBook:Facebook;
+
+			private var logger:PBLogger;
+
+			private function init():void
+			{
+				//instantiate our Flash Friendly logger and listen for facebook logs
+				logger = PBLogger.getLogger("pbking.facebook");
+				logger.addEventListener(PBLogEvent.LOG, onLog);
+
+				//create our facebook instance with the session util
+				var fsu:FacebookFlexSessionUtil = new FacebookFlexSessionUtil();
+				fBook = fsu.facebook;
+				fBook.addEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
+				fBook.addEventListener(FacebookActionEvent.CONNECTION_ERROR, onFacebookConnectionError);
+				
+				//connect.  
+				//The type of connection that is used is automatically chosen.
+				fsu.connect();
+			}
+
+			/**
+			 * Called when the facebook connection is ready.
+			 * 
+			 * Makes the call to get a list of the user's albums
+			 */
+			private function onFacebookReady(event:FacebookActionEvent):void
+			{
+				fBook.removeEventListener(FacebookActionEvent.CONNECT, onFacebookReady);
+				
+				if(fBook.is_connected)
+				{
+					//we're connected . . but it's possible we're connected "sessionlessly"
+					//a "sessionless connection" isn't possible as a desktop app, but a web
+					//app can have a connection without a user having installed the application.
+					//You MAY have some code (JS, etc) that forces a user to have the app installed
+					//but if you choose not to then you might need to do something with that
+					//information here
+					
+					if(fBook.is_sessionless)
+					{
+						handleSessionlessSession();
+					}
+					else
+					{
+						//we're groovy.  the user has installed the app.
+						//full speed ahead!
+						fBook.post(new GetFriends(), onGotFriends);
+					}
+				}
+				else
+				{
+					onFacebookConnectionError(event);
+				}
+			}
+			
+			private function handleSessionlessSession():void
+			{
+				var message:String = "You must allow this application access to use it.  " + 
+						"You don't have to allow ALL applications, you can do some things without allowing access. " + 
+						"for instance, we know that your Facebook UID is " + fBook.uid + "." +
+						"But for this example you do have to allow access.  " + 
+						"Click OK to open the install page.";
+						
+				Alert.show(message, "Please Install . . .", 4, null, onAlertClose);
+			}
+			
+			private function onAlertClose(e:Event):void
+			{
+				var request:URLRequest = new URLRequest(fBook.getInstallationURL());
+				navigateToURL(request, "_top");
+			}
+			
+			private function onFacebookConnectionError(event:FacebookActionEvent):void
+			{
+				Alert.show("Failed to connect to facebook: " + event.message);
+			}
+
+			private function onGotFriends(call:GetFriends):void
+			{
+				fBook.post(new GetUserInfo(call.friends, [UserFields.pic_square, UserFields.name]), onGotUserInfo);
+			}
+			
+			private function onGotUserInfo(call:GetUserInfo):void
+			{
+				friendList.dataProvider = call.users;
+			}
+
+			/**
+			 * util to show logging on the stage
+			 */
+			private function onLog(le:PBLogEvent):void
+			{
+				logText.text += le.message + "\n";
+			}			
+		]]>
+	</mx:Script>
+
+	<!-- VIEW -->
+
+	<mx:List id="friendList"
+		width="200"
+		height="100%"
+		itemRenderer="renderers.ProfileRendererSimple"/>
+
+	<mx:TextArea id="logText" width="100%" height="100%"/>
+	
+</mx:Application>
