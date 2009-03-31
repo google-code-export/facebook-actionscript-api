@@ -14,6 +14,6 @@ For tutorials, articles, and videos on using the new API, visit the [http://www.
 
 === Other Information ===
 
-The API was originally developed by [http://pbking.com/ Jason Crist] and authored under the direction of [http://terralever.com/ Terralever], an online marketing firm with strength in Flash-based media. Although Adobe has taken over day-to-day management of the project, Jason still maintains a consulting role.
+The API was originally developed by [http://pbking.com/ Jason Crist] and authored under the direction of [http://terralever.com/ Terralever], an online marketing firm with strength in Flash-based media. Although Adobe has taken over day-to-day management of the project, Jason still maintains a consulting role. If you are looking for the deprecated code and samples, see the 'tag/version2' directory in the repository or search for files with the 'Deprecated' tag in the downloads section.
 
 For questions and inquiries about this library, please contact Daniel Dura at Adobe Systems via email at ddura@adobe.com. Submit bug reports, patches, or feature requests via the issue tracker.
