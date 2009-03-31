@@ -1,4 +1,3 @@
-
 The new ActionScript 3.0 Client Library for Facebook Platform API, fully supported by Facebook and Adobe, makes it easy to build applications that combine the strengths of the Flash Platform and Facebook Platform.
 
 The Adobe Flash Platform and Facebook Platform provide the ideal solution for building rich, social experiences on the web. Flash is available on more than 98% of Internet-connected PCs, so people can immediately access the applications, content, and video that enable social interactions. The Facebook Platform is used by millions of people everyday to connect and share with the people in their lives. Together, both platforms allow you to:
@@ -9,12 +8,12 @@ The Adobe Flash Platform and Facebook Platform provide the ideal solution for bu
   * Solve problems: Build RIAs that harness the power of community.
   * Reach people: Reach millions of Facebook users through social distribution.
 
-=== Gettings Started ===
+=== Getting Started ===
 
-For tutorials, articles, and videos on using the new API, visit the [http://www.adobe.com/devnet/facebook/ Facebook page on the Adobe Developer Center]. You can also see the docs for the most recent stable build [http://code.google.com/p/facebook-actionscript-api/source/browse/release/current/docs/index.html here].
+For tutorials, articles, and videos on using the new API, visit the [http://www.adobe.com/devnet/facebook/ Facebook page] on the Adobe Developer Center. You can also see the [http://code.google.com/p/facebook-actionscript-api/source/browse/release/current/docs/index.html docs] for the most recent and stable build.
 
 === Other Information ===
 
-The API is was originally developed by [http://pbking.com/ Jason Crist] and authored under the direction of [http://terralever.com/ Terralever], an online marketing firm with strength in Flash-based media. While Adobe has taken over day-to-day management of the project, Jason still maintains a consulting role.
+The API was originally developed by [http://pbking.com/ Jason Crist] and authored under the direction of [http://terralever.com/ Terralever], an online marketing firm with strength in Flash-based media. Although Adobe has taken over day-to-day management of the project, Jason still maintains a consulting role.
 
-For questions and inquiries about this library, please contact Daniel Dura at Adobe Systems via email at ddura@adobe.com. To submit bug reports, patches, or feature requests, please submit via the issue tracker.
+For questions and inquiries about this library, please contact Daniel Dura at Adobe Systems via email at ddura@adobe.com. Submit bug reports, patches, or feature requests via the issue tracker.
