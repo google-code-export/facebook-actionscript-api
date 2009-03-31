@@ -1,6 +1,3 @@
-#summary New home page to be posted.
-
-http://www.danieldura.com/post_images/flash_platform_signature.jpg
 
 The new ActionScript 3.0 Client Library for Facebook Platform API, fully supported by Facebook and Adobe, makes it easy to build applications that combine the strengths of the Flash Platform and Facebook Platform.
 
