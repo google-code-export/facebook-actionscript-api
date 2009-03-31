@@ -1,3 +1,4 @@
+#labels Deprecated
 ==Step One: Project Setup==
 
 The first thing you’ll have to do is to setup an application on Facebook.  To do so you have to have the [http://www.facebook.com/developer developer] application installed.  Once installed, go to the “My Applications” section.  Click “Apply for another key”.  This will bring you to the application setup page.  (Alternately you could just edit the settings of an existing application).
