@@ -29,6 +29,8 @@
 					curl_close($ch);					    
 				} 																	
 			?>
+			
+			//A 'name' attribute with the same value as the 'id' is REQUIRED for Chrome/Mozilla browsers
 			swfobject.embedSWF("FlashMobileWeb.swf", "flashContent", "300", "400", "9.0", null, flashVars, null, {name:"flashContent"});
 		</script>		
 		<div id="fb-root"></div><!-- required div tag -->
