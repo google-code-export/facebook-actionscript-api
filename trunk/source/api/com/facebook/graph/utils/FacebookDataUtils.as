@@ -40,94 +40,6 @@ package com.facebook.graph.utils {
     */
     public class FacebookDataUtils {
 		
-		/**
-		 * Returns the relative time format found on Facebook. ie. 6 mins ago, etc.
-		 *  
-		 * @param value The date to convert
-		 * @param limitToDay Boolean If true, any date longer than a day is formatted 'on M/dd/yyyy at h:mmtt'. Default is false
-		 * @return The relative time string
-		 * 
-		 */		
-		public static function dateToRelativeTime(value:Date, limitToDay:Boolean = false):String {
-			const DAY_NAMES:Array = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-			const ONE_MINUTE:Number = 60;
-			const ONE_HOUR:Number = 60 * ONE_MINUTE;
-			const ONE_DAY:Number = 24 * ONE_HOUR;
-			const ONE_WEEK:Number = 7 * ONE_DAY;
-			const ONE_MONTH:Number = 30.5 * ONE_DAY;
-			const ONE_YEAR:Number = 365 * ONE_DAY;
-			
-			var elapsed:Number = (new Date().time - value.time)/1000; // all in seconds
-			var minutesAgo:Number = elapsed/60;
-			var hoursAgo:Number = elapsed/3600;
-			
-			if (elapsed < ONE_HOUR) {
-				if (minutesAgo == 0) {
-					var sec:int = elapsed > 1 ? elapsed : 2;
-					return sec + ' seconds ago';
-				} else if (minutesAgo == 1) {
-					return 'about a minute ago';
-				} else {
-					return minutesAgo + ' minutes ago';
-				}
-			}
-			else if (elapsed < ONE_DAY) {
-				if (hoursAgo == 1) {
-					return 'about an hour ago';
-				} else {					
-					return hoursAgo + ' hours ago';
-				}
-			}
-			else if (limitToDay) {
-				var m:String = (value.getMonth()+1).toString();
-				var dd:String = value.getDate().toString();
-				var yyyy:String = value.getFullYear().toString();
-				if (dd.length < 2) { dd = '0' + dd; }
-				
-				var dateStr:String = m+'/'+dd+'/'+yyyy; //date formatted to M/dd/yyyy
-				
-				var h:String = '';
-				if (value.hours%12 == 0) { h = '12'; }
-				else if (value.hours >= 13) { h  = String(value.hours-12); }
-				else { h = value.hours.toString(); }
-				var mm:String = value.getMinutes().toString();
-				if (mm.length < 2) { mm = '0' + mm; }
-				var tt:String = value.getHours()<12 ? 'am' : 'pm';
-				
-				var timeStr:String = h+':'+mm+tt; //time formatted to h:mmtt
-				
-				return 'on ' + dateStr + ' at ' + timeStr;				
-			}
-			else if (elapsed < ONE_WEEK) {
-				var dayName:String = DAY_NAMES[value.day];
-				
-				// 5+ days ago => display "last Thursday" instead of "on Thursday".
-				if (elapsed >= ONE_DAY * 5) {
-					return 'last ' + dayName;
-				} else {
-					return 'on ' + dayName;
-				}
-			} 
-			else if (elapsed < ONE_WEEK * 2) {
-				return 'about a week ago';
-			}
-			else if (elapsed < ONE_WEEK * 3.5) {
-				var numWeeks:int = elapsed / ONE_WEEK;
-				return 'about ' + numWeeks + ' weeks ago';
-			}
-			else if (elapsed < ONE_MONTH * 1.5) {
-				return 'about a month ago';
-			}
-			else if (elapsed < ONE_YEAR) {
-				var numMonths:int = (elapsed + ONE_MONTH / 2) / ONE_MONTH;
-				return 'about ' + numMonths + ' months ago';
-			}
-			else {
-				return 'over a year ago';
-			}
-			
-		}
-
         /**
         * Attempts to convert the various Facebook date formats
         * to a Date object.
@@ -154,8 +66,12 @@ package com.facebook.graph.utils {
             //Parse dates in this format: 11/30/1973 or 10/30
 			//Most likey will be a users birthday.
             if (/(\d\d)\/(\d\d)(\/\d+)?/ig.test(value)) {
-                var datePeices:Array = value.split('/');
-                return new Date(datePeices[2], datePeices[1], datePeices[0]);
+				var datePeices:Array = value.split('/');
+				if (datePeices.length == 3) {
+					return new Date(datePeices[2], Number(datePeices[0])-1, datePeices[1]);
+				} else {
+					return new Date(0, Number(datePeices[1])-1, datePeices[0]);
+				}
             }
 
             /*
