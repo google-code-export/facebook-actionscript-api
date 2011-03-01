@@ -39,6 +39,9 @@ package com.facebook.graph.data {
 	 */
 	public class FQLMultiQuery {
 		
+		/**
+		 * Hash of query strings, indexed by query name 
+		 */		
 		public var queries:Object;
 		
 		/**
