@@ -117,21 +117,21 @@ package com.facebook.graph.windows {
 
 			var vars:URLVariables = new URLVariables();
 			vars.client_id = applicationId;
-			vars.redirect_uri = FacebookURLDefaults.MOBILE_REDIRECT_URL;
+			vars.redirect_uri = FacebookURLDefaults.LOGIN_SUCCESS_URL;
 			vars.display = 'touch';
 			vars.type = 'user_agent';
 
 			if (extendedPermissions != null) {
 				vars.scope = extendedPermissions.join(',');
 			}
-
+			
 			return vars;
 		}
 
 		protected function handleLocationChange(event:Event):void
 		{
 			var location:String = webView.location;
-			if (location.indexOf(FacebookURLDefaults.LOGIN_FAIL_URL) == 0)
+			if (location.indexOf(FacebookURLDefaults.LOGIN_FAIL_URL) == 0 || location.indexOf(FacebookURLDefaults.LOGIN_FAIL_SECUREURL) == 0)
 			{
 				loginCallback(null, FacebookDataUtils.getURLVariables(location).error_reason);
 				userClosedWindow =  false;
@@ -139,7 +139,7 @@ package com.facebook.graph.windows {
 				webView=null;
 			}
 
-			else if (location.indexOf(FacebookURLDefaults.MOBILE_REDIRECT_URL) == 0)
+			else if (location.indexOf(FacebookURLDefaults.LOGIN_SUCCESS_URL) == 0 || location.indexOf(FacebookURLDefaults.LOGIN_SUCCESS_SECUREURL) == 0)
 			{
 				loginCallback(FacebookDataUtils.getURLVariables(location), null);
 
