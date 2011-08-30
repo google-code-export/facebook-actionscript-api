@@ -44,6 +44,7 @@ package {
 	public class FlashMobileWeb extends Sprite {
 		
 		protected static const APP_ID:String = "YOUR_APP_ID"; //Your App Id
+		protected static const APP_URL:String = "http://your.app.url/"; //Your App URL as specified in facebook.com/developers app settings
 		
 		protected var profilePic:Loader;
 		
@@ -53,7 +54,7 @@ package {
 				accessToken = String(loaderInfo.parameters.accessToken); //get the token passed in index.php
 			}
 			
-			Facebook.init(APP_ID, onInit, null, accessToken);
+			Facebook.init(APP_ID, onInit, null, accessToken);			
 			
 			loginBtn.addEventListener(MouseEvent.CLICK, handleLoginClick, false, 0, true);
 			callBtn.addEventListener(MouseEvent.CLICK, handleCallClick, false, 0, true);
@@ -76,12 +77,12 @@ package {
 		
 		protected function handleLoginClick(event:MouseEvent):void {			
 			if (loginBtn.label == "Login") {
-				var redirectUri:String = "http://your.app.url/"; //Your App URL as specified in facebook.com/developers app settings
+				var redirectUri:String = APP_URL; //Your App URL as specified in facebook.com/developers app settings
 				var permissions:Array = ["user_photos", "user_location"];
 				Facebook.mobileLogin(redirectUri, "touch", permissions);
 			} else {
 				outputTxt.appendText("LOGOUT\n");				
-				Facebook.mobileLogout("http://your.app.url/"); //Redirect user back to your app url
+				Facebook.mobileLogout(APP_URL); //Redirect user back to your app url				
 			}
 		}
 		

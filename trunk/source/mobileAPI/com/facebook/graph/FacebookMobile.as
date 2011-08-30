@@ -33,6 +33,7 @@
 package com.facebook.graph {
 
 	import com.facebook.graph.core.AbstractFacebook;
+	import com.facebook.graph.data.Batch;
 	import com.facebook.graph.data.FQLMultiQuery;
 	import com.facebook.graph.data.FacebookSession;
 	import com.facebook.graph.net.FacebookRequest;
@@ -272,8 +273,8 @@ package com.facebook.graph {
 		 * @see http://developers.facebook.com/docs/api#reading
 		 *
 		 */
-		public static function nextPage(data:Object, callback:Function):void {
-			getInstance().nextPage(data, callback);
+		public static function nextPage(data:Object, callback:Function):FacebookRequest {
+			return getInstance().nextPage(data, callback);
 		}
 		
 		/**
@@ -289,8 +290,8 @@ package com.facebook.graph {
 		 * @see http://developers.facebook.com/docs/api#reading
 		 *
 		 */
-		public static function previousPage(data:Object, callback:Function):void {
-			getInstance().previousPage(data, callback);
+		public static function previousPage(data:Object, callback:Function):FacebookRequest {
+			return getInstance().previousPage(data, callback);
 		}
 
 		/**
@@ -353,7 +354,19 @@ package com.facebook.graph {
 		 */	
 		public static function fqlMultiQuery(queries:FQLMultiQuery, callback:Function=null, parser:IResultParser=null):void {
 			getInstance().fqlMultiQuery(queries, callback, parser);
-		}		
+		}
+		
+		/**
+		 * Executes a batch api operation on facebook.
+		 * 
+		 * @param batch The batch to send to facebook.
+		 * @see com.facebook.graph.data.Batch
+		 * @see callback The callback to execute when this operation is complete.
+		 * 
+		 */
+		public static function batchRequest(batch:Batch, callback:Function=null):void {
+			getInstance().batchRequest(batch, callback);
+		}
 
 		/**
 		 * Used to make old style RESTful API calls on Facebook.
@@ -549,17 +562,16 @@ package com.facebook.graph {
 		 *
 		 */
 		protected function logout(callback:Function=null, appOrigin:String=null):void {
-			
 			this.logoutCallback = callback;
 			
 			//clears cookie for mobile.
 			var params:Object = {};
 			params.confirm = 1;
 			params.next = appOrigin;
-			var req:FacebookRequest = new FacebookRequest("http://m.facebook.com/logout.php");
+			var req:FacebookRequest = new FacebookRequest();
 			
 			openRequests[req] = handleLogout;
-			req.call("", params, handleRequestLoad);
+			req.call("http://m.facebook.com/logout.php", "GET" , handleRequestLoad, params);
 			
 			var so:SharedObject = SharedObject.getLocal(SO_NAME);
 			so.clear();

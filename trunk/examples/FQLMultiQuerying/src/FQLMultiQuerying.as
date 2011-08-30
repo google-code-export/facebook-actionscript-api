@@ -59,7 +59,6 @@ package {
 		public function FQLMultiQuerying() {
 			configUI();
 			FacebookDesktop.init(APP_ID, handleInit);
-			addEventListener(Event.DEACTIVATE, handleDeactivate, false, 0, true);
 		}
 		
 		// Protected Methods:
@@ -98,12 +97,6 @@ package {
 			addChild(upBtn);
 		}
 		
-		protected function setupTextField(textField:TextField):void {
-			textField.autoSize = TextFieldAutoSize.LEFT;
-			textField.selectable = false;
-			textField.defaultTextFormat = new TextFormat("_sans", 14);
-		}
-		
 		protected function updateDisplay():void {
 			// Reposition renderers:
 			var al:int = renderers.length;
@@ -122,63 +115,20 @@ package {
 		
 		// Event Handlers:
 		
-		protected function handleDeactivate(event:Event):void {
-			//FacebookDesktop.logout(handleLogout, APP_ORIGIN);
-			//NativeApplication.nativeApplication.exit();
-		}
-		
-		protected function handleInit(result:Object, fail:Object):void {
-			loginBtn.enabled = true;
-			if (result) { // User is already logged in.
-				loginBtn.label = "Logout";
-				isLoggedIn = true;
-				getAlbumsBtn.x = loginBtn.x + loginBtn.width + PADDING_SMALL;
-				getAlbumsBtn.visible = true;
-			} else { // User hasn't logged in.
-				loginBtn.label = "Login";
-			}
-		}
-		
-		protected function handleLogin(result:Object, fail:Object):void {
-			if (result) { // User successfully logged in.
-				loginBtn.label = "Logout";
-				isLoggedIn = true;
-				getAlbumsBtn.x = loginBtn.x + loginBtn.width + PADDING_SMALL;
-				getAlbumsBtn.visible = true;
-			} else { // User unsuccessfully logged in.
-				loginBtn.label = "Login";
-			}
-		}
-		
-		protected function handleLogout(success:Boolean):void {
-			loginBtn.label = "Login";
-			isLoggedIn = false;
-			
-			getAlbumsBtn.visible = downBtn.visible = upBtn.visible = false;
-			getAlbumsBtn.enabled = true;
-			getAlbumsBtn.label = "Get Albums and Their Tags";
-			
-			if (albumsContainer) { removeChild(albumsContainer); }
-			albumsContainer = null;
-		}
-		
-		protected function handleLoginBtnClick(event:MouseEvent):void {
-			if (isLoggedIn) {
-				FacebookDesktop.logout(handleLogout, APP_ORIGIN);
-			} else {
-				FacebookDesktop.login(handleLogin, permissions);
-			}
-		}
-		
 		protected function handleGetAlbumsBtnClick(event:MouseEvent):void {
 			getAlbumsBtn.enabled = false;
 			getAlbumsBtn.label = "Loading albums...";
 			
+			// Create a FQL multi-query:
 			var queries:FQLMultiQuery = new FQLMultiQuery();
-			queries.add("SELECT {FIELDS} FROM album WHERE owner=me()", "query1", {FIELDS:ALBUM_FIELDS});
-			queries.add("SELECT {FIELDS} FROM photo WHERE aid IN (SELECT aid FROM #query1)", "query2", {FIELDS:PHOTO_FIELDS});
-			queries.add("SELECT {FIELDS} FROM photo_tag WHERE pid IN (SELECT pid FROM #query2)", "query3", {FIELDS:TAG_FIELDS});
-			queries.add("SELECT {FIELDS} FROM photo WHERE pid IN (SELECT cover_pid FROM #query1)", "query4", {FIELDS:PHOTO_FIELDS});
+			
+			// Add queries:
+			queries.add("SELECT {FIELDS} FROM album WHERE owner=me()", "albums", {FIELDS:ALBUM_FIELDS});
+			queries.add("SELECT {FIELDS} FROM photo WHERE aid IN (SELECT aid FROM #albums)", "photos", {FIELDS:PHOTO_FIELDS});
+			queries.add("SELECT {FIELDS} FROM photo_tag WHERE pid IN (SELECT pid FROM #photos)", "tags", {FIELDS:TAG_FIELDS});
+			queries.add("SELECT {FIELDS} FROM photo WHERE pid IN (SELECT cover_pid FROM #albums)", "albumCovers", {FIELDS:PHOTO_FIELDS});
+			
+			// Call fqlMultiQuery:
 			FacebookDesktop.fqlMultiQuery(queries, handleAlbumInfo);
 		}
 		
@@ -186,10 +136,10 @@ package {
 			if (result) {
 				getAlbumsBtn.label = "Albums loaded";
 				
-				var albums:Array = result.query1 as Array;
-				var photos:Array = result.query2 as Array;
-				var tags:Array = result.query3 as Array;
-				var covers:Array = result.query4 as Array;
+				var albums:Array = result.albums as Array;
+				var photos:Array = result.photos as Array;
+				var tags:Array = result.tags as Array;
+				var covers:Array = result.albumCovers as Array;
 				
 				if (albumsContainer) { removeChild(albumsContainer); }
 				albumsContainer = new Sprite();
@@ -271,6 +221,49 @@ package {
 				upBtn.enabled = false;
 			} else {
 				getAlbumsBtn.label = "Error";
+			}
+		}
+		
+		protected function handleInit(result:Object, fail:Object):void {
+			loginBtn.enabled = true;
+			if (result) { // User is already logged in.
+				loginBtn.label = "Logout";
+				isLoggedIn = true;
+				getAlbumsBtn.x = loginBtn.x + loginBtn.width + PADDING_SMALL;
+				getAlbumsBtn.visible = true;
+			} else { // User hasn't logged in.
+				loginBtn.label = "Login";
+			}
+		}
+		
+		protected function handleLogin(result:Object, fail:Object):void {
+			if (result) { // User successfully logged in.
+				loginBtn.label = "Logout";
+				isLoggedIn = true;
+				getAlbumsBtn.x = loginBtn.x + loginBtn.width + PADDING_SMALL;
+				getAlbumsBtn.visible = true;
+			} else { // User unsuccessfully logged in.
+				loginBtn.label = "Login";
+			}
+		}
+		
+		protected function handleLogout(success:Boolean):void {
+			loginBtn.label = "Login";
+			isLoggedIn = false;
+			
+			getAlbumsBtn.visible = downBtn.visible = upBtn.visible = false;
+			getAlbumsBtn.enabled = true;
+			getAlbumsBtn.label = "Get Albums and Their Tags";
+			
+			if (albumsContainer) { removeChild(albumsContainer); }
+			albumsContainer = null;
+		}
+		
+		protected function handleLoginBtnClick(event:MouseEvent):void {
+			if (isLoggedIn) {
+				FacebookDesktop.logout(handleLogout, APP_ORIGIN);
+			} else {
+				FacebookDesktop.login(handleLogin, permissions);
 			}
 		}
 		
