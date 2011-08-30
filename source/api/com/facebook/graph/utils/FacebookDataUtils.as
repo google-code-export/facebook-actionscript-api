@@ -70,7 +70,7 @@ package com.facebook.graph.utils {
 				if (datePeices.length == 3) {
 					return new Date(datePeices[2], Number(datePeices[0])-1, datePeices[1]);
 				} else {
-					return new Date(0, Number(datePeices[1])-1, datePeices[0]);
+					return new Date(0, Number(datePeices[0])-1, datePeices[1]);
 				}
             }
 
@@ -122,7 +122,7 @@ package com.facebook.graph.utils {
                     index = time[2].indexOf('Z');
                 }
 
-                if (isNaN(index)) {
+                if (!isNaN(index)) {
                     var temp:Number = Number(time[2].slice(0, index));
                     second = temp<<0;
                     millisecond = 1000 * ((temp % 1) / 1);

@@ -39,8 +39,8 @@ package {
 	
 	public class FlashDesktopMain extends Sprite {
 		
-		protected static const APP_ID:String = "143613717133";
-		protected static const APP_ORIGIN:String = "http://dev.gskinner.com/"; //The site URL of your application (specified in your app settings); needed for clearing cookie when logging out
+		protected static const APP_ID:String = "YOUR_APP_ID_GOES_HERE"; // Your App ID.
+		protected static const APP_ORIGIN:String = "YOUR_APP_URL"; //The site URL of your application (specified in your app settings); needed for clearing cookie when logging out
 		
 		public function FlashDesktopMain() {	
 			configUI();
@@ -58,7 +58,7 @@ package {
 			clearBtn.addEventListener(MouseEvent.CLICK, handleClearClick, false, 0, true);
 			
 			//Initialize Facebook library
-			FacebookDesktop.init(APP_ID, onInit);			
+			FacebookDesktop.init(APP_ID, onInit);						
 		}
 		
 		protected function onInit(result:Object, fail:Object):void {						

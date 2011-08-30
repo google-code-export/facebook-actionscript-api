@@ -280,14 +280,16 @@ package com.facebook.graph.windows {
      */
     protected function getURLVariables():URLVariables {
       var params:String;
-      if (html.location.indexOf('#') != -1) {
-        params = html.location.slice(html.location.indexOf('#')+1);
-      } else if (html.location.indexOf('?') != -1) {
+
+      if (html.location.indexOf('?') != -1) {
         params = html.location.slice(html.location.indexOf('?')+1);
+      } else if (html.location.indexOf('#') != -1) {
+        params = html.location.slice(html.location.indexOf('#')+1);
       }
 	  
       var vars:URLVariables = new URLVariables();
-	  if (params != null) { vars.decode(params); }
+	  	if (params != null) { vars.decode(params); }
+		  
       return vars;
     }
   }

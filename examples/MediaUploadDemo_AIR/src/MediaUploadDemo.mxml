@@ -98,7 +98,7 @@
 			}
 			
 			protected function login():void {
-				FacebookDesktop.login(handleLogin, []);
+				FacebookDesktop.login(handleLogin, ['user_photos', 'publish_stream']);
 			}
 			
 			protected function logout():void {

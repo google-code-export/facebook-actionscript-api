@@ -42,7 +42,7 @@ package {
 		protected static const APP_ID:String = "YOUR_APP_ID"; //Place your application id here
 		
 		public function FlashWebMain() {	
-			configUI();
+			configUI();			
 		}
 		
 		protected function configUI():void {
@@ -54,7 +54,7 @@ package {
 			
 			//listeners for UI
 			loginToggleBtn.addEventListener(MouseEvent.CLICK, handleLoginClick, false, 0, true);
-			callApiBtn.addEventListener(MouseEvent.CLICK, handleCallApiClick, false, 0, true);			
+			callApiBtn.addEventListener(MouseEvent.CLICK, handleCallApiClick, false, 0, true);
 			showUIBtn.addEventListener(MouseEvent.CLICK, handleUIClick, false, 0, true);
 			getRadio.addEventListener(MouseEvent.CLICK, handleReqTypeChange, false, 0, true);
 			postRadio.addEventListener(MouseEvent.CLICK, handleReqTypeChange, false, 0, true);
@@ -75,7 +75,7 @@ package {
 		
 		protected function handleLoginClick(event:MouseEvent):void {
 			if (loginToggleBtn.label == "Log In") {				
-				var opts:Object = {perms:"publish_stream, user_photos"};
+				var opts:Object = {scope:"publish_stream, user_photos"};
 				Facebook.login(onLogin, opts);
 			} else {
 				Facebook.logout(onLogout);

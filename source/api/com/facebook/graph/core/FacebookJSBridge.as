@@ -62,17 +62,26 @@ package com.facebook.graph.core {
 					function() {
 			
 						FBAS = {
+							
+							oauth: false,
 			
 							setSWFObjectID: function( swfObjectID ) {																
 								FBAS.swfObjectID = swfObjectID;
 							},
 								
 							init: function( opts ) {
-								FB.init( FB.JSON.parse( opts ) );
-								
-								FB.Event.subscribe( 'auth.sessionChange', function( response ) {
-									FBAS.updateSwfSession( response.session );
-								} );								
+								var options = FB.JSON.parse( opts );
+								FB.init( options );
+								FBAS.oauth = options.oauth;
+								if (FBAS.oauth) {
+									FB.Event.subscribe( 'auth.authResponseChange', function( response ) {
+										FBAS.updateSwfAuthResponse( response.authResponse );
+									} );
+								} else {
+									FB.Event.subscribe( 'auth.sessionChange', function( response ) {
+										FBAS.updateSwfSession( response.session );
+									} );
+								}
 							},
 								
 							setCanvasAutoResize: function( autoSize, interval ) {
@@ -94,17 +103,20 @@ package com.facebook.graph.core {
 							},
 								
 							handleUserLogin: function( response ) {
-								if( response.session == null ) {
-									FBAS.updateSwfSession( null );
-									return;
-								}
-								
-								if( response.perms != null ) {
-									// user is logged in and granted some permissions.
-									// perms is a comma separated list of granted permissions
-									FBAS.updateSwfSession( response.session, response.perms );
+								if( FBAS.oauth ) {
+									FBAS.updateSwfAuthResponse( response.authResponse );
 								} else {
-									FBAS.updateSwfSession( response.session );
+									if( response.session == null) {
+										FBAS.updateSwfSession( null );
+										return;
+									}
+									if( response.perms != null ) {
+										// user is logged in and granted some permissions.
+										// perms is a comma separated list of granted permissions
+										FBAS.updateSwfSession( response.session, response.perms );
+									} else {
+										FBAS.updateSwfSession( response.session );
+									}
 								}
 							},
 								
@@ -128,13 +140,26 @@ package com.facebook.graph.core {
 								session = FB.getSession();
 								return FB.JSON.stringify( session );
 							},
-								
+			
+							getAuthResponse: function() {
+								authResponse = FB.getAuthResponse();
+								return FB.JSON.stringify( authResponse );
+							},
+			
 							getLoginStatus: function() {
 								FB.getLoginStatus( function( response ) {
-									if( response.session ) {
-										FBAS.updateSwfSession( response.session );
+									if (FBAS.oauth) {
+										if( response.authResponse ) {
+											FBAS.updateSwfAuthResponse( response.authResponse );
+										} else {
+											FBAS.updateSwfAuthResponse( null );
+										}
 									} else {
-										FBAS.updateSwfSession( null );
+										if( response.session ) {
+											FBAS.updateSwfSession( response.session );
+										} else {
+											FBAS.updateSwfSession( null );
+										}
 									}
 								} );
 							},
@@ -151,6 +176,16 @@ package com.facebook.graph.core {
 									swf.sessionChange( null );
 								} else {
 									swf.sessionChange( FB.JSON.stringify( session ), FB.JSON.stringify( extendedPermissions.split( ',' ) ) );
+								}
+							},
+			
+							updateSwfAuthResponse: function( response ) {								
+								swf = FBAS.getSwf();
+								
+								if( response == null ) {
+									swf.authResponseChange( null );
+								} else {
+									swf.authResponseChange( FB.JSON.stringify( response ) );
 								}
 							}
 						};
