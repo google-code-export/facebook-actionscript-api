@@ -53,11 +53,34 @@ package com.facebook.graph.net {
 	 */
 	public class FacebookBatchRequest extends AbstractFacebookRequest {
 		
+		/**
+		 * @private
+		 *
+		 */
 		protected var _params:Object;
+
+		/**
+		 * @private
+		 *
+		 */
 		protected var _relativeURL:String;
+
+		/**
+		 * @private
+		 *
+		 */
 		protected var _fileData:Object;
+
+		/**
+		 * @private
+		 *
+		 */
 		protected var _accessToken:String;
 		
+		/**
+		 * @private
+		 *
+		 */
 		protected var _batch:Batch;
 		
 		public function FacebookBatchRequest(batch:Batch, completeCallback:Function = null) {

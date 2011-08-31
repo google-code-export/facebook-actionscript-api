@@ -45,6 +45,10 @@ package com.facebook.graph.data {
 	 */
 	public class Batch {
 		
+		/**
+		 * @private
+		 *
+		 */
 		protected var _requests:Array;
 		
 		public function Batch() {
