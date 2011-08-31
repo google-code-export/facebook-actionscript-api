@@ -90,6 +90,9 @@ package com.facebook.graph.net {
 				var params:Object = {method:request.requestMethod, relative_url:request.relativeURL};
 				
 				if (request.params) {
+					if (request.params['contentType'] != undefined) {
+						params.contentType = request.params['contentType'];
+					}
 					params.body = this.objectToURLVariables(request.params).toString();
 				}
 				
