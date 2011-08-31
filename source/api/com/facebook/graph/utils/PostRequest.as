@@ -131,7 +131,7 @@ package com.facebook.graph.utils {
 			writeQuotationMark();
 			writeLineBreak();
 
-			bytes = contentType;
+			bytes = contentType || "application/octet-stream";
 			l = bytes.length;
 			for (i=0; i<l; i++) {
 				postData.writeByte(bytes.charCodeAt(i));
