@@ -103,7 +103,7 @@ package com.facebook.graph.windows {
 		protected function showWindow(req:URLRequest):void {
 
 			webView.addEventListener(
-				Event.LOCATION_CHANGE,
+				Event.COMPLETE,
 				handleLocationChange,
 				false, 0, true
 			);
