@@ -489,7 +489,9 @@ package com.facebook.graph {
 			}
 
 			this.webView.assignFocus();
-			this.webView.viewPort = new Rectangle(0, 0, this.stageRef.stageWidth, this.stageRef.stageHeight);
+			
+			// RCS - This was overwrting the specified viewport so I'm commenting it out.
+			//this.webView.viewPort = new Rectangle(0, 0, this.stageRef.stageWidth, this.stageRef.stageHeight);
 
 			if (applicationId == null) {
 				throw new Error(
