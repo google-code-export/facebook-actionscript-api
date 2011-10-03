@@ -166,19 +166,22 @@ package com.facebook.graph.windows {
         *
         */
         override protected function handleLocationChange(event:Event):void {
-            super.handleLocationChange(event);			
+            super.handleLocationChange(event);
 			
             if (html.location.indexOf(FacebookURLDefaults.LOGIN_FAIL_URL) == 0 || html.location.indexOf(FacebookURLDefaults.LOGIN_FAIL_SECUREURL) == 0) {
                 loginCallback(null, getURLVariables().error_reason);
 				
 				userClosedWindow =  false;
 				html.stage.nativeWindow.close();
+				html.removeEventListener(Event.LOCATION_CHANGE, handleLocationChange);
+				
 				
             } else if (html.location.indexOf (FacebookURLDefaults.LOGIN_SUCCESS_URL) == 0 || html.location.indexOf(FacebookURLDefaults.LOGIN_SUCCESS_SECUREURL) == 0) {				
                 loginCallback(getURLVariables(), null);
 
                 userClosedWindow = false;
                 html.stage.nativeWindow.close();
+				html.removeEventListener(Event.LOCATION_CHANGE, handleLocationChange);
 
             } else if (html.location.indexOf(
                 FacebookURLDefaults.LOGIN_URL
@@ -191,6 +194,7 @@ package com.facebook.graph.windows {
 			{
 				loginCallback(false, 'user-canceled');
 				html.stage.nativeWindow.close();
+				html.removeEventListener(Event.LOCATION_CHANGE, handleLocationChange);
 			}						
         }
     }

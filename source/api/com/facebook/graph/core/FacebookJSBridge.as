@@ -63,8 +63,6 @@ package com.facebook.graph.core {
 			
 						FBAS = {
 							
-							oauth: false,
-			
 							setSWFObjectID: function( swfObjectID ) {																
 								FBAS.swfObjectID = swfObjectID;
 							},
@@ -72,16 +70,9 @@ package com.facebook.graph.core {
 							init: function( opts ) {
 								var options = FB.JSON.parse( opts );
 								FB.init( options );
-								FBAS.oauth = options.oauth;
-								if (FBAS.oauth) {
-									FB.Event.subscribe( 'auth.authResponseChange', function( response ) {
-										FBAS.updateSwfAuthResponse( response.authResponse );
-									} );
-								} else {
-									FB.Event.subscribe( 'auth.sessionChange', function( response ) {
-										FBAS.updateSwfSession( response.session );
-									} );
-								}
+								FB.Event.subscribe( 'auth.authResponseChange', function( response ) {
+									FBAS.updateSwfAuthResponse( response.authResponse );
+								} );
 							},
 								
 							setCanvasAutoResize: function( autoSize, interval ) {
@@ -103,27 +94,13 @@ package com.facebook.graph.core {
 							},
 								
 							handleUserLogin: function( response ) {
-								if( FBAS.oauth ) {
-									FBAS.updateSwfAuthResponse( response.authResponse );
-								} else {
-									if( response.session == null) {
-										FBAS.updateSwfSession( null );
-										return;
-									}
-									if( response.perms != null ) {
-										// user is logged in and granted some permissions.
-										// perms is a comma separated list of granted permissions
-										FBAS.updateSwfSession( response.session, response.perms );
-									} else {
-										FBAS.updateSwfSession( response.session );
-									}
-								}
+								FBAS.updateSwfAuthResponse( response.authResponse );
 							},
 								
 							logout: function() {
 								FB.logout( FBAS.handleUserLogout );
 							},
-								
+							
 							handleUserLogout: function( response ) {
 								swf = FBAS.getSwf();
 								swf.logout();
@@ -135,12 +112,7 @@ package com.facebook.graph.core {
 								cb = function( response ) { FBAS.getSwf().uiResponse( FB.JSON.stringify( response ), method ); }
 								FB.ui( obj, cb );
 							},
-								
-							getSession: function() {
-								session = FB.getSession();
-								return FB.JSON.stringify( session );
-							},
-			
+							
 							getAuthResponse: function() {
 								authResponse = FB.getAuthResponse();
 								return FB.JSON.stringify( authResponse );
@@ -148,18 +120,10 @@ package com.facebook.graph.core {
 			
 							getLoginStatus: function() {
 								FB.getLoginStatus( function( response ) {
-									if (FBAS.oauth) {
-										if( response.authResponse ) {
-											FBAS.updateSwfAuthResponse( response.authResponse );
-										} else {
-											FBAS.updateSwfAuthResponse( null );
-										}
+									if( response.authResponse ) {
+										FBAS.updateSwfAuthResponse( response.authResponse );
 									} else {
-										if( response.session ) {
-											FBAS.updateSwfSession( response.session );
-										} else {
-											FBAS.updateSwfSession( null );
-										}
+										FBAS.updateSwfAuthResponse( null );
 									}
 								} );
 							},
@@ -167,18 +131,7 @@ package com.facebook.graph.core {
 							getSwf: function getSwf() {								
 								return document.getElementById( FBAS.swfObjectID );								
 							},
-								
-							updateSwfSession: function( session, extendedPermissions ) {								
-								swf = FBAS.getSwf();
-								extendedPermissions = ( extendedPermissions == null ) ? '' : extendedPermissions;
-								
-								if( session == null ) {
-									swf.sessionChange( null );
-								} else {
-									swf.sessionChange( FB.JSON.stringify( session ), FB.JSON.stringify( extendedPermissions.split( ',' ) ) );
-								}
-							},
-			
+							
 							updateSwfAuthResponse: function( response ) {								
 								swf = FBAS.getSwf();
 								

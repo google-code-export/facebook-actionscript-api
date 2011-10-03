@@ -116,7 +116,12 @@ package com.facebook.graph.net {
 					if (request.params['contentType'] != undefined) {
 						params.contentType = request.params['contentType'];
 					}
-					params.body = this.objectToURLVariables(request.params).toString();
+					var urlVars:String = this.objectToURLVariables(request.params).toString();
+					if (request.requestMethod == URLRequestMethod.GET || request.requestMethod.toUpperCase() == "DELETE") {
+						params.relative_url += "?" + urlVars;
+					} else {
+						params.body = urlVars;
+					}
 				}
 				
 				formatted.push(params);
