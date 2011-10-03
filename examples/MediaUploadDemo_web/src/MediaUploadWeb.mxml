@@ -91,7 +91,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 			}
 
 			protected function login():void {
-				Facebook.login(handleLogin, {perms:"user_photos, publish_stream"});
+				Facebook.login(handleLogin, {scope:"user_photos, publish_stream"});
 			}
 
 			protected function logout():void {
