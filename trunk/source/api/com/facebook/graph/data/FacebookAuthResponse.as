@@ -52,7 +52,7 @@ package com.facebook.graph.data {
         public var expireDate:Date;
 
         /**
-        * Oauth access token for Facebook graph services.
+        * OAuth 2.0 access token for Facebook graph services.
         *
         */
         public var accessToken:String;
@@ -78,7 +78,7 @@ package com.facebook.graph.data {
         public function fromJSON(result:Object):void {
             if (result != null) {
 				expireDate = new Date();
-				expireDate.setTime(expireDate.time + result.expiresIn);
+				expireDate.setTime(expireDate.time + result.expiresIn * 1000);
                 accessToken = result.access_token || result.accessToken;
 				signedRequest = result.signedRequest;
                 uid = result.userID;

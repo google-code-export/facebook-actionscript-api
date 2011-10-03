@@ -22,8 +22,8 @@ package {
 		
 		// Static/Constant Properties:
 		
-		protected static const APP_ID:String = "YOUR_APP_ID_GOES_HERE"; // Your App ID.
-		protected static const APP_ORIGIN:String = "YOUR_APP_URL"; // The site URL of your application (specified in your app settings); needed for clearing cookie when logging out.
+		protected static const APP_ID:String = "YOUR_APP_ID"; // Your App ID.
+		protected static const APP_ORIGIN:String = "YOUR_APP_ORGIN"; // The site URL of your application (specified in your app settings); needed for clearing cookie when logging out.
 		
 		// Public Properties:
 		
@@ -216,6 +216,7 @@ package {
 			if (result) { // User successfully logged in.
 				setBtnLabelText(loginBtn, loginBtnLabel, "Logout");
 				isLoggedIn = true;
+				trace(FacebookDesktop.getSession().availablePermissions);
 			} else { // User unsuccessfully logged in.
 				
 			}

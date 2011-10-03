@@ -210,7 +210,7 @@ package com.facebook.graph {
 								   requestMethod:String = 'GET'
 		):void {
 
-			return getInstance().api(method,
+			getInstance().api(method,
 				callback,
 				params,
 				requestMethod
@@ -326,7 +326,7 @@ package com.facebook.graph {
 											callback:Function
 		):void {
 
-			return getInstance().deleteObject(method, callback);
+			getInstance().deleteObject(method, callback);
 		}
 
 		/**
@@ -388,7 +388,7 @@ package com.facebook.graph {
 										   requestMethod:String = 'GET'
 		):void {
 
-			return getInstance().callRestAPI(methodName, callback, values, requestMethod);
+			getInstance().callRestAPI(methodName, callback, values, requestMethod);
 		}
 
 		/**
@@ -489,9 +489,7 @@ package com.facebook.graph {
 			}
 
 			this.webView.assignFocus();
-			
-			// RCS - This was overwrting the specified viewport so I'm commenting it out.
-			//this.webView.viewPort = new Rectangle(0, 0, this.stageRef.stageWidth, this.stageRef.stageHeight);
+			this.webView.viewPort = new Rectangle(0, 0, this.stageRef.stageWidth, this.stageRef.stageHeight);
 
 			if (applicationId == null) {
 				throw new Error(
@@ -570,10 +568,11 @@ package com.facebook.graph {
 			var params:Object = {};
 			params.confirm = 1;
 			params.next = appOrigin;
+			params.access_token = accessToken;
 			var req:FacebookRequest = new FacebookRequest();
 			
 			openRequests[req] = handleLogout;
-			req.call("http://m.facebook.com/logout.php", "GET" , handleRequestLoad, params);
+			req.call("https://m.facebook.com/logout.php", "GET" , handleRequestLoad, params);
 			
 			var so:SharedObject = SharedObject.getLocal(SO_NAME);
 			so.clear();

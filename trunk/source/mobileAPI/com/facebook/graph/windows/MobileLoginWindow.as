@@ -39,6 +39,7 @@ package com.facebook.graph.windows {
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
+	import flash.events.LocationChangeEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.media.StageWebView;
@@ -107,6 +108,11 @@ package com.facebook.graph.windows {
 				handleLocationChange,
 				false, 0, true
 			);
+			webView.addEventListener(
+				LocationChangeEvent.LOCATION_CHANGE,
+				handleLocationChange,
+				false, 0, true
+			);
 			
 			webView.loadURL(req.url);
 		}
@@ -118,7 +124,7 @@ package com.facebook.graph.windows {
 			var vars:URLVariables = new URLVariables();
 			vars.client_id = applicationId;
 			vars.redirect_uri = FacebookURLDefaults.LOGIN_SUCCESS_URL;
-			vars.display = 'touch';
+			vars.display = 'wap'; //'touch';
 			vars.type = 'user_agent';
 
 			if (extendedPermissions != null) {
@@ -133,6 +139,8 @@ package com.facebook.graph.windows {
 			var location:String = webView.location;
 			if (location.indexOf(FacebookURLDefaults.LOGIN_FAIL_URL) == 0 || location.indexOf(FacebookURLDefaults.LOGIN_FAIL_SECUREURL) == 0)
 			{
+				webView.removeEventListener(Event.COMPLETE, handleLocationChange);
+				webView.removeEventListener(LocationChangeEvent.LOCATION_CHANGE, handleLocationChange);
 				loginCallback(null, FacebookDataUtils.getURLVariables(location).error_reason);
 				userClosedWindow =  false;
 				webView.dispose();
@@ -141,8 +149,10 @@ package com.facebook.graph.windows {
 
 			else if (location.indexOf(FacebookURLDefaults.LOGIN_SUCCESS_URL) == 0 || location.indexOf(FacebookURLDefaults.LOGIN_SUCCESS_SECUREURL) == 0)
 			{
+				webView.removeEventListener(Event.COMPLETE, handleLocationChange);
+				webView.removeEventListener(LocationChangeEvent.LOCATION_CHANGE, handleLocationChange);
 				loginCallback(FacebookDataUtils.getURLVariables(location), null);
-
+				
 				userClosedWindow =  false;
 				webView.dispose();
 				webView=null;

@@ -17,7 +17,7 @@
 					$redirectUri = "http://your.site.url/"; //Your Site URL		
 					
 					$authUrl = "https://graph.facebook.com/oauth/access_token?client_id=".$appId."&redirect_uri=".$redirectUri."&client_secret=".$appSecret."&code=".$code;				
-				
+					
 					$ch = curl_init();
 					curl_setopt($ch, CURLOPT_URL, $authUrl);
 					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -25,7 +25,11 @@
 					$a = explode("&", $tokenStr); 
 					$accessToken = substr($a[0], strpos($a[0], "=")+1);
 					$expiry = substr($a[1], strpos($a[1], "=")+1);
-					echo("flashVars = {accessToken:\"".$accessToken."\", expiry:\"".$expiry."\"};");
+					if (strrpos($accessToken, "error") >= 0) {
+						echo "flashVars = {accessToken:'null'}";
+					} else {
+						echo("flashVars = {accessToken:\"".$accessToken."\", expiry:\"".$expiry."\"};");
+					}
 					curl_close($ch);					    
 				} 																	
 			?>
