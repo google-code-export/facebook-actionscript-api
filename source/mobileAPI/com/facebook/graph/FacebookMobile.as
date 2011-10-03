@@ -121,16 +121,20 @@ package com.facebook.graph {
 		 * to ask the user for once they are logged in.
 		 * 
 		 * @param webView (Optional) The instance of StageWebView to use for the login window
+		 * 
+		 * @param display (Optional) The display type for the OAuth dialog. "wap" for older mobile browsers,
+		 * "touch" for smartphones. The Default is "touch".
 		 *
 		 * For the most current list of extended permissions,
 		 * visit http://developers.facebook.com/docs/authentication/permissions
 		 *
 		 * @see http://developers.facebook.com/docs/authentication
 		 * @see http://developers.facebook.com/docs/authentication/permissions
+		 * @see http://developers.facebook.com/docs/guides/mobile/
 		 *
 		 */
-		public static function login(callback:Function, stageRef:Stage, extendedPermissions:Array, webView:StageWebView = null):void {
-			getInstance().login(callback, stageRef, extendedPermissions, webView);
+		public static function login(callback:Function, stageRef:Stage, extendedPermissions:Array, webView:StageWebView = null, display:String = 'touch'):void {
+			getInstance().login(callback, stageRef, extendedPermissions, webView, display);
 		}
 
 		/**
@@ -478,7 +482,7 @@ package com.facebook.graph {
      	  * @private
           *
      	  */
-		protected function login(callback:Function, stageRef:Stage, extendedPermissions:Array, webView:StageWebView = null):void {
+		protected function login(callback:Function, stageRef:Stage, extendedPermissions:Array, webView:StageWebView = null, display:String = 'touch'):void {
 			this.loginCallback = callback;
 			this.stageRef = stageRef;
 			if (!webView) {
@@ -489,9 +493,6 @@ package com.facebook.graph {
 			}
 
 			this.webView.assignFocus();
-			
-			// RCS - This was overwrting the specified viewport so I'm commenting it out.
-			//this.webView.viewPort = new Rectangle(0, 0, this.stageRef.stageWidth, this.stageRef.stageHeight);
 
 			if (applicationId == null) {
 				throw new Error(
@@ -502,7 +503,8 @@ package com.facebook.graph {
 			loginWindow = new MobileLoginWindow(handleLogin);
 			loginWindow.open(this.applicationId,
 				this.webView,
-				FacebookDataUtils.flattenArray(extendedPermissions)
+				FacebookDataUtils.flattenArray(extendedPermissions),
+				display
 			);
 		}
 		

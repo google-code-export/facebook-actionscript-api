@@ -80,22 +80,23 @@ package com.facebook.graph.windows {
 		 * @param applicationId Current ID of the application being used.
 		 * @param extendedPermissions (Optional) List of extended permissions
 		 * to ask the user for after login.
-		 * @param point (Optional) Starting point for the LoginWindow.
-		 * If null, the window will be centered on the current user's screen.
+		 * @param display (Optional) The display type for the OAuth dialog. "wap" for older mobile browsers,
+		 * "touch" for smartphones. The Default is "touch".
 		 *
-		 * @see http://developers.facebook.com/docs/authentication/desktop
+		 * @see http://developers.facebook.com/docs/guides/mobile/ 
 		 *
 		 */
 		public function open(applicationId:String,
 							 webView:StageWebView,
-							 extendedPermissions:Array = null
+							 extendedPermissions:Array = null, 
+							 display:String='touch'
 		):void {
 
 			this.webView = webView;
 
 			loginRequest = new URLRequest();
 			loginRequest.method = URLRequestMethod.GET;
-			loginRequest.url = FacebookURLDefaults.AUTH_URL +"?"+ formatData(applicationId, extendedPermissions);
+			loginRequest.url = FacebookURLDefaults.AUTH_URL +"?"+ formatData(applicationId, display, extendedPermissions);
 
 			showWindow(loginRequest);
 		}
@@ -118,13 +119,14 @@ package com.facebook.graph.windows {
 		}
 
 		protected function formatData(applicationId:String,
-									  extendedPermissions:Array = null
+									  display:String,
+									  extendedPermissions:Array = null									  
 		):URLVariables {
 
 			var vars:URLVariables = new URLVariables();
 			vars.client_id = applicationId;
 			vars.redirect_uri = FacebookURLDefaults.LOGIN_SUCCESS_URL;
-			vars.display = 'wap'; //'touch';
+			vars.display = display;
 			vars.type = 'user_agent';
 
 			if (extendedPermissions != null) {
