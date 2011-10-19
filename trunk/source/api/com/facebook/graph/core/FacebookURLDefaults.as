@@ -61,6 +61,14 @@ package com.facebook.graph.core {
      */
     public static var AUTH_URL:String
       = 'https://graph.facebook.com/oauth/authorize';
+	
+	/**
+	 * URL for uploading videos via Graph API.
+	 *
+	 */
+	public static var VIDEO_URL:String
+	  = 'https://graph-video.facebook.com';
+	  
 
 
     /**
