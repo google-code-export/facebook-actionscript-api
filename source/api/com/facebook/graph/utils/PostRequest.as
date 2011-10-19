@@ -118,8 +118,8 @@ package com.facebook.graph.utils {
 
 			writeBoundary();
 			writeLineBreak();
-
-			bytes = 'Content-Disposition: form-data; name="'+filename+'"; filename="';
+			
+			bytes = 'Content-Disposition: form-data; name="'+filename+'"; filename="'+filename+'";';
 			l = bytes.length;
 
 			for (i=0; i<l; i++)  {

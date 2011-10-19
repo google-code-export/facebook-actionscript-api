@@ -312,6 +312,24 @@ package com.facebook.graph {
 
 			api(method, callback, params, URLRequestMethod.POST);
 		}
+		
+		/**
+		 * Shortcut method to upload video to Facebook.
+		 * 
+		 * @param method The method to call on the Graph API.
+		 * For example, to upload a video, pass in /me/videos. To upload to an friend's wall, pass in /USER_ID/videos.
+		 * @param callback Method that will be called when this request is complete
+		 * The handler must have the signature of callback(result:Object, fail:Object);
+		 * On success, result will be the object data returned from Facebook.
+		 * On fail, result will be null and fail will contain information about the error.
+		 * @param params An object containing the title, description, fileName (including extension), and video (FileReference or ByteArray) 
+		 * 
+		 * @see http://developers.facebook.com/docs/reference/api/video/
+		 * 
+		 */
+		public static function uploadVideo(method:String, callback:Function = null, params:* = null):void {
+			getInstance().uploadVideo(method, callback, params);
+		}
 
 		/**
 		 * Deletes an object from Facebook.
